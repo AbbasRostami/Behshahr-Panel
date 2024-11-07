@@ -13,4 +13,24 @@ export default [
     icon: <Mail size={20} />,
     navLink: "/second-page",
   },
+  {
+    id: "articles",
+    title: "مدیریت اخبار و مقالات",
+    icon: <User size={20} />,
+    children: [
+      {
+        id: "Articles-list",
+        title: "لیست اخبار و مقالات",
+        icon: <Circle size={12} />,
+        navLink: "/articles-list",
+      },
+      {
+        id: "Articles-add",
+        title: "افزودن اخبار و مقالات",
+        icon: <Circle size={12} />,
+        navLink: "/articles-add",
+      },
+      
+    ],
+  },
 ];
