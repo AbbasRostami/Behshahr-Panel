@@ -9,11 +9,11 @@ import DataTable from 'react-data-table-component'
 import Avatar from '@components/avatar'
 
 // ** Label Images
-import xdLabel from '@src/assets/images/icons/brands/xd-label.png'
-import vueLabel from '@src/assets/images/icons/brands/vue-label.png'
-import htmlLabel from '@src/assets/images/icons/brands/html-label.png'
-import reactLabel from '@src/assets/images/icons/brands/react-label.png'
-import sketchLabel from '@src/assets/images/icons/brands/sketch-label.png'
+import xdLabel from './../../../assets/images/logo/logo.svg'
+import vueLabel from './../../../assets/images/logo/logo.svg'
+import htmlLabel from './../../../assets/images/logo/logo.svg'
+import reactLabel from './../../../assets/images/logo/logo.svg'
+import sketchLabel from './../../../assets/images/logo/logo.svg'
 
 // ** Styles
 import '@styles/react/libs/tables/react-dataTable-component.scss'

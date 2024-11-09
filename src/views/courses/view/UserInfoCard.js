@@ -71,9 +71,9 @@ const UserInfoCard = ({ selectedUser }) => {
     formState: { errors }
   } = useForm({
     defaultValues: {
-      username: selectedUser.username,
-      lastName: selectedUser.fullName.split(' ')[1],
-      firstName: selectedUser.fullName.split(' ')[0]
+      // username: selectedUser.username,
+      // lastName: selectedUser.fullName.split(' ')[1],
+      // firstName: selectedUser.fullName.split(' ')[0]
     }
   })
 
@@ -172,21 +172,7 @@ const UserInfoCard = ({ selectedUser }) => {
     <Fragment>
       <Card>
         <CardBody>
-          <div className='user-avatar-section'>
-            <div className='d-flex align-items-center flex-column'>
-              {renderUserImg()}
-              <div className='d-flex flex-column align-items-center text-center'>
-                <div className='user-info'>
-                  <h4>{selectedUser !== null ? selectedUser.fullName : 'Eleanor Aguilar'}</h4>
-                  {selectedUser !== null ? (
-                    <Badge color={roleColors[selectedUser.role]} className='text-capitalize'>
-                      {selectedUser.role}
-                    </Badge>
-                  ) : null}
-                </div>
-              </div>
-            </div>
-          </div>
+          
           <div className='d-flex justify-content-around my-2 pt-75'>
             <div className='d-flex align-items-start me-2'>
               <Badge color='light-primary' className='rounded p-75'>
@@ -213,29 +199,29 @@ const UserInfoCard = ({ selectedUser }) => {
               <ul className='list-unstyled'>
                 <li className='mb-75'>
                   <span className='fw-bolder me-25'>Username:</span>
-                  <span>{selectedUser.username}</span>
+                  <span>sddsds</span>
                 </li>
                 <li className='mb-75'>
                   <span className='fw-bolder me-25'>Billing Email:</span>
-                  <span>{selectedUser.email}</span>
+                  <span>sddssdds</span>
                 </li>
                 <li className='mb-75'>
                   <span className='fw-bolder me-25'>Status:</span>
-                  <Badge className='text-capitalize' color={statusColors[selectedUser.status]}>
-                    {selectedUser.status}
+                  <Badge className='text-capitalize' >
+                    dsfdsdfsds
                   </Badge>
                 </li>
                 <li className='mb-75'>
                   <span className='fw-bolder me-25'>Role:</span>
-                  <span className='text-capitalize'>{selectedUser.role}</span>
+                  <span className='text-capitalize'>assaasassa</span>
                 </li>
                 <li className='mb-75'>
                   <span className='fw-bolder me-25'>Tax ID:</span>
-                  <span>Tax-{selectedUser.contact.substr(selectedUser.contact.length - 4)}</span>
+                  <span>assssssssss</span>
                 </li>
                 <li className='mb-75'>
                   <span className='fw-bolder me-25'>Contact:</span>
-                  <span>{selectedUser.contact}</span>
+                  <span>ascsasasa</span>
                 </li>
                 <li className='mb-75'>
                   <span className='fw-bolder me-25'>Language:</span>
@@ -316,7 +302,7 @@ const UserInfoCard = ({ selectedUser }) => {
                 <Input
                   type='email'
                   id='billing-email'
-                  defaultValue={selectedUser.email}
+                
                   placeholder='example@domain.com'
                 />
               </Col>
@@ -331,7 +317,7 @@ const UserInfoCard = ({ selectedUser }) => {
                   classNamePrefix='select'
                   options={statusOptions}
                   theme={selectThemeColors}
-                  defaultValue={statusOptions[statusOptions.findIndex(i => i.value === selectedUser.status)]}
+                  // defaultValue={statusOptions[statusOptions.findIndex(i => i.value === selectedUser.status)]}
                 />
               </Col>
               <Col md={6} xs={12}>
@@ -341,14 +327,14 @@ const UserInfoCard = ({ selectedUser }) => {
                 <Input
                   id='tax-id'
                   placeholder='Tax-1234'
-                  defaultValue={selectedUser.contact.substr(selectedUser.contact.length - 4)}
+                  // defaultValue={selectedUser.contact.substr(selectedUser.contact.length - 4)}
                 />
               </Col>
               <Col md={6} xs={12}>
                 <Label className='form-label' for='contact'>
                   Contact
                 </Label>
-                <Input id='contact' defaultValue={selectedUser.contact} placeholder='+1 609 933 4422' />
+                <Input id='contact' placeholder='+1 609 933 4422' />
               </Col>
               <Col md={6} xs={12}>
                 <Label className='form-label' for='language'>
