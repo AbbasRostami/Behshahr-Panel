@@ -12,6 +12,8 @@ import PublicRoute from "@components/routes/PublicRoute";
 
 // ** Utils
 import { isObjEmpty } from "@utils";
+import Wizard from "../../views/wizard";
+import UserView from "../../views/courses/view";
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -51,6 +53,18 @@ const Routes = [
   {
     path: "/second-page",
     element: <SecondPage />,
+  },
+  {
+    path: "/Courses/List",
+    element: <SecondPage />,
+  },
+  {
+    path: "/add-List",
+    element: <Wizard />,
+  },
+  {
+    path: "/courses-view",
+    element: <UserView />,
   },
   {
     path: "/login",

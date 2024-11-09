@@ -13,4 +13,24 @@ export default [
     icon: <Mail size={20} />,
     navLink: "/second-page",
   },
+
+  {
+    id: "Courses",
+    title: "مدیریت دوره",
+    icon: <User size={20} />,
+    children: [
+      {
+        id: "list",
+        title: "لیست دوره ها",
+        icon: <Circle size={12} />,
+        navLink: "/Courses/List",
+      },
+      {
+        id: "view",
+        title: "افزودن دوره",
+        icon: <Circle size={12} />,
+        navLink: "/add/List",
+      },
+    ],
+  },
 ];
