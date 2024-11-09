@@ -69,11 +69,11 @@ const Sidebar = props => {
                 >
                   <Mail size={18} className='me-75' />
                   <span className='align-middle'>Inbox</span>
-                  {store.emailsMeta.inbox ? (
+                  {/* {store.emailsMeta.inbox ? (
                     <Badge className='float-end' color='light-primary' pill>
                       {store.emailsMeta.inbox}
                     </Badge>
-                  ) : null}
+                  ) : null} */}
                 </ListGroupItem>
                 <ListGroupItem
                   tag={Link}
@@ -94,11 +94,11 @@ const Sidebar = props => {
                 >
                   <Edit2 size={18} className='me-75' />
                   <span className='align-middle'>Draft</span>
-                  {store.emailsMeta.draft ? (
+                  {/* {store.emailsMeta.draft ? (
                     <Badge className='float-end' color='light-warning' pill>
                       {store.emailsMeta.draft}
                     </Badge>
-                  ) : null}
+                  ) : null} */}
                 </ListGroupItem>
                 <ListGroupItem
                   tag={Link}
@@ -119,11 +119,11 @@ const Sidebar = props => {
                 >
                   <Info size={18} className='me-75' />
                   <span className='align-middle'>Spam</span>
-                  {store.emailsMeta.spam ? (
+                  {/* {store.emailsMeta.spam ? (
                     <Badge className='float-end' color='light-danger' pill>
                       {store.emailsMeta.spam}
                     </Badge>
-                  ) : null}
+                  ) : null} */}
                 </ListGroupItem>
                 <ListGroupItem
                   tag={Link}

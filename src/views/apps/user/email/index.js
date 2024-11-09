@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { Fragment, useEffect, useState } from 'react'
 
 // ** Email App Component Imports
-import Mails from './Mails'
+// import Mails from './Mails'
 import Sidebar from './Sidebar'
 
 // ** Third Party Components
@@ -67,7 +67,7 @@ const EmailApp = () => {
             })}
             onClick={() => setSidebarOpen(false)}
           ></div>
-          <Mails
+          {/* <Mails
             store={store}
             query={query}
             setQuery={setQuery}
@@ -85,7 +85,7 @@ const EmailApp = () => {
             updateMailLabel={updateMailLabel}
             selectCurrentMail={selectCurrentMail}
             resetSelectedMail={resetSelectedMail}
-          />
+          /> */}
         </div>
       </div>
     </Fragment>
