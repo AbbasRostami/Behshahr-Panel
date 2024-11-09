@@ -4,9 +4,9 @@ import UsersList from "../views/apps/user/list";
 const SecondPage = () => {
   return (
     <>
-      <Card>
+     
         <UsersList />
-      </Card>
+      
     </>
   );
 };
