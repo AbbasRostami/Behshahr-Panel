@@ -63,7 +63,7 @@ const StatsCard = ({ cols }) => {
   return (
     <Card className='card-statistics'>
       <CardHeader>
-        <CardTitle tag='h4'>آمار سایت</CardTitle>
+        <CardTitle tag='h4' className='fs-3'>آمار سایت</CardTitle>
         <CardText className='card-text font-small-2 me-25 mb-0'>Updated 1 month ago</CardText>
       </CardHeader>
       <CardBody className='statistics-body'>
