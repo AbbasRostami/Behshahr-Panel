@@ -13,4 +13,10 @@ export default [
     icon: <Mail size={20} />,
     navLink: "/second-page",
   },
+  {
+    id: "comment",
+    title: "مدیریت کامنت ها",
+    icon: <Mail size={20} />,
+    navLink: "/comment",
+  },
 ];

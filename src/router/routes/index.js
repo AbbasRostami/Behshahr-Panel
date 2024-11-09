@@ -12,6 +12,7 @@ import PublicRoute from "@components/routes/PublicRoute";
 
 // ** Utils
 import { isObjEmpty } from "@utils";
+import EmailApp from "../../views/apps/user/email";
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -43,6 +44,10 @@ const Routes = [
   {
     path: "/home",
     element: <Home />,
+  },
+  {
+    path: "/comment",
+    element: <EmailApp />
   },
   {
     path: "/sample",
