@@ -13,7 +13,7 @@ import WizardModernVertical from "./WizardModernVertical";
 // ** Custom Components
 import BreadCrumbs from "@components/breadcrumbs";
 
-const Wizard = () => {
+const CoursesAdd = () => {
   return (
     <Fragment>
       <Row>
@@ -24,4 +24,4 @@ const Wizard = () => {
     </Fragment>
   );
 };
-export default Wizard;
+export default CoursesAdd;

@@ -16,7 +16,7 @@ import UserInfoCard from "./UserInfoCard";
 // ** Styles
 import "@styles/react/apps/app-users.scss";
 
-const UserView = () => {
+const CoursesView = () => {
   // ** Store Vars
   const store = useSelector((state) => state.users);
   const dispatch = useDispatch();
@@ -52,4 +52,4 @@ const UserView = () => {
  
   );
 };
-export default UserView;
+export default CoursesView;

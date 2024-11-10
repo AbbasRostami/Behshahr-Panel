@@ -1,6 +1,6 @@
 import UsersList from "../views/apps/user/list";
 
-const SecondPage = () => {
+const CoursesList = () => {
   return (
     <>
         <UsersList />
@@ -8,4 +8,4 @@ const SecondPage = () => {
   );
 };
 
-export default SecondPage;
+export default CoursesList;

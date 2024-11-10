@@ -16,6 +16,9 @@ import Wizard from "../../views/courses/add";
 import UserView from "../../views/courses/view";
 import ArticlesAdds from "../../pages/Articles-adds";
 import ArticlesView from "../../views/articles/view";
+import CoursesList from "../../pages/CoursesList";
+import CoursesAdd from "../../views/courses/add";
+import CoursesView from "../../views/courses/view";
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -56,18 +59,23 @@ const Routes = [
     path: "/second-page",
     element: <SecondPage />,
   },
+
+  // Courses
   {
     path: "/courses-list",
-    element: <SecondPage />,
+    element: <CoursesList />,
   },
   {
     path: "/courses-add",
-    element: <Wizard />,
+    element: <CoursesAdd />,
   },
   {
     path: "/courses-view",
-    element: <UserView />,
+    element: <CoursesView />,
   },
+
+
+  //  Articles
   {
     path: "/articles-list",
     element: <SecondPage />,
@@ -80,6 +88,8 @@ const Routes = [
     path: "/articles-view",
     element: <ArticlesView />,
   },
+
+
   {
     path: "/login",
     element: <Login />,
