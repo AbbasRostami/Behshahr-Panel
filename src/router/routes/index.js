@@ -14,6 +14,8 @@ import PublicRoute from "@components/routes/PublicRoute";
 import { isObjEmpty } from "@utils";
 import Wizard from "../../views/courses/add";
 import UserView from "../../views/courses/view";
+import ArticlesAdds from "../../pages/Articles-adds";
+import ArticlesView from "../../views/articles/view";
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -65,6 +67,18 @@ const Routes = [
   {
     path: "/courses-view",
     element: <UserView />,
+  },
+  {
+    path: "/articles-list",
+    element: <SecondPage />,
+  },
+  {
+    path: "/articles-add",
+    element: <ArticlesAdds />,
+  },
+  {
+    path: "/articles-view",
+    element: <ArticlesView />,
   },
   {
     path: "/login",

@@ -7,7 +7,6 @@ import { Disc, X, Circle } from "react-feather";
 
 // ** Config
 import themeConfig from "@configs/themeConfig";
-
 // ** Utils
 import { getUserData, getHomeRouteForLoggedInUser } from "@utils";
 
