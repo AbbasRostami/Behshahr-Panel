@@ -29,7 +29,7 @@ export default [
         id: "view",
         title: "افزودن دوره",
         icon: <Circle size={12} />,
-        navLink: "/add/List",
+        navLink: "/add-List",
       },
     ],
   },
