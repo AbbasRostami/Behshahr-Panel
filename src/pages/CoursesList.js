@@ -1,9 +1,9 @@
-import UsersList from "../views/apps/user/list";
+import CoursesLists from "../views/courses/list";
 
 const CoursesList = () => {
   return (
     <>
-        <UsersList />
+        <CoursesLists />
     </>
   );
 };

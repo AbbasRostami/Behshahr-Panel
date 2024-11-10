@@ -19,6 +19,7 @@ import ArticlesView from "../../views/articles/view";
 import CoursesList from "../../pages/CoursesList";
 import CoursesAdd from "../../views/courses/add";
 import CoursesView from "../../views/courses/view";
+import ArticlesLists from "../../views/articles/list";
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -33,7 +34,7 @@ const TemplateTitle = "%s - Vuexy React Admin Template";
 const DefaultRoute = "/home";
 
 const Home = lazy(() => import("../../pages/Home"));
-const SecondPage = lazy(() => import("../../pages/ArticlesList"));
+const ArticlesList = lazy(() => import("../../pages/ArticlesList"));
 const SecondPage = lazy(() => import("../../pages/CoursesList"));
 const Login = lazy(() => import("../../pages/Login"));
 const Register = lazy(() => import("../../pages/Register"));
@@ -79,7 +80,7 @@ const Routes = [
   //  Articles
   {
     path: "/articles-list",
-    element: <SecondPage />,
+    element: <ArticlesList />,
   },
   {
     path: "/articles-add",

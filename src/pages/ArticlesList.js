@@ -1,6 +1,6 @@
 import ArticlesLists from "../views/articles/list";
 
-const SecondPage = () => {
+const ArticlesList = () => {
   return (
     <>
       <ArticlesLists />
@@ -8,4 +8,4 @@ const SecondPage = () => {
   );
 };
 
-export default SecondPage;
+export default ArticlesList;
