@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 
 // ** Store & Actions
-import { getUser } from "../store";
+// import { getUser } from "../store";
 import { useSelector, useDispatch } from "react-redux";
 
 // ** Reactstrap Imports
@@ -25,9 +25,9 @@ const CoursesView = () => {
   const { id } = useParams();
 
   // ** Get suer on mount
-  useEffect(() => {
-    dispatch(getUser(parseInt(id)));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getUser(parseInt(id)));
+  // }, [dispatch]);
 
   const [active, setActive] = useState("1");
 

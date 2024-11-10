@@ -9,7 +9,6 @@ import { User, Lock, Bookmark, Bell, Link } from "react-feather";
 import CoursesLists from ".";
 
 
-
 const CoursesListTabs = ({ active, toggleTab }) => {
   return (
     <Fragment>
@@ -23,7 +22,7 @@ const CoursesListTabs = ({ active, toggleTab }) => {
         <NavItem>
           <NavLink active={active === "2"} onClick={() => toggleTab("2")}>
           <User className="font-medium-3 me-50" />
-            <span className="fw-bold">دوره های رزرو</span>
+            <span className="fw-bold">دوره های رزرو شده</span>
           </NavLink>
         </NavItem>
         <NavItem>
@@ -36,9 +35,9 @@ const CoursesListTabs = ({ active, toggleTab }) => {
       </Nav>
 
       <TabContent activeTab={active}>
-        <TabPane tabId="1">
+        {/* <TabPane tabId="1">
           <CoursesLists />
-        </TabPane>
+        </TabPane> */}
 
         {/* <TabPane tabId="2">
           <UserProjectsList />

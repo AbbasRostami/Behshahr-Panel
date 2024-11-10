@@ -42,7 +42,7 @@ const UserTabs = ({ active, toggleTab }) => {
         <NavItem>
           <NavLink active={active === "5"} onClick={() => toggleTab("5")}>
             <Bookmark className="font-medium-3 me-50" />
-            <span className="fw-bold">اتصالات </span>
+            <span className="fw-bold">اتصالات</span>
           </NavLink>
         </NavItem>
       </Nav>
