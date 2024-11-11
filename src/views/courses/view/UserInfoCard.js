@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 
 // ** Reactstrap Imports
 import {
@@ -32,6 +32,7 @@ import { selectThemeColors } from "@utils";
 
 // ** Styles
 import "@styles/react/libs/react-select/_react-select.scss";
+import { getApi } from "../../../core/api/api";
 
 const roleColors = {
   editor: "light-info",
@@ -72,6 +73,17 @@ const languageOptions = [
 const MySwal = withReactContent(Swal);
 
 const UserInfoCard = ({ selectedUser }) => {
+  const [data, setData] = useState([]);
+  const GetCouresesView = async () => {
+    const path = `/Course/CourseList?PageNumber=2&RowsOfPage=1&SortingCol=DESC&SortType=Expire&Query`;
+    const response = await getApi({ path });
+    console.log(response.data.courseDtos[0]);
+    setData(response.data.courseDtos[0]);
+  };
+
+  useEffect(() => {
+    GetCouresesView();
+  }, []);
   // ** State
   const [show, setShow] = useState(false);
 
@@ -210,36 +222,36 @@ const UserInfoCard = ({ selectedUser }) => {
             {selectedUser !== null ? (
               <ul className="list-unstyled">
                 <li className="mb-75">
-                  <span className="fw-bolder me-25">Username:</span>
-                  <span>sddsds</span>
+                  <span className="fw-bolder me-25">نام کاربری:</span>
+                  <span> {data?.fullName} </span>
                 </li>
                 <li className="mb-75">
-                  <span className="fw-bolder me-25">Billing Email:</span>
-                  <span>sddssdds</span>
+                  <span className="fw-bolder me-25"> نام کلاس:</span>
+                  <span>{data?.classRoomName}</span>
                 </li>
                 <li className="mb-75">
-                  <span className="fw-bolder me-25">Status:</span>
-                  <Badge className="text-capitalize">dsfdsdfsds</Badge>
+                  <span className="fw-bolder me-25">سطح دوره:</span>
+                  <Badge className="text-capitalize">{data?.levelName}</Badge>
                 </li>
                 <li className="mb-75">
-                  <span className="fw-bolder me-25">Role:</span>
-                  <span className="text-capitalize">assaasassa</span>
+                  <span className="fw-bolder me-25">وضعیت دوره:</span>
+                  <span className="text-capitalize">{data?.statusName}</span>
                 </li>
                 <li className="mb-75">
-                  <span className="fw-bolder me-25">Tax ID:</span>
-                  <span>assssssssss</span>
+                  <span className="fw-bolder me-25">نوع دوره :</span>
+                  <span>{data?.typeName}</span>
                 </li>
                 <li className="mb-75">
-                  <span className="fw-bolder me-25">Contact:</span>
-                  <span>ascsasasa</span>
+                  <span className="fw-bolder me-25">قیمت دوره:</span>
+                  <span>{data?.cost} تومان </span>
                 </li>
                 <li className="mb-75">
-                  <span className="fw-bolder me-25">Language:</span>
-                  <span>English</span>
+                  <span className="fw-bolder me-25">شمارش دوره:</span>
+                  <span>{data?.reserveCount}</span>
                 </li>
                 <li className="mb-75">
-                  <span className="fw-bolder me-25">Country:</span>
-                  <span>England</span>
+                  <span className="fw-bolder me-25">توضیحات:</span>
+                  <span> {data?.describe} </span>
                 </li>
               </ul>
             ) : null}

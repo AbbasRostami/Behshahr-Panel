@@ -10,6 +10,9 @@ import { User, Lock, Bookmark, Bell, Link } from "react-feather";
 // ** User Components
 import UserProjectsList from "./UserProjectsList";
 import Connections from "./Connections";
+import GroupsList from "./groups";
+import Comments from "./comments";
+import Status from "./status";
 
 const UserTabs = ({ active, toggleTab }) => {
   return (
@@ -53,15 +56,15 @@ const UserTabs = ({ active, toggleTab }) => {
         </TabPane>
 
         <TabPane tabId="2">
-          <UserProjectsList />
+          <GroupsList />
         </TabPane>
 
         <TabPane tabId="3">
-          <UserProjectsList />
+          <Comments />
         </TabPane>
 
         <TabPane tabId="4">
-          <UserProjectsList />
+          <Status />
         </TabPane>
 
         <TabPane tabId="5">

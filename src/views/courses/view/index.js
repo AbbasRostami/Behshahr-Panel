@@ -15,6 +15,7 @@ import UserInfoCard from "./UserInfoCard";
 
 // ** Styles
 import "@styles/react/apps/app-users.scss";
+import { getApi } from "../../../core/api/api";
 
 const CoursesView = () => {
   // ** Store Vars
@@ -48,8 +49,6 @@ const CoursesView = () => {
         </Col>
       </Row>
     </div>
-  
- 
   );
 };
 export default CoursesView;
