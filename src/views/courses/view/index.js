@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 
 // ** Store & Actions
-import { getUser } from "../store";
+// import { getUser } from "../store";
 import { useSelector, useDispatch } from "react-redux";
 
 // ** Reactstrap Imports
@@ -15,6 +15,7 @@ import UserInfoCard from "./UserInfoCard";
 
 // ** Styles
 import "@styles/react/apps/app-users.scss";
+import { getApi } from "../../../core/api/api";
 
 const UserView = () => {
   // ** Store Vars
@@ -25,9 +26,9 @@ const UserView = () => {
   const { id } = useParams();
 
   // ** Get suer on mount
-  useEffect(() => {
-    dispatch(getUser(parseInt(id)));
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(getUser(parseInt(id)));
+  // }, [dispatch]);
 
   const [active, setActive] = useState("1");
 
@@ -48,8 +49,6 @@ const UserView = () => {
         </Col>
       </Row>
     </div>
-  
- 
   );
 };
 export default UserView;
