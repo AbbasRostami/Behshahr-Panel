@@ -13,7 +13,7 @@ import { User, UserPlus, UserCheck, UserX } from "react-feather";
 // ** Styles
 import "@styles/react/apps/app-users.scss";
 
-const UsersList = () => {
+const ArticlesLists = () => {
   return (
     <div className="app-user-list">
       {/* <Row>
@@ -55,4 +55,4 @@ const UsersList = () => {
   );
 };
 
-export default UsersList;
+export default ArticlesLists;

@@ -13,13 +13,9 @@ import WizardModernVertical from "./WizardModernVertical";
 // ** Custom Components
 import BreadCrumbs from "@components/breadcrumbs";
 
-const Wizard = () => {
+const CoursesAdd = () => {
   return (
     <Fragment>
-      <BreadCrumbs
-        title="Form Wizard"
-        data={[{ title: "Form" }, { title: "Form Wizard" }]}
-      />
       <Row>
         <Col sm="12">
           <WizardVertical />
@@ -28,4 +24,4 @@ const Wizard = () => {
     </Fragment>
   );
 };
-export default Wizard;
+export default CoursesAdd;

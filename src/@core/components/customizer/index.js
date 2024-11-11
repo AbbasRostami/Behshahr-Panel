@@ -221,13 +221,7 @@ const Customizer = (props) => {
         open: openCustomizer,
       })}
     >
-      <a
-        href="/"
-        className="customizer-toggle d-flex align-items-center justify-content-center"
-        onClick={handleToggle}
-      >
-        <Settings size={14} className="spinner" />
-      </a>
+     
       <PerfectScrollbar
         className="customizer-content"
         options={{ wheelPropagation: false }}

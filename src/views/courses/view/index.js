@@ -17,7 +17,7 @@ import UserInfoCard from "./UserInfoCard";
 import "@styles/react/apps/app-users.scss";
 import { getApi } from "../../../core/api/api";
 
-const UserView = () => {
+const CoursesView = () => {
   // ** Store Vars
   const store = useSelector((state) => state.users);
   const dispatch = useDispatch();
@@ -51,4 +51,4 @@ const UserView = () => {
     </div>
   );
 };
-export default UserView;
+export default CoursesView;

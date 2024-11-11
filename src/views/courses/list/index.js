@@ -12,11 +12,32 @@ import { User, UserPlus, UserCheck, UserX } from "react-feather";
 
 // ** Styles
 import "@styles/react/apps/app-users.scss";
+import { useState } from "react";
+import CoursesListTabs from "./Tabs";
 
-const UsersList = () => {
+const CoursesLists = () => {
+
+  const [active, setActive] = useState("1");
+
+  const toggleTab = (tab) => {
+    if (active !== tab) {
+      setActive(tab);
+    }
+  };
+
   return (
     <div className="app-user-list">
-      {/* <Row>
+
+      <Row>
+      <Col xl="8" lg="7" xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
+          <CoursesListTabs active={active} toggleTab={toggleTab} />
+        </Col>
+      </Row>
+
+      
+      <Row>
+
+       
         <Col lg="3" sm="6">
           <StatsHorizontal
             color="primary"
@@ -49,10 +70,11 @@ const UsersList = () => {
             renderStats={<h3 className="fw-bolder mb-75">237</h3>}
           />
         </Col>
-      </Row> */}
+        
+      </Row>
       <Table />
     </div>
   );
 };
 
-export default UsersList;
+export default CoursesLists;

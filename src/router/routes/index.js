@@ -12,8 +12,14 @@ import PublicRoute from "@components/routes/PublicRoute";
 
 // ** Utils
 import { isObjEmpty } from "@utils";
-import Wizard from "../../views/wizard";
+import Wizard from "../../views/courses/add";
 import UserView from "../../views/courses/view";
+import ArticlesAdds from "../../pages/Articles-adds";
+import ArticlesView from "../../views/articles/view";
+import CoursesList from "../../pages/CoursesList";
+import CoursesAdd from "../../views/courses/add";
+import CoursesView from "../../views/courses/view";
+import ArticlesLists from "../../views/articles/list";
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -28,7 +34,8 @@ const TemplateTitle = "%s - Vuexy React Admin Template";
 const DefaultRoute = "/home";
 
 const Home = lazy(() => import("../../pages/Home"));
-const SecondPage = lazy(() => import("../../pages/SecondPage"));
+const ArticlesList = lazy(() => import("../../pages/ArticlesList"));
+const SecondPage = lazy(() => import("../../pages/CoursesList"));
 const Login = lazy(() => import("../../pages/Login"));
 const Register = lazy(() => import("../../pages/Register"));
 const ForgotPassword = lazy(() => import("../../pages/ForgotPassword"));
@@ -54,18 +61,37 @@ const Routes = [
     path: "/second-page",
     element: <SecondPage />,
   },
+
+  // Courses
   {
-    path: "/Courses/List",
-    element: <SecondPage />,
+    path: "/courses-list",
+    element: <CoursesList />,
   },
   {
-    path: "/add-List",
-    element: <Wizard />,
+    path: "/courses-add",
+    element: <CoursesAdd />,
   },
   {
     path: "/courses-view",
-    element: <UserView />,
+    element: <CoursesView />,
   },
+
+
+  //  Articles
+  {
+    path: "/articles-list",
+    element: <ArticlesList />,
+  },
+  {
+    path: "/articles-add",
+    element: <ArticlesAdds />,
+  },
+  {
+    path: "/articles-view",
+    element: <ArticlesView />,
+  },
+
+
   {
     path: "/login",
     element: <Login />,
