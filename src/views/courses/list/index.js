@@ -1,8 +1,8 @@
 // ** User List Component
-import Table from "./Table";
+import Table from "./CoursesYours";
 
 // ** Reactstrap Imports
-import { Row, Col } from "reactstrap";
+import { Row, Col, TabContent, TabPane } from "reactstrap";
 
 // ** Custom Components
 import StatsHorizontal from "@components/widgets/stats/StatsHorizontal";
@@ -14,6 +14,10 @@ import { User, UserPlus, UserCheck, UserX } from "react-feather";
 import "@styles/react/apps/app-users.scss";
 import { useState } from "react";
 import CoursesListTabs from "./Tabs";
+import UsersList from "./CoursesYours";
+import CoursesYours from "./CoursesYours";
+import CoursesReserve from "./CoursesReserve";
+import CoursesTeacher from "./CoursesTeacher";
 
 const CoursesLists = () => {
 
@@ -33,8 +37,6 @@ const CoursesLists = () => {
           <CoursesListTabs active={active} toggleTab={toggleTab} />
         </Col>
       </Row>
-
-      
       <Row>
 
        
@@ -72,7 +74,20 @@ const CoursesLists = () => {
         </Col>
         
       </Row>
-      <Table />
+      
+      <TabContent activeTab={active}>
+        <TabPane tabId="1">
+          <CoursesYours />
+        </TabPane>
+
+        <TabPane tabId="2">
+          <CoursesReserve />
+        </TabPane>
+
+        <TabPane tabId="3">
+          <CoursesTeacher />
+        </TabPane>
+      </TabContent>
     </div>
   );
 };

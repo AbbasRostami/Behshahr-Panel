@@ -6,7 +6,6 @@ import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
 
 // ** Icons Imports
 import { User, Lock, Bookmark, Bell, Link } from "react-feather";
-import CoursesLists from ".";
 
 
 const CoursesListTabs = ({ active, toggleTab }) => {
@@ -34,19 +33,7 @@ const CoursesListTabs = ({ active, toggleTab }) => {
       
       </Nav>
 
-      <TabContent activeTab={active}>
-        {/* <TabPane tabId="1">
-          <CoursesLists />
-        </TabPane> */}
-
-        {/* <TabPane tabId="2">
-          <UserProjectsList />
-        </TabPane>
-
-        <TabPane tabId="3">
-          <UserProjectsList />
-        </TabPane> */}
-      </TabContent>
+      
     </Fragment>
   );
 };
