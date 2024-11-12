@@ -16,6 +16,8 @@ import reactLabel from "@src/assets/images/icons/brands/react-label.png";
 import sketchLabel from "@src/assets/images/icons/brands/sketch-label.png";
 // ** Styles
 import "@styles/react/libs/tables/react-dataTable-component.scss";
+import { useEffect, useState } from "react";
+import { getApi } from "../../../core/api/api";
 
 const projectsArr = [
   {
@@ -137,6 +139,17 @@ export const columns = [
 ];
 
 const Comments = () => {
+  const [data, setData] = useState([]);
+  const GetCouresesView = async () => {
+    const path = ``;
+    const response = await getApi({ path });
+    console.log(response.data);
+    setData(response.data);
+  };
+
+  useEffect(() => {
+    GetCouresesView();
+  }, []);
   return (
     <Card>
       <div className="react-dataTable user-view-account-projects">

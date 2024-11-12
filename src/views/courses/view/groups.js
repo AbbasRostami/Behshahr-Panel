@@ -16,6 +16,8 @@ import reactLabel from "@src/assets/images/icons/brands/react-label.png";
 import sketchLabel from "@src/assets/images/icons/brands/sketch-label.png";
 // ** Styles
 import "@styles/react/libs/tables/react-dataTable-component.scss";
+import { useEffect, useState } from "react";
+import { getApi } from "../../../core/api/api";
 
 const projectsArr = [
   {
@@ -89,21 +91,20 @@ export const columns = [
     sortable: true,
     minWidth: "300px",
     name: "نام گروه",
-    selector: (row) => row.title,
+    selector: (row) => row.courseName,
     cell: (row) => {
       return (
         <div className="d-flex justify-content-left align-items-center ">
-          <div className="avatar-wrapper">
+          {/* <div className="avatar-wrapper">
             <Avatar
               className="me-1"
               img={row.img}
               alt={row.title}
               imgWidth="32"
             />
-          </div>
+          </div> */}
           <div className="d-flex flex-column">
-            <span className="text-truncate fw-bolder">{row.title}</span>
-            <small className="text-muted">{row.subtitle}</small>
+            <span className="text-truncate fw-bolder">{row.courseName}</span>
           </div>
         </div>
       );
@@ -111,23 +112,14 @@ export const columns = [
   },
   {
     name: "وضعیت دوره ",
-    selector: (row) => row.totalTasks,
+    selector: (row) => row.courseCapacity,
   },
   {
     name: "نام استاد",
-    selector: (row) => row.progress,
+    selector: (row) => row.teacherName,
     sortable: true,
     cell: (row) => {
-      return (
-        <div className="d-flex flex-column w-100">
-          <small className="mb-1">{`${row.progress}%`}</small>
-          <Progress
-            value={row.progress}
-            style={{ height: "6px" }}
-            className={`w-100 progress-bar-${row.progressColor}`}
-          />
-        </div>
-      );
+      return <div className="d-flex flex-column w-100">{row.teacherName}</div>;
     },
   },
   {
@@ -137,6 +129,17 @@ export const columns = [
 ];
 
 const GroupsList = () => {
+  const [data, setData] = useState([]);
+  const GetCouresesView = async () => {
+    const path = `/CourseGroup`;
+    const response = await getApi({ path });
+    console.log(response.data?.courseGroupDtos);
+    setData(response.data?.courseGroupDtos);
+  };
+
+  useEffect(() => {
+    GetCouresesView();
+  }, []);
   return (
     <Card>
       <div className="react-dataTable user-view-account-projects">
@@ -144,7 +147,7 @@ const GroupsList = () => {
           noHeader
           responsive
           columns={columns}
-          data={projectsArr}
+          data={data}
           className="react-dataTable"
           sortIcon={<ChevronDown size={10} />}
         />
