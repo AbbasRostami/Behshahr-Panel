@@ -11,7 +11,7 @@ export default [
     id: "secondPage",
     title: "مدیریت کاربران",
     icon: <Mail size={20} />,
-    navLink: "/second-page",
+    navLink: "/users",
   },
 
   {

@@ -100,32 +100,32 @@ const UsersList = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [sortColumn, setSortColumn] = useState('id')
   const [rowsPerPage, setRowsPerPage] = useState(10)
-  // const [currentRole, setCurrentRole] = useState({ value: '', label: 'انتخاب کنید...' })
-  // const [currentPlan, setCurrentPlan] = useState({ value: '', label: 'انتخاب کنید...'  })
-  // const [currentStatus, setCurrentStatus] = useState({ value: '', label: 'انتخاب کنید...' , number: 0 })
+  const [currentRole, setCurrentRole] = useState({ value: '', label: 'انتخاب کنید...' })
+  const [currentPlan, setCurrentPlan] = useState({ value: '', label: 'انتخاب کنید...'  })
+  const [currentStatus, setCurrentStatus] = useState({ value: '', label: 'انتخاب کنید...' , number: 0 })
 
 
-  // const roleOptions = [
-  //   { value: '', label: 'Select Role' },
-  //   { value: 'admin', label: 'ادمین' },
-  //   { value: 'author', label: 'استاد' },
-  //   { value: 'editor', label: 'دانشجو' },
+  const roleOptions = [
+    { value: '', label: 'Select Role' },
+    { value: 'admin', label: 'ادمین' },
+    { value: 'author', label: 'استاد' },
+    { value: 'editor', label: 'دانشجو' },
 
-  // ]
+  ]
 
-  // const planOptions = [
-  //   { value: '', label: 'Select Plan' },
-  //   { value: 'basic', label: 'Basic' },
-  //   { value: 'company', label: 'Company' },
-  //   { value: 'enterprise', label: 'Enterprise' },
-  //   { value: 'team', label: 'Team' }
-  // ]
+  const planOptions = [
+    { value: '', label: 'Select Plan' },
+    { value: 'basic', label: 'Basic' },
+    { value: 'company', label: 'Company' },
+    { value: 'enterprise', label: 'Enterprise' },
+    { value: 'team', label: 'Team' }
+  ]
 
-  // const statusOptions = [
-  //   { value: '', label: 'Select Status', number: 0 },
-  //   { value: 'active', label: 'فعال', number: 1 },
-  //   { value: 'inactive', label: 'غیرفعال', number: 2 }
-  // ]
+  const statusOptions = [
+    { value: '', label: 'Select Status', number: 0 },
+    { value: 'active', label: 'فعال', number: 1 },
+    { value: 'inactive', label: 'غیرفعال', number: 2 }
+  ]
 
   // ** Function in get data on page change
   const handlePagination = page => {
@@ -223,7 +223,7 @@ const UsersList = () => {
 
   return (
     <Fragment>
-      {/* <Card>
+      <Card>
         <CardHeader>
           <CardTitle tag='h4'>فیلتر</CardTitle>
         </CardHeader>
@@ -302,7 +302,7 @@ const UsersList = () => {
             
           </Row>
         </CardBody>
-      </Card> */}
+      </Card>
 
       <Card className='overflow-hidden'>
         <div className='react-dataTable'>
