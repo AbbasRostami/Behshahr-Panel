@@ -21,6 +21,7 @@ import CoursesAdd from "../../views/courses/add";
 import CoursesView from "../../views/courses/view";
 import ArticlesLists from "../../views/articles/list";
 import UserList from "../../pages/UserList";
+import UsersView from "../../views/users/view";
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -64,7 +65,7 @@ const Routes = [
   },
   {
     path: "/users-view",
-    element: <SecondPage />,
+    element: <UsersView />,
   },
   
   // Courses
