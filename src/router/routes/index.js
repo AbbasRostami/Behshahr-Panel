@@ -116,6 +116,35 @@ const Routes = [
       layout: "blank",
     },
   },
+
+  {
+    element: <EmailApp />,
+    path: '/apps/email',
+    meta: {
+      appLayout: true,
+      className: 'email-application'
+    }
+  },
+  // {
+  //   element: <EmailApp />,
+  //   path: '/apps/email/:folder',
+  //   meta: {
+  //     appLayout: true,
+  //     className: 'email-application'
+  //   }
+  // },
+  {
+    element: <EmailApp />,
+    path: '/apps/email/label/:label',
+    meta: {
+      appLayout: true,
+      className: 'email-application'
+    }
+  },
+  {
+    element: <EmailApp />,
+    path: '/apps/email/:filter'
+  },
 ];
 
 const getRouteMeta = (route) => {

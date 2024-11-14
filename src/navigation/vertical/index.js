@@ -17,6 +17,6 @@ export default [
     id: "comment",
     title: "مدیریت کامنت ها",
     icon: <Mail size={20} />,
-    navLink: "/comment",
+    navLink: "/comments",
   },
 ];
