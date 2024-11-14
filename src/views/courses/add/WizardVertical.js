@@ -1,45 +1,38 @@
-// ** React Imports
 import { useRef, useState } from "react";
-
-// ** Custom Components
 import Wizard from "@components/wizard";
-
-// ** Steps
-import Address from "./steps/Address";
-import SocialLinks from "./steps/SocialLinks";
-import PersonalInfo from "./steps/PersonalInfo";
-import AccountDetails from "./steps/AccountDetails";
+import Address from "./steps/StepThree";
+import SocialLinks from "./steps/StepFour";
+import PersonalInfo from "./steps/StepTwo";
+import AccountDetails from "./steps/StepOne";
 
 const WizardVertical = () => {
-  // ** Ref
   const ref = useRef(null);
 
-  // ** State
   const [stepper, setStepper] = useState(null);
 
   const steps = [
     {
       id: "account-details",
-      title: "Account Details",
-      subtitle: "Enter Your Account Details.",
+      title: "اطلاعات دوره مرحله اول",
+      subtitle: "اطلاعات دوره را وارد کنید.",
       content: <AccountDetails stepper={stepper} type="wizard-vertical" />,
     },
     {
       id: "personal-info",
-      title: "Personal Info",
-      subtitle: "Add Personal Info",
+      title: "اطلاعات دوره مرحله دوم",
+      subtitle: "اطلاعات دوره را وارد کنید.",
       content: <PersonalInfo stepper={stepper} type="wizard-vertical" />,
     },
     {
       id: "step-address",
-      title: "Address",
-      subtitle: "Add Address",
+      title: "اطلاعات دوره مرحله سوم",
+      subtitle: "اطلاعات دوره را وارد کنید.",
       content: <Address stepper={stepper} type="wizard-vertical" />,
     },
     {
       id: "social-links",
-      title: "Social Links",
-      subtitle: "Add Social Links",
+      title: "افزدون تکنولوژی",
+      subtitle: "اطلاعات تکنولوژی را وارد کنید.",
       content: <SocialLinks stepper={stepper} type="wizard-vertical" />,
     },
   ];
