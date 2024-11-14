@@ -14,26 +14,16 @@ import {
   ModalBody,
   ModalHeader,
 } from "reactstrap";
-
 import Swal from "sweetalert2";
 import Select from "react-select";
 import { Check, Briefcase } from "react-feather";
 import { useForm, Controller } from "react-hook-form";
 import withReactContent from "sweetalert2-react-content";
-
-import Avatar from "@components/avatar";
-
 import { selectThemeColors } from "@utils";
 
 import "@styles/react/libs/react-select/_react-select.scss";
-import { getApi } from "../../../core/api/api";
+// import { getApi } from "../../../core/api/api";
 import avatar from "./../../../assets/images/portrait/small/avatar-s-2.jpg"
-
-const statusColors = {
-  active: "light-success",
-  pending: "light-warning",
-  inactive: "light-secondary",
-};
 
 const statusOptions = [
   { value: "active", label: "Active" },
@@ -244,7 +234,7 @@ const UserInfoCard = ({ selectedUser }) => {
         ></ModalHeader>
         <ModalBody className="px-sm-5 pt-50 pb-5">
           <div className="text-center mb-2">
-            <h1 className="mb-1">ویرایش اطلاعات دوره</h1>
+            <h1 className="mb-1">ویرایش اطلاعات کاربر</h1>
           </div>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Row className="gy-1 pt-75">

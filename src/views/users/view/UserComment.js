@@ -1,5 +1,5 @@
-import { Badge, Card, DropdownItem, DropdownMenu, DropdownToggle, Progress, UncontrolledDropdown } from "reactstrap";
-import { Archive, ChevronDown, FileText, MoreVertical, Trash2 } from "react-feather";
+import { Badge, Card, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from "reactstrap";
+import { Archive, ChevronDown, MoreVertical, Trash2 } from "react-feather";
 import DataTable from "react-data-table-component";
 import Avatar from "@components/avatar";
 import xdLabel from "@src/assets/images/icons/brands/xd-label.png";
@@ -8,8 +8,7 @@ import htmlLabel from "@src/assets/images/icons/brands/html-label.png";
 import reactLabel from "@src/assets/images/icons/brands/react-label.png";
 import sketchLabel from "@src/assets/images/icons/brands/sketch-label.png";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
-import { getApi } from "../../../core/api/api";
-import { Link } from "react-router-dom";
+// import { getApi } from "../../../core/api/api";
 import toast from "react-hot-toast";
 
 const projectsArr = [

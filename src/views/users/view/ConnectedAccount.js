@@ -1,22 +1,5 @@
-// ** Reactstrap Imports
-import { Card, CardBody, CardHeader, CardTitle, Input, Label, Progress } from "reactstrap";
-
-// ** Third Party Components
-import { Check, ChevronDown, X } from "react-feather";
-import DataTable from "react-data-table-component";
-
-// ** Custom Components
-import Avatar from "@components/avatar";
-
-// ** Label Images
-import xdLabel from "@src/assets/images/icons/brands/xd-label.png";
-import vueLabel from "@src/assets/images/icons/brands/vue-label.png";
-import htmlLabel from "@src/assets/images/icons/brands/html-label.png";
-import reactLabel from "@src/assets/images/icons/brands/react-label.png";
-import sketchLabel from "@src/assets/images/icons/brands/sketch-label.png";
-// ** Styles
+import { Card, CardBody, CardTitle, Input, Label, Progress } from "reactstrap";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
-
 import slackIcon from "./../../../assets/images/icons/social/slack.png";
 import asanaIcon from "./../../../assets/images/icons/social/asana.png";
 import googleIcon from "./../../../assets/images/icons/social/google.png";

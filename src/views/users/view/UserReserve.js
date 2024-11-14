@@ -1,30 +1,21 @@
-// ** Reactstrap Imports
-import { Card, CardHeader, Progress } from "reactstrap";
-
-// ** Third Party Components
+import { Badge, Card, CardHeader, Progress } from "reactstrap";
 import { ChevronDown } from "react-feather";
 import DataTable from "react-data-table-component";
-
-// ** Custom Components
-import Avatar from "@components/avatar";
-
-// ** Label Images
 import xdLabel from "@src/assets/images/icons/brands/xd-label.png";
 import vueLabel from "@src/assets/images/icons/brands/vue-label.png";
 import htmlLabel from "@src/assets/images/icons/brands/html-label.png";
 import reactLabel from "@src/assets/images/icons/brands/react-label.png";
 import sketchLabel from "@src/assets/images/icons/brands/sketch-label.png";
-// ** Styles
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { useEffect, useState } from "react";
-import { getApi } from "../../../core/api/api";
+// import { getApi } from "../../../core/api/api";
 
 const projectsArr = [
   {
     progress: 60,
     hours: "210:30h",
     progressColor: "info",
-    totalTasks: "233/240",
+    totalTasks: "2024/02/14",
     subtitle: "React Project",
     title: "BGC eCommerce App",
     img: reactLabel,
@@ -32,7 +23,7 @@ const projectsArr = [
   {
     hours: "89h",
     progress: 15,
-    totalTasks: "9/50",
+    totalTasks: "2024/02/14",
     progressColor: "danger",
     subtitle: "UI/UX Project",
     title: "Falcon Logo Design",
@@ -41,7 +32,7 @@ const projectsArr = [
   {
     progress: 90,
     hours: "129:45h",
-    totalTasks: "100/190",
+    totalTasks: "2024/02/14",
     progressColor: "success",
     subtitle: "Vuejs Project",
     title: "Dashboard Design",
@@ -50,7 +41,7 @@ const projectsArr = [
   {
     hours: "45h",
     progress: 49,
-    totalTasks: "12/86",
+    totalTasks: "2024/02/14",
     progressColor: "warning",
     subtitle: "iPhone Project",
     title: "Foodista mobile app",
@@ -60,7 +51,7 @@ const projectsArr = [
   {
     progress: 73,
     hours: "67:10h",
-    totalTasks: "234/378",
+    totalTasks: "2024/02/14",
     progressColor: "info",
     subtitle: "React Project",
     title: "Dojo React Project",
@@ -69,7 +60,7 @@ const projectsArr = [
   {
     progress: 81,
     hours: "108:39h",
-    totalTasks: "264/537",
+    totalTasks: "2024/02/14",
     title: "HTML Project",
     progressColor: "success",
     subtitle: "Crypto Website",
@@ -78,7 +69,7 @@ const projectsArr = [
   {
     progress: 78,
     hours: "88:19h",
-    totalTasks: "214/627",
+    totalTasks: "2024/02/14",
     progressColor: "success",
     subtitle: "Vuejs Project",
     title: "Vue Admin template",
@@ -111,16 +102,25 @@ export const columns = [
     },
   },
   {
-    name: "وضعیت دوره ",
-    selector: (row) => row.title,
+    name: "تاریخ رزرو",
+    selector: (row) => row.totalTasks,
   },
   {
-    name: "نام استاد",
-    selector: (row) => row.title,
+    name: "وضعیت",
+    minWidth: "100px",
     sortable: true,
-    cell: (row) => {
-      return <div className="d-flex flex-column w-100">{row.title}</div>;
-    },
+    sortField: "status",
+    selector: (row) => row.status,
+    cell: (row) => (
+      <Badge className="text-capitalize" color="success" pill>
+        {row.status} رزرو شده
+      </Badge>
+
+      // color={statusObj[row.status]} pill
+      // color='success' pill
+      // color='danger' pill
+      // color='secondary' pill
+    ),
   },
   {
     name: "اقدام",
@@ -128,7 +128,7 @@ export const columns = [
   },
 ];
 
-const GroupsList = () => {
+const UserReserve = () => {
   // const [data, setData] = useState([]);
   // const GetCouresesView = async () => {
   //   const path = `/CourseGroup`;
@@ -156,4 +156,4 @@ const GroupsList = () => {
   );
 };
 
-export default GroupsList;
+export default UserReserve;

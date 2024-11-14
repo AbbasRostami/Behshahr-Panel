@@ -1,16 +1,9 @@
-// ** React Imports
 import { Fragment } from "react";
-
-// ** Reactstrap Imports
 import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
-
-// ** Icons Imports
-import { User, Lock, Bookmark, Bell, Link } from "react-feather";
-
-// ** User Components
+import { User, Lock, Bookmark } from "react-feather";
 import UserProjectsList from "./UserCourses";
 import Connections from "./SocialsAccount";
-import GroupsList from "./groups";
+import GroupsList from "./UserReserve";
 import Comments from "./UserComment";
 import Status from "./ConnectedAccount";
 
