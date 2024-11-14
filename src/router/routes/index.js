@@ -13,6 +13,8 @@ import PublicRoute from "@components/routes/PublicRoute";
 // ** Utils
 import { isObjEmpty } from "@utils";
 import EmailApp from "../../views/apps/user/email";
+import CommentsList from "../../views/email";
+import Comments from "../../pages/Comments";
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -118,23 +120,23 @@ const Routes = [
   },
 
   {
-    element: <EmailApp />,
+    element: <CommentsList />,
     path: '/apps/email',
     meta: {
       appLayout: true,
       className: 'email-application'
     }
   },
-  // {
-  //   element: <EmailApp />,
-  //   path: '/apps/email/:folder',
-  //   meta: {
-  //     appLayout: true,
-  //     className: 'email-application'
-  //   }
-  // },
   {
-    element: <EmailApp />,
+    element: <CommentsList />,
+    path: '/apps/email/:folder',
+    meta: {
+      appLayout: true,
+      className: 'email-application'
+    }
+  },
+  {
+    element: <CommentsList />,
     path: '/apps/email/label/:label',
     meta: {
       appLayout: true,
@@ -142,7 +144,7 @@ const Routes = [
     }
   },
   {
-    element: <EmailApp />,
+    element: <CommentsList />,
     path: '/apps/email/:filter'
   },
 ];

@@ -25,7 +25,7 @@ import {
 // ** Styles
 import '@styles/react/apps/app-email.scss'
 
-const EmailApp = () => {
+const CommentsList = () => {
   // ** States
   const [query, setQuery] = useState('')
   const [openMail, setOpenMail] = useState(false)
@@ -92,4 +92,4 @@ const EmailApp = () => {
   )
 }
 
-export default EmailApp
+export default CommentsList

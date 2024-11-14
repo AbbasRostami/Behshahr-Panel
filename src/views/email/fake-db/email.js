@@ -1,4 +1,4 @@
-import mock from '../mock'
+import mock from './mock'
 
 // Avatars Imports
 import avatar1 from '@src/assets/images/avatars/1.png'
