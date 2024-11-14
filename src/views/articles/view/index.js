@@ -1,9 +1,4 @@
-// ** React Imports
-import { Fragment, useState, useEffect } from "react";
-
-// ** Third Party Components
-import axios from "axios";
-import classnames from "classnames";
+import { Fragment, useState} from "react";
 import {
   Share2,
   GitHub,
@@ -15,25 +10,16 @@ import {
   CornerUpLeft,
   MessageSquare,
 } from "react-feather";
-
-// ** Utils
-import { kFormatter } from "@utils";
-
-// ** Custom Components
 import Avatar from "@components/avatar";
-import Breadcrumbs from "@components/breadcrumbs";
 
-// ** Reactstrap Imports
 import {
   Row,
   Col,
   Card,
   Form,
-  Badge,
   Input,
   Label,
   Button,
-  CardImg,
   CardBody,
   CardText,
   CardTitle,
@@ -41,40 +27,52 @@ import {
   DropdownItem,
   DropdownToggle,
   UncontrolledDropdown,
+  Modal,
+  ModalHeader,
+  ModalBody,
 } from "reactstrap";
 
-// ** Styles
 import "@styles/base/pages/page-blog.scss";
 
-// ** Images
-import cmtImg from "@src/assets/images/portrait/small/avatar-s-6.jpg";
 import avatar from "./../../../assets/images/portrait/small/avatar-s-11.jpg";
+import { Controller, useForm } from "react-hook-form";
+import StateManagedSelect from "react-select";
+
 const ArticlesView = () => {
-  const badgeColorsArr = {
-    Quote: "light-info",
-    Fashion: "light-primary",
-    Gaming: "light-danger",
-    Video: "light-warning",
-    Food: "light-success",
+ 
+  const [show, setShow] = useState(false);
+
+  const {
+    control,
+    setError,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      // username: selectedUser.username,
+      // lastName: selectedUser.fullName.split(' ')[1],
+      // firstName: selectedUser.fullName.split(' ')[0]
+    },
+  });
+
+  const onSubmit = (data) => {
+    if (Object.values(data).every((field) => field.length > 0)) {
+      setShow(false);
+    } else {
+      for (const key in data) {
+        if (data[key].length === 0) {
+          setError(key, {
+            type: "manual",
+          });
+        }
+      }
+    }
   };
 
-  const renderTags = () => {
-    return data.blog.tags.map((tag, index) => {
-      return (
-        <a key={index} href='/' onClick={e => e.preventDefault()}>
-          <Badge
-            className={classnames({
-              'me-50': index !== data.blog.tags.length - 1
-            })}
-            color={badgeColorsArr[tag]}
-            pill
-          >
-            {tag}
-          </Badge>
-        </a>
-      )
-    })
-  }
+
+  const countryOptions = [
+    { value: "uk", label: "اخبار پژوهشگاه" },
+  ];
 
   const renderComments = () => {
    
@@ -289,20 +287,9 @@ const ArticlesView = () => {
                             />
                           </div>
                         </Col>
+                      
                         <Col sm="12">
-                          <div className="form-check mb-2">
-                            <Input type="checkbox" id="save-data-checkbox" />
-                            <Label
-                              className="form-check-label"
-                              for="save-data-checkbox"
-                            >
-                              Save my name, email, and website in this browser
-                              for the next time I comment.
-                            </Label>
-                          </div>
-                        </Col>
-                        <Col sm="12">
-                          <Button color="primary">Post Comment</Button>
+                          <Button color="primary" onClick={() => setShow(true)}>ویرایش</Button>
                         </Col>
                       </Row>
                     </Form>
@@ -313,6 +300,139 @@ const ArticlesView = () => {
           </div>
         </div>
       </div>
+
+      <Modal
+        isOpen={show}
+        toggle={() => setShow(!show)}
+        className="modal-dialog-centered modal-lg"
+      >
+        <ModalHeader
+          className="bg-transparent"
+          toggle={() => setShow(!show)}
+        ></ModalHeader>
+        <ModalBody className="px-sm-5 pt-50 pb-5">
+          <div className="text-center mb-2">
+            <h1 className="mb-1">ویرایش اطلاعات اخبار و مقالات</h1>
+          </div>
+          <Form onSubmit={handleSubmit(onSubmit)}>
+            <Row className="gy-1 pt-75">
+
+
+              <Col md={6} xs={12}>
+                <Label className="form-label" for="firstName">
+                 عنوان
+                </Label>
+                <Controller
+                  defaultValue=""
+                  control={control}
+                  id="firstName"
+                  name="firstName"
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      id="firstName"
+                      invalid={errors.firstName && true}
+                    />
+                  )}
+                />
+              </Col>
+              <Col md={6} xs={12}>
+                <Label className="form-label" for="lastName">
+                  عنوان گوگل
+                </Label>
+                <Controller
+                  defaultValue=""
+                  control={control}
+                  id="lastName"
+                  name="lastName"
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      id="lastName"
+                      invalid={errors.lastName && true}
+                    />
+                  )}
+                />
+              </Col>
+             
+              <Col md={6} xs={12}>
+                <Label className="form-label" for="lastName">
+                 کلمات کلیدی
+                </Label>
+                <Controller
+                  defaultValue=""
+                  control={control}
+                  id="lastName"
+                  name="lastName"
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      id="lastName"
+                      invalid={errors.lastName && true}
+                    />
+                  )}
+                />
+              </Col>
+              
+              <Col md={6} xs={12}>
+                <Label className="form-label" for="country">
+                  انتخاب دسته بندی
+                </Label>
+                <StateManagedSelect
+                  id="country"
+                  isClearable={false}
+                  className="react-select"
+                  classNamePrefix="select"
+                  options={countryOptions}
+                  defaultValue={countryOptions[0]}
+                />
+              </Col>
+              
+              <Col md={6} xs={12}>
+                <Label className="form-label" for="billing-email">
+                 توضیح کوتاه
+                </Label>
+                <Input
+                  type="email"
+                  id="billing-email"
+                />
+              </Col>
+
+              <Col md={6} xs={12}>
+                <Label className="form-label" for="tax-id">
+                  توضیحات
+                </Label>
+                <Input
+                  id="tax-id"
+                  // defaultValue={selectedUser.contact.substr(selectedUser.contact.length - 4)}
+                />
+              </Col>
+              
+              <Col md={12} xs={12}>
+                <Label className="form-label" for="firstName">
+                 توضیحات گوگل
+                </Label>
+                <Controller
+                  defaultValue=""
+                  control={control}
+                  id="firstName"
+                  name="firstName"
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      id="firstName"
+                      invalid={errors.firstName && true}
+                    />
+                  )}
+                />
+              </Col>
+              <Col md={8} xs={12} className="mt-2">
+              <Button color="primary">ثبت</Button>
+              </Col>
+            </Row>
+          </Form>
+        </ModalBody>
+      </Modal>
     </Fragment>
   );
 };
