@@ -8,6 +8,8 @@ import reactLabel from "@src/assets/images/icons/brands/react-label.png";
 import sketchLabel from "@src/assets/images/icons/brands/sketch-label.png";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { useEffect, useState } from "react";
+import { getApi } from "../../../core/api/api";
+import { useParams } from "react-router-dom";
 // import { getApi } from "../../../core/api/api";
 
 const projectsArr = [
@@ -82,7 +84,7 @@ export const columns = [
     sortable: true,
     minWidth: "300px",
     name: "نام گروه",
-    selector: (row) => row.title,
+    selector: (row) => row.courseName,
     cell: (row) => {
       return (
         <div className="d-flex justify-content-left align-items-center ">
@@ -95,7 +97,7 @@ export const columns = [
             />
           </div> */}
           <div className="d-flex flex-column">
-            <span className="text-truncate fw-bolder">{row.title}</span>
+            <span className="text-truncate fw-bolder">.{row.courseName}</span>
           </div>
         </div>
       );
@@ -103,7 +105,7 @@ export const columns = [
   },
   {
     name: "تاریخ رزرو",
-    selector: (row) => row.totalTasks,
+    selector: (row) => row.reserverDate,
   },
   {
     name: "وضعیت",
@@ -129,17 +131,19 @@ export const columns = [
 ];
 
 const UserReserve = () => {
-  // const [data, setData] = useState([]);
-  // const GetCouresesView = async () => {
-  //   const path = `/CourseGroup`;
-  //   const response = await getApi({ path });
-  //   console.log(response.data?.courseGroupDtos);
-  //   setData(response.data?.courseGroupDtos);
-  // };
+  // const params = useParams();
+  const [data, setData] = useState([]);
+  const GetUsersReserve = async () => {
+    // const path = `/CourseReserve/${params?.CourseId}`;
+    const path = `/CourseReserve`;
+    const response = await getApi({ path });
+    console.log(response.data);
+    setData(response.data);
+  };
 
-  // useEffect(() => {
-  //   GetCouresesView();
-  // }, []);
+  useEffect(() => {
+    GetUsersReserve();
+  }, []);
   return (
     <Card>
       <div className="react-dataTable user-view-account-projects">
@@ -147,7 +151,7 @@ const UserReserve = () => {
           noHeader
           responsive
           columns={columns}
-          data={projectsArr}
+          data={data}
           className="react-dataTable"
           sortIcon={<ChevronDown size={10} />}
         />

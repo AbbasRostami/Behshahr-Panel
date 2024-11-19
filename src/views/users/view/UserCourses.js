@@ -8,6 +8,9 @@ import htmlLabel from "@src/assets/images/icons/brands/html-label.png";
 import reactLabel from "@src/assets/images/icons/brands/react-label.png";
 import sketchLabel from "@src/assets/images/icons/brands/sketch-label.png";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
+import { useEffect, useState } from "react";
+import { getApi } from "../../../core/api/api";
+import { Cell } from "recharts";
 
 const projectsArr = [
   {
@@ -82,7 +85,7 @@ export const columns = [
     minWidth: "300px",
     name: "نام دوره",
     selector: (row) => row.title,
-    cell: (row) => {
+    Cell: (row) => {
       return (
         <div className="d-flex justify-content-left align-items-center ">
           <div className="avatar-wrapper">
@@ -102,15 +105,26 @@ export const columns = [
   },
   {
     name: "توضیحات دوره",
-    selector: (row) => row.totalTasks,
+    selector: (row) => row.miniDescribe,
   },
   {
     name: "تاریخ آخرین بروزرسانی",
-    selector: (row) => row.hours,
+    selector: (row) => row.startTime,
   },
 ];
 
 const UserProjectsList = () => {
+  const [data, setData] = useState([]);
+  const GetUsersCourses = async () => {
+    const path = `/Home/GetCourseDetails?CourseId=9bd12534-af26-ef11-b6c7-cc06a3e06235`;
+    const response = await getApi({ path });
+    console.log(response.data);
+    setData(response.data);
+  };
+
+  useEffect(() => {
+    GetUsersCourses();
+  }, []);
   return (
     <Card>
       <div className="react-dataTable user-view-account-projects">
@@ -118,7 +132,7 @@ const UserProjectsList = () => {
           noHeader
           responsive
           columns={columns}
-          data={projectsArr}
+          data={data}
           className="react-dataTable"
           sortIcon={<ChevronDown size={10} />}
         />

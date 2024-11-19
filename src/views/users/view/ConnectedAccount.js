@@ -5,6 +5,8 @@ import asanaIcon from "./../../../assets/images/icons/social/asana.png";
 import googleIcon from "./../../../assets/images/icons/social/google.png";
 import githubIcon from "./../../../assets/images/icons/social/github.png";
 import mailchimpIcon from "./../../../assets/images/icons/social/mailchimp.png";
+import { useEffect, useState } from "react";
+import { getApi } from "../../../core/api/api";
 
 const connectedAccounts = [
   {
@@ -40,36 +42,46 @@ const connectedAccounts = [
 ];
 
 const ConnectedAccount = () => {
+  // const [data, setData] = useState([]);
+  // const GetUsersAbout = async () => {
+  //   const path = `/User/UserDetails/40296`;
+  //   const response = await getApi({ path });
+  //   console.log(response.data);
+  //   setData(response.data);
+  // };
+
+  // useEffect(() => {
+  //   GetUsersAbout();
+  // }, []);
 
   return (
     <Card>
-        <CardBody>
-          <CardTitle className="mb-75">سایر اطلاعات کاربر</CardTitle>
-          <p>Display content from your connected accounts on your site</p>
-          {connectedAccounts.map((item, index) => {
-            
-            return (
-              <div key={index} className="d-flex mt-2">
-                <div className="flex-shrink-0">
-                  <img
-                    className="me-1"
-                    src={item.logo}
-                    alt={item.title}
-                    height="38"
-                    width="38"
-                  />
-                </div>
-                <div className="d-flex align-item-center justify-content-between flex-grow-1">
-                  <div className="me-1">
-                    <p className="fw-bolder mb-0">{item.title}</p>
-                    <span>{item.subtitle}</span>
-                  </div>
+      <CardBody>
+        <CardTitle className="mb-75">سایر اطلاعات کاربر</CardTitle>
+        <p>Display content from your connected accounts on your site</p>
+        {connectedAccounts.map((item, index) => {
+          return (
+            <div key={index} className="d-flex mt-2">
+              <div className="flex-shrink-0">
+                <img
+                  className="me-1"
+                  src={item.logo}
+                  alt={item.title}
+                  height="38"
+                  width="38"
+                />
+              </div>
+              <div className="d-flex align-item-center justify-content-between flex-grow-1">
+                <div className="me-1">
+                  <p className="fw-bolder mb-0">{item.title}</p>
+                  <span>{item.subtitle}</span>
                 </div>
               </div>
-            );
-          })}
-        </CardBody>
-      </Card>
+            </div>
+          );
+        })}
+      </CardBody>
+    </Card>
   );
 };
 

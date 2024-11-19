@@ -1,4 +1,11 @@
-import { Badge, Card, DropdownItem, DropdownMenu, DropdownToggle, UncontrolledDropdown } from "reactstrap";
+import {
+  Badge,
+  Card,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  UncontrolledDropdown,
+} from "reactstrap";
 import { Archive, ChevronDown, MoreVertical, Trash2 } from "react-feather";
 import DataTable from "react-data-table-component";
 import Avatar from "@components/avatar";
@@ -10,6 +17,8 @@ import sketchLabel from "@src/assets/images/icons/brands/sketch-label.png";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 // import { getApi } from "../../../core/api/api";
 import toast from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { getApi } from "../../../core/api/api";
 
 const projectsArr = [
   {
@@ -82,8 +91,8 @@ export const columns = [
   {
     sortable: true,
     minWidth: "300px",
-    name: "نام دوره",
-    selector: (row) => row.title,
+    name: "نام کاربر",
+    selector: (row) => row.author,
     cell: (row) => {
       return (
         <div className="d-flex justify-content-left align-items-center ">
@@ -96,7 +105,7 @@ export const columns = [
             />
           </div>
           <div className="d-flex flex-column">
-            <span className="text-truncate fw-bolder">{row.title}</span>
+            <span className="text-truncate fw-bolder">{row.author}</span>
           </div>
         </div>
       );
@@ -104,20 +113,20 @@ export const columns = [
   },
   {
     name: "عنوان کامنت ",
-    selector: (row) => row.totalTasks,
+    selector: (row) => row.title,
   },
   {
     name: "متن کامنت ",
-    selector: (row) => row.totalTasks,
+    selector: (row) => row.describe,
   },
   {
-    name: 'وضعیت',
-    minWidth: '100px',
+    name: "وضعیت",
+    minWidth: "100px",
     sortable: true,
-    sortField: 'status',
-    selector: row => row.status,
-    cell: row => (
-      <Badge className='text-capitalize' color='success' pill >
+    sortField: "status",
+    selector: (row) => row.status,
+    cell: (row) => (
+      <Badge className="text-capitalize" color="success" pill>
         {row.status} تایید شده
       </Badge>
 
@@ -125,55 +134,68 @@ export const columns = [
       // color='success' pill
       // color='danger' pill
       // color='secondary' pill
-
-    )
+    ),
   },
   {
-    name: 'اقدام',
-    minWidth: '100px',
-    cell: row => (
-      <div className='column-action'>
+    name: "اقدام",
+    minWidth: "100px",
+    cell: (row) => (
+      <div className="column-action">
         <UncontrolledDropdown>
-          <DropdownToggle tag='div' className='btn btn-sm'>
-            <MoreVertical size={14} className='cursor-pointer' />
+          <DropdownToggle tag="div" className="btn btn-sm">
+            <MoreVertical size={14} className="cursor-pointer" />
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem tag='a' href='/' className='w-100' onClick={e => e.preventDefault()}>
-              <Archive size={14} className='me-50' />
-              <span className='align-middle' onClick={() => toast.success('عملیات با موفقیت انجام شد.')}>عدم تایید</span>
+            <DropdownItem
+              tag="a"
+              href="/"
+              className="w-100"
+              onClick={(e) => e.preventDefault()}
+            >
+              <Archive size={14} className="me-50" />
+              <span
+                className="align-middle"
+                onClick={() => toast.success("عملیات با موفقیت انجام شد.")}
+              >
+                عدم تایید
+              </span>
             </DropdownItem>
             <DropdownItem
-              tag='a'
-              href='/'
-              className='w-100'
-              onClick={e => {
-                e.preventDefault()
-                store.dispatch(deleteUser(row.id))
+              tag="a"
+              href="/"
+              className="w-100"
+              onClick={(e) => {
+                e.preventDefault();
+                store.dispatch(deleteUser(row.id));
               }}
             >
-              <Trash2 size={14} className='me-50' />
-              <span className='align-middle' onClick={() => toast.success('عملیات با موفقیت انجام شد.')}>حذف</span>
+              <Trash2 size={14} className="me-50" />
+              <span
+                className="align-middle"
+                onClick={() => toast.success("عملیات با موفقیت انجام شد.")}
+              >
+                حذف
+              </span>
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>
       </div>
-    )
-  }
+    ),
+  },
 ];
 
 const UserComments = () => {
-  // const [data, setData] = useState([]);
-  // const GetCouresesView = async () => {
-  //   const path = ``;
-  //   const response = await getApi({ path });
-  //   console.log(response.data);
-  //   setData(response.data);
-  // };
+  const [data, setData] = useState([]);
+  const GetUsersComments = async () => {
+    const path = `/Course/GetCourseCommnets/11a8d66a-2031-ef11-b6c8-c6ea51a59bbe`;
+    const response = await getApi({ path });
+    console.log(response.data);
+    setData(response.data);
+  };
 
-  // useEffect(() => {
-  //   GetCouresesView();
-  // }, []);
-
+  useEffect(() => {
+    GetUsersComments();
+  }, []);
   return (
     <Card>
       <div className="react-dataTable user-view-account-projects">
@@ -181,7 +203,7 @@ const UserComments = () => {
           noHeader
           responsive
           columns={columns}
-          data={projectsArr}
+          data={data}
           className="react-dataTable"
           sortIcon={<ChevronDown size={10} />}
         />

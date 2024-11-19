@@ -32,10 +32,11 @@ import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import AddUserModal from "./AddUser";
 
-import avatar2 from './../../../../src/assets/images/pages/2.png'
-import avatar6 from './../../../../src/assets/images/pages/6.png'
-import avatar11 from './../../../../src/assets/images/pages/11.png'
-import avatar12 from './../../../../src/assets/images/pages/12.png'
+import avatar2 from "./../../../../src/assets/images/pages/2.png";
+import avatar6 from "./../../../../src/assets/images/pages/6.png";
+import avatar11 from "./../../../../src/assets/images/pages/11.png";
+import avatar12 from "./../../../../src/assets/images/pages/12.png";
+import { getApi } from "../../../core/api/api";
 
 const CustomHeader = ({
   handlePerPage,
@@ -43,11 +44,7 @@ const CustomHeader = ({
   handleFilter,
   toggleSidebar,
   searchTerm,
-  
 }) => {
-
-    
-
   return (
     <div className="invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75">
       <Row>
@@ -87,12 +84,10 @@ const CustomHeader = ({
             <Button className="add-new-user" color="primary">
               جستجو
             </Button>
-
-            
           </div>
 
           <div className=" mx-2">
-          <AddUserModal />
+            <AddUserModal />
           </div>
         </Col>
       </Row>
@@ -101,14 +96,24 @@ const CustomHeader = ({
 };
 
 const UsersList = () => {
+  const [data, setData] = useState([]);
+  const GetUsersList = async () => {
+    const path = `/User/UserMannage?PageNumber=2&RowsOfPage=20&SortingCol=DESC&SortType=InsertDate&IsActiveUser=true&IsDeletedUser=true&roleId=5`;
+    const response = await getApi({ path });
+    console.log(response.data.listUser);
+    setData(response.data.listUser);
+  };
+
+  useEffect(() => {
+    GetUsersList();
+  }, []);
   // ** States
 
   const datas = [
-    { name: "a", lastname: "b", progress: 78,progressColor: 'success'},
-    { name: "a", lastname: "b", progress: 55,progressColor: 'info' },
-    { name: "a", lastname: "b", progress: 34,progressColor: 'danger' },
+    { name: "a", lastname: "b", progress: 78, progressColor: "success" },
+    { name: "a", lastname: "b", progress: 55, progressColor: "info" },
+    { name: "a", lastname: "b", progress: 34, progressColor: "danger" },
   ];
-
 
   const [sort, setSort] = useState("desc");
   const [searchTerm, setSearchTerm] = useState("");
@@ -334,20 +339,18 @@ const UsersList = () => {
             sortIcon={<ChevronDown />}
             className="react-dataTable"
             paginationComponent={CustomPagination}
-            data={datas}
+            data={data}
             subHeaderComponent={
               <CustomHeader
                 searchTerm={searchTerm}
                 rowsPerPage={rowsPerPage}
                 handleFilter={handleFilter}
                 handlePerPage={handlePerPage}
-                
               />
             }
           />
         </div>
       </Card>
-
     </Fragment>
   );
 };

@@ -20,10 +20,10 @@ import { Check, Briefcase } from "react-feather";
 import { useForm, Controller } from "react-hook-form";
 import withReactContent from "sweetalert2-react-content";
 import { selectThemeColors } from "@utils";
-
+import { getApi } from "../../../core/api/api";
 import "@styles/react/libs/react-select/_react-select.scss";
 // import { getApi } from "../../../core/api/api";
-import avatar from "./../../../assets/images/portrait/small/avatar-s-2.jpg"
+import avatar from "./../../../assets/images/portrait/small/avatar-s-2.jpg";
 
 const statusOptions = [
   { value: "active", label: "Active" },
@@ -43,15 +43,15 @@ const MySwal = withReactContent(Swal);
 
 const UserInfoCard = ({ selectedUser }) => {
   const [data, setData] = useState([]);
-  const GetCouresesView = async () => {
-    const path = `/Course/CourseList?PageNumber=2&RowsOfPage=1&SortingCol=DESC&SortType=Expire&Query`;
+  const GetUsersView = async () => {
+    const path = `/User/UserDetails/40296`;
     const response = await getApi({ path });
-    console.log(response.data.courseDtos[0]);
-    setData(response.data.courseDtos[0]);
+    console.log(response.data);
+    setData(response.data);
   };
 
   useEffect(() => {
-    GetCouresesView();
+    GetUsersView();
   }, []);
   const [show, setShow] = useState(false);
 
@@ -92,6 +92,8 @@ const UserInfoCard = ({ selectedUser }) => {
   };
 
   const handleSuspendedClick = () => {
+    const [data, setData] = useState([]);
+
     return MySwal.fire({
       title: "آیا مطمئن هستید؟",
       text: "البته امکان بازگشت نیست وجود دارد",
@@ -130,21 +132,20 @@ const UserInfoCard = ({ selectedUser }) => {
     <Fragment>
       <Card>
         <CardBody>
-        <div className='user-avatar-section'>
-            <div className='d-flex align-items-center flex-column'>
-              <div className='d-flex flex-column align-items-center text-center'>
-              <img
-          height='110'
-          width='110'
-          alt='user-avatar'
-          src={avatar}
-          className='img-fluid rounded mt-3 mb-2'
-        />
-                <div className='user-info'>
-                
-                    <Badge className='text-capitalize' color='success' pill>
-                     Adminstrator
-                    </Badge>
+          <div className="user-avatar-section">
+            <div className="d-flex align-items-center flex-column">
+              <div className="d-flex flex-column align-items-center text-center">
+                <img
+                  height="110"
+                  width="110"
+                  alt="user-avatar"
+                  src={avatar}
+                  className="img-fluid rounded mt-3 mb-2"
+                />
+                <div className="user-info">
+                  <Badge className="text-capitalize" color="success" pill>
+                    Adminstrator
+                  </Badge>
                 </div>
               </div>
             </div>
@@ -165,7 +166,7 @@ const UserInfoCard = ({ selectedUser }) => {
               </Badge>
               <div className="ms-75">
                 <h4 className="mb-0">568</h4>
-                <small className="fs-4">دوره های رزرو  </small>
+                <small className="fs-4">دوره های رزرو </small>
               </div>
             </div>
           </div>
@@ -175,35 +176,41 @@ const UserInfoCard = ({ selectedUser }) => {
               <ul className="list-unstyled">
                 <li className="mb-75">
                   <span className="fw-bolder me-25">نام کاربری:</span>
-                  <span> {data?.fullName} </span>
+                  <span> {data?.lName} </span>
                 </li>
                 <li className="mb-75">
-                  <span className="fw-bolder me-25"> نام کلاس:</span>
-                  <span>{data?.classRoomName}</span>
+                  <span className="fw-bolder me-25">نام خانوادگی کاربری:</span>
+                  <span> {data?.fName} </span>
                 </li>
                 <li className="mb-75">
-                  <span className="fw-bolder me-25">سطح دوره:</span>
-                  <Badge className="text-capitalize">{data?.levelName}</Badge>
+                  <span className="fw-bolder me-25"> ایمیل کاربر:</span>
+                  <span>{data?.recoveryEmail}</span>
+                </li>
+                <li className="mb-75">
+                  <span className="fw-bolder me-25">کد ملی:</span>
+                  <Badge className="text-capitalize">
+                    {data?.nationalCode}
+                  </Badge>
                 </li>
                 <li className="mb-75">
                   <span className="fw-bolder me-25">وضعیت دوره:</span>
-                  <span className="text-capitalize">{data?.statusName}</span>
+                  <span className="text-capitalize ">فعال {data?.active}</span>
                 </li>
                 <li className="mb-75">
-                  <span className="fw-bolder me-25">نوع دوره :</span>
-                  <span>{data?.typeName}</span>
+                  <span className="fw-bolder me-25">درصد تکمیل پروفایل :</span>
+                  <span>{"%" + data?.profileCompletionPercentage}</span>
                 </li>
                 <li className="mb-75">
                   <span className="fw-bolder me-25">قیمت دوره:</span>
                   <span>{data?.cost} تومان </span>
                 </li>
                 <li className="mb-75">
-                  <span className="fw-bolder me-25">شمارش دوره:</span>
-                  <span>{data?.reserveCount}</span>
+                  <span className="fw-bolder me-25">آدرس کاربر:</span>
+                  <span>{data?.homeAdderess}</span>
                 </li>
                 <li className="mb-75">
-                  <span className="fw-bolder me-25">توضیحات:</span>
-                  <span> {data?.describe} </span>
+                  <span className="fw-bolder me-25">شماره کاربر:</span>
+                  <span> {data?.phoneNumber} </span>
                 </li>
               </ul>
             ) : null}

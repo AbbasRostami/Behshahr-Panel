@@ -1,4 +1,3 @@
-
 import { Fragment, lazy } from "react";
 import { Navigate } from "react-router-dom";
 
@@ -7,9 +6,7 @@ import VerticalLayout from "@src/layouts/VerticalLayout";
 import HorizontalLayout from "@src/layouts/HorizontalLayout";
 import LayoutWrapper from "@src/@core/layouts/components/layout-wrapper";
 
-
 import PublicRoute from "@components/routes/PublicRoute";
-
 
 import { isObjEmpty } from "@utils";
 import Wizard from "../../views/courses/add";
@@ -57,17 +54,17 @@ const Routes = [
     element: <Sample />,
   },
 
-
   // Users
   {
     path: "/users",
     element: <UserList />,
   },
   {
+    // path: "/users-view/:CourseId",
     path: "/users-view",
     element: <UsersView />,
   },
-  
+
   // Courses
   {
     path: "/courses-list",
@@ -82,7 +79,6 @@ const Routes = [
     element: <CoursesView />,
   },
 
-
   //  Articles
   {
     path: "/articles-list",
@@ -96,7 +92,6 @@ const Routes = [
     path: "/articles-view",
     element: <ArticlesView />,
   },
-
 
   {
     path: "/login",
