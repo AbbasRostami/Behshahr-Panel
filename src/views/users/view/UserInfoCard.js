@@ -24,6 +24,7 @@ import { getApi } from "../../../core/api/api";
 import "@styles/react/libs/react-select/_react-select.scss";
 // import { getApi } from "../../../core/api/api";
 import avatar from "./../../../assets/images/portrait/small/avatar-s-2.jpg";
+import { useParams } from "react-router-dom";
 
 const statusOptions = [
   { value: "active", label: "Active" },
@@ -41,18 +42,7 @@ const countryOptions = [
 
 const MySwal = withReactContent(Swal);
 
-const UserInfoCard = ({ selectedUser }) => {
-  const [data, setData] = useState([]);
-  const GetUsersView = async () => {
-    const path = `/User/UserDetails/40296`;
-    const response = await getApi({ path });
-    console.log(response.data);
-    setData(response.data);
-  };
-
-  useEffect(() => {
-    GetUsersView();
-  }, []);
+const UserInfoCard = ({ selectedUser, data }) => {
   const [show, setShow] = useState(false);
 
   const {

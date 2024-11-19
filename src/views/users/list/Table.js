@@ -37,6 +37,7 @@ import avatar6 from "./../../../../src/assets/images/pages/6.png";
 import avatar11 from "./../../../../src/assets/images/pages/11.png";
 import avatar12 from "./../../../../src/assets/images/pages/12.png";
 import { getApi } from "../../../core/api/api";
+import { useParams } from "react-router-dom";
 
 const CustomHeader = ({
   handlePerPage,
@@ -97,6 +98,12 @@ const CustomHeader = ({
 
 const UsersList = () => {
   const [data, setData] = useState([]);
+  // const params = useParams();
+  // const [ebi, setEbi] = useState(obj + 1);
+  // const obj = {
+  //   PageNumber: "",
+  //   RowsOfPage: "",
+  // };
   const GetUsersList = async () => {
     const path = `/User/UserMannage?PageNumber=2&RowsOfPage=20&SortingCol=DESC&SortType=InsertDate&IsActiveUser=true&IsDeletedUser=true&roleId=5`;
     const response = await getApi({ path });
@@ -156,52 +163,52 @@ const UsersList = () => {
   ];
 
   const handlePagination = (page) => {
-    dispatch(
-      getData({
-        sort,
-        sortColumn,
-        q: searchTerm,
-        perPage: rowsPerPage,
-        page: page.selected + 1,
-        role: currentRole.value,
-        status: currentStatus.value,
-        currentPlan: currentPlan.value,
-      })
-    );
+    // dispatch(
+    //   getData({
+    //     sort,
+    //     sortColumn,
+    //     q: searchTerm,
+    //     perPage: rowsPerPage,
+    //     page: page.selected + 1,
+    //     role: currentRole.value,
+    //     status: currentStatus.value,
+    //     currentPlan: currentPlan.value,
+    //   })
+    // );
     setCurrentPage(page.selected + 1);
   };
 
   const handlePerPage = (e) => {
     const value = parseInt(e.currentTarget.value);
-    dispatch(
-      getData({
-        sort,
-        sortColumn,
-        q: searchTerm,
-        perPage: value,
-        page: currentPage,
-        role: currentRole.value,
-        currentPlan: currentPlan.value,
-        status: currentStatus.value,
-      })
-    );
+    // dispatch(
+    //   getData({
+    //     sort,
+    //     sortColumn,
+    //     q: searchTerm,
+    //     perPage: value,
+    //     page: currentPage,
+    //     role: currentRole.value,
+    //     currentPlan: currentPlan.value,
+    //     status: currentStatus.value,
+    //   })
+    // );
     setRowsPerPage(value);
   };
 
   const handleFilter = (val) => {
     setSearchTerm(val);
-    dispatch(
-      getData({
-        sort,
-        q: val,
-        sortColumn,
-        page: currentPage,
-        perPage: rowsPerPage,
-        role: currentRole.value,
-        status: currentStatus.value,
-        currentPlan: currentPlan.value,
-      })
-    );
+    // dispatch(
+    //   getData({
+    //     sort,
+    //     q: val,
+    //     sortColumn,
+    //     page: currentPage,
+    //     perPage: rowsPerPage,
+    //     role: currentRole.value,
+    //     status: currentStatus.value,
+    //     currentPlan: currentPlan.value,
+    //   })
+    // );
   };
 
   const CustomPagination = () => {
@@ -231,18 +238,18 @@ const UsersList = () => {
   const handleSort = (column, sortDirection) => {
     setSort(sortDirection);
     setSortColumn(column.sortField);
-    dispatch(
-      getData({
-        sort,
-        sortColumn,
-        q: searchTerm,
-        page: currentPage,
-        perPage: rowsPerPage,
-        role: currentRole.value,
-        status: currentStatus.value,
-        currentPlan: currentPlan.value,
-      })
-    );
+    // dispatch(
+    //   getData({
+    //     sort,
+    //     sortColumn,
+    //     q: searchTerm,
+    //     page: currentPage,
+    //     perPage: rowsPerPage,
+    //     role: currentRole.value,
+    //     status: currentStatus.value,
+    //     currentPlan: currentPlan.value,
+    //   })
+    // );
   };
 
   return (
@@ -266,18 +273,18 @@ const UsersList = () => {
                 theme={selectThemeColors}
                 onChange={(data) => {
                   setCurrentRole(data);
-                  dispatch(
-                    getData({
-                      sort,
-                      sortColumn,
-                      q: searchTerm,
-                      role: data.value,
-                      page: currentPage,
-                      perPage: rowsPerPage,
-                      status: currentStatus.value,
-                      currentPlan: currentPlan.value,
-                    })
-                  );
+                  // dispatch(
+                  //   getData({
+                  //     sort,
+                  //     sortColumn,
+                  //     q: searchTerm,
+                  //     role: data.value,
+                  //     page: currentPage,
+                  //     perPage: rowsPerPage,
+                  //     status: currentStatus.value,
+                  //     currentPlan: currentPlan.value,
+                  //   })
+                  // );
                 }}
               />
             </Col>
@@ -293,18 +300,18 @@ const UsersList = () => {
                 value={currentStatus}
                 onChange={(data) => {
                   setCurrentStatus(data);
-                  dispatch(
-                    getData({
-                      sort,
-                      sortColumn,
-                      q: searchTerm,
-                      page: currentPage,
-                      status: data.value,
-                      perPage: rowsPerPage,
-                      role: currentRole.value,
-                      currentPlan: currentPlan.value,
-                    })
-                  );
+                  // dispatch(
+                  //   getData({
+                  //     sort,
+                  //     sortColumn,
+                  //     q: searchTerm,
+                  //     page: currentPage,
+                  //     status: data.value,
+                  //     perPage: rowsPerPage,
+                  //     role: currentRole.value,
+                  //     currentPlan: currentPlan.value,
+                  //   })
+                  // );
                 }}
               />
             </Col>

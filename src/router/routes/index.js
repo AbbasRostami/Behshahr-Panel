@@ -61,7 +61,7 @@ const Routes = [
   },
   {
     // path: "/users-view/:CourseId",
-    path: "/users-view",
+    path: "/users-view/:id",
     element: <UsersView />,
   },
 

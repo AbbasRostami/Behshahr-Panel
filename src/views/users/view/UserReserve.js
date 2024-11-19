@@ -1,5 +1,14 @@
-import { Badge, Card, CardHeader, Progress } from "reactstrap";
-import { ChevronDown } from "react-feather";
+import {
+  Badge,
+  Card,
+  CardHeader,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  Progress,
+  UncontrolledDropdown,
+} from "reactstrap";
+import { Archive, ChevronDown, MoreVertical, Trash2 } from "react-feather";
 import DataTable from "react-data-table-component";
 import xdLabel from "@src/assets/images/icons/brands/xd-label.png";
 import vueLabel from "@src/assets/images/icons/brands/vue-label.png";
@@ -82,7 +91,7 @@ const projectsArr = [
 export const columns = [
   {
     sortable: true,
-    minWidth: "300px",
+    maxWidth: "200px",
     name: "نام گروه",
     selector: (row) => row.courseName,
     cell: (row) => {
@@ -126,16 +135,58 @@ export const columns = [
   },
   {
     name: "اقدام",
-    selector: (row) => row.hours,
+    minWidth: "100px",
+    cell: (row) => (
+      <div className="column-action">
+        <UncontrolledDropdown>
+          <DropdownToggle tag="div" className="btn btn-sm">
+            <MoreVertical size={14} className="cursor-pointer" />
+          </DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem
+              tag="a"
+              href="/"
+              className="w-100"
+              onClick={(e) => e.preventDefault()}
+            >
+              <Archive size={14} className="me-50" />
+              <span
+                className="align-middle"
+                onClick={() => toast.success("عملیات با موفقیت انجام شد.")}
+              >
+                عدم تایید
+              </span>
+            </DropdownItem>
+            <DropdownItem
+              tag="a"
+              href="/"
+              className="w-100"
+              onClick={(e) => {
+                e.preventDefault();
+                store.dispatch(deleteUser(row.id));
+              }}
+            >
+              <Trash2 size={14} className="me-50" />
+              <span
+                className="align-middle"
+                onClick={() => toast.success("عملیات با موفقیت انجام شد.")}
+              >
+                حذف
+              </span>
+            </DropdownItem>
+          </DropdownMenu>
+        </UncontrolledDropdown>
+      </div>
+    ),
   },
 ];
 
 const UserReserve = () => {
-  // const params = useParams();
+  const params = useParams();
   const [data, setData] = useState([]);
   const GetUsersReserve = async () => {
     // const path = `/CourseReserve/${params?.CourseId}`;
-    const path = `/CourseReserve`;
+    const path = `/CourseReserve/9bd12534-af26-ef11-b6c7-cc06a3e06235`;
     const response = await getApi({ path });
     console.log(response.data);
     setData(response.data);

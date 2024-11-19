@@ -23,7 +23,6 @@ export const columns = [
           <Link
             to={`/apps/user/view/${row.id}`}
             className="user_name text-truncate text-body"
-            onClick={() => store.dispatch(getUser(row.id))}
           >
             <span className="fw-bolder">{row.lastnamelastname}</span>
           </Link>
@@ -46,7 +45,6 @@ export const columns = [
           <Link
             to={`/apps/user/view/${row.id}`}
             className="user_name text-truncate text-body"
-            onClick={() => store.dispatch(getUser(row.id))}
           >
             <span className="fw-bolder">{row.lastnamelastname}</span>
           </Link>
@@ -69,7 +67,6 @@ export const columns = [
           <Link
             to={`/apps/user/view/${row.id}`}
             className="user_name text-truncate text-body"
-            onClick={() => store.dispatch(getUser(row.id))}
           >
             <span className="fw-bolder">{row.lastnamelastname}</span>
           </Link>
@@ -127,9 +124,8 @@ export const columns = [
             <DropdownItem
               tag={Link}
               className="w-100"
-              to="/users-view"
-              // to={`/apps/user/view/${row.id}`}
-              onClick={() => store.dispatch(getUser(row.id))}
+              // to="/users-view"
+              to={`/users-view/${row.id}`}
             >
               <FileText size={14} className="me-50" />
               <span className="align-middle">جزئیات</span>
@@ -149,7 +145,6 @@ export const columns = [
               className="w-100"
               onClick={(e) => {
                 e.preventDefault();
-                store.dispatch(deleteUser(row.id));
               }}
             >
               <Trash2 size={14} className="me-50" />

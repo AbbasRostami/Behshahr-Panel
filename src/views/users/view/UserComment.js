@@ -90,32 +90,27 @@ const projectsArr = [
 export const columns = [
   {
     sortable: true,
-    minWidth: "300px",
-    name: "نام کاربر",
+    maxWidth: "150px",
+    name: " عنوان دوره",
     selector: (row) => row.author,
     cell: (row) => {
       return (
         <div className="d-flex justify-content-left align-items-center ">
-          <div className="avatar-wrapper">
-            <Avatar
-              className="me-1"
-              img={row.img}
-              alt={row.title}
-              imgWidth="25"
-            />
-          </div>
+          <div className="avatar-wrapper"></div>
           <div className="d-flex flex-column">
-            <span className="text-truncate fw-bolder">{row.author}</span>
+            <span className="text-truncate fw-bolder">{row.courseTitle}</span>
           </div>
         </div>
       );
     },
   },
   {
+    maxWidth: "150px",
     name: "عنوان کامنت ",
-    selector: (row) => row.title,
+    selector: (row) => row.commentTitle,
   },
   {
+    maxWidth: "150px",
     name: "متن کامنت ",
     selector: (row) => row.describe,
   },
@@ -187,10 +182,10 @@ export const columns = [
 const UserComments = () => {
   const [data, setData] = useState([]);
   const GetUsersComments = async () => {
-    const path = `/Course/GetCourseCommnets/11a8d66a-2031-ef11-b6c8-c6ea51a59bbe`;
+    const path = `/Course/CommentManagment?PageNumber=1&RowsOfPage=10&SortingCol=DESC&SortType=InsertDate&Query=`;
     const response = await getApi({ path });
-    console.log(response.data);
-    setData(response.data);
+    console.log(response.data.comments);
+    setData(response.data.comments);
   };
 
   useEffect(() => {

@@ -11,6 +11,7 @@ import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { useEffect, useState } from "react";
 import { getApi } from "../../../core/api/api";
 import { Cell } from "recharts";
+import { useParams } from "react-router-dom";
 
 const projectsArr = [
   {
@@ -82,19 +83,19 @@ const projectsArr = [
 export const columns = [
   {
     sortable: true,
-    minWidth: "300px",
+    maxWidth: "300px",
     name: "نام دوره",
     selector: (row) => row.title,
     Cell: (row) => {
       return (
         <div className="d-flex justify-content-left align-items-center ">
           <div className="avatar-wrapper">
-            <Avatar
+            {/* <Avatar
               className="me-1"
               img={row.img}
               alt={row.title}
               imgWidth="32"
-            />
+            /> */}
           </div>
           <div className="d-flex flex-column">
             <span className="text-truncate fw-bolder">{row.title}</span>
@@ -104,22 +105,26 @@ export const columns = [
     },
   },
   {
+    maxWidth: "300px",
     name: "توضیحات دوره",
-    selector: (row) => row.miniDescribe,
+    selector: (row) => row.describe,
   },
   {
+    maxWidth: "300px",
     name: "تاریخ آخرین بروزرسانی",
-    selector: (row) => row.startTime,
+    selector: (row) => row.lastUpdate,
   },
 ];
 
 const UserProjectsList = () => {
   const [data, setData] = useState([]);
+  const params = useParams();
+  console.log(params);
   const GetUsersCourses = async () => {
-    const path = `/Home/GetCourseDetails?CourseId=9bd12534-af26-ef11-b6c7-cc06a3e06235`;
+    const path = `/User/UserDetails/${params.id}`;
     const response = await getApi({ path });
-    console.log(response.data);
-    setData(response.data);
+    console.log(response.data.courses);
+    setData(response.data.courses);
   };
 
   useEffect(() => {
@@ -127,13 +132,13 @@ const UserProjectsList = () => {
   }, []);
   return (
     <Card>
-      <div className="react-dataTable user-view-account-projects">
+      <div className="text-truncate react-dataTable user-view-account-projects">
         <DataTable
           noHeader
           responsive
           columns={columns}
           data={data}
-          className="react-dataTable"
+          className="react-dataTable text-truncate"
           sortIcon={<ChevronDown size={10} />}
         />
       </div>
