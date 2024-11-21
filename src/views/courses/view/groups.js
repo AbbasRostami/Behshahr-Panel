@@ -1,8 +1,23 @@
 // ** Reactstrap Imports
-import { Card, CardHeader, Progress } from "reactstrap";
+import {
+  Card,
+  CardHeader,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  Progress,
+  UncontrolledDropdown,
+} from "reactstrap";
 
 // ** Third Party Components
-import { ChevronDown } from "react-feather";
+import {
+  Archive,
+  ChevronDown,
+  FileText,
+  Link,
+  MoreVertical,
+  Trash2,
+} from "react-feather";
 import DataTable from "react-data-table-component";
 
 // ** Custom Components
@@ -111,7 +126,7 @@ export const columns = [
     },
   },
   {
-    name: "وضعیت دوره ",
+    name: "ظرفیت دوره ",
     selector: (row) => row.courseCapacity,
   },
   {
@@ -124,7 +139,39 @@ export const columns = [
   },
   {
     name: "اقدام",
-    selector: (row) => row.hours,
+    minWidth: "100px",
+    cell: (row) => (
+      <div className="column-action">
+        <UncontrolledDropdown>
+          <DropdownToggle tag="div" className="btn btn-sm">
+            <MoreVertical size={14} className="cursor-pointer" />
+          </DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem
+              tag="a"
+              href="/"
+              className="w-100"
+              onClick={(e) => e.preventDefault()}
+            >
+              <Archive size={14} className="me-50" />
+              <span className="align-middle">ویرایش</span>
+            </DropdownItem>
+            <DropdownItem
+              tag="a"
+              href="/"
+              className="w-100"
+              onClick={(e) => {
+                e.preventDefault();
+                store.dispatch(deleteUser(row.id));
+              }}
+            >
+              <Trash2 size={14} className="me-50" />
+              <span className="align-middle">حذف</span>
+            </DropdownItem>
+          </DropdownMenu>
+        </UncontrolledDropdown>
+      </div>
+    ),
   },
 ];
 

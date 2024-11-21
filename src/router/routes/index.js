@@ -72,10 +72,9 @@ const Routes = [
     element: <CoursesAdd />,
   },
   {
-    path: "/courses-view",
+    path: "/courses-view/:CourseId",
     element: <CoursesView />,
   },
-
 
   //  Articles
   {
@@ -90,7 +89,6 @@ const Routes = [
     path: "/articles-view",
     element: <ArticlesView />,
   },
-
 
   {
     path: "/login",
