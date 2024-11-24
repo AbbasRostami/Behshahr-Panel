@@ -33,4 +33,10 @@ export default [
       },
     ],
   },
+  {
+    id: "comment",
+    title: "مدیریت کامنت ها",
+    icon: <Mail size={20} />,
+    navLink: "/comments",
+  },
 ];
