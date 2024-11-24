@@ -49,34 +49,34 @@ const Routes = [
     path: "/home",
     element: <Home />,
   },
-  {
-    element: <EmailApp />,
-    path: '/apps/email',
-    meta: {
-      appLayout: true,
-      className: 'email-application'
-    }
-  },
-  {
-    element: <EmailApp />,
-    path: '/apps/email/:folder',
-    meta: {
-      appLayout: true,
-      className: 'email-application'
-    }
-  },
-  {
-    element: <EmailApp />,
-    path: '/apps/email/label/:label',
-    meta: {
-      appLayout: true,
-      className: 'email-application'
-    }
-  },
-  {
-    element: <EmailApp />,
-    path: '/apps/email/:filter'
-  },
+  // {
+  //   element: <EmailApp />,
+  //   path: '/apps/email',
+  //   meta: {
+  //     appLayout: true,
+  //     className: 'email-application'
+  //   }
+  // },
+  // {
+  //   element: <EmailApp />,
+  //   path: '/apps/email/:folder',
+  //   meta: {
+  //     appLayout: true,
+  //     className: 'email-application'
+  //   }
+  // },
+  // {
+  //   element: <EmailApp />,
+  //   path: '/apps/email/label/:label',
+  //   meta: {
+  //     appLayout: true,
+  //     className: 'email-application'
+  //   }
+  // },
+  // {
+  //   element: <EmailApp />,
+  //   path: '/apps/email/:filter'
+  // },
   {
     path: "/sample",
     element: <Sample />,
@@ -157,34 +157,34 @@ const Routes = [
     },
   },
 
-  {
-    element: <CommentsList />,
-    path: '/apps/email',
-    meta: {
-      appLayout: true,
-      className: 'email-application'
-    }
-  },
-  {
-    element: <CommentsList />,
-    path: '/apps/email/:folder',
-    meta: {
-      appLayout: true,
-      className: 'email-application'
-    }
-  },
-  {
-    element: <CommentsList />,
-    path: '/apps/email/label/:label',
-    meta: {
-      appLayout: true,
-      className: 'email-application'
-    }
-  },
-  {
-    element: <CommentsList />,
-    path: '/apps/email/:filter'
-  },
+  // {
+  //   element: <CommentsList />,
+  //   path: '/apps/email',
+  //   meta: {
+  //     appLayout: true,
+  //     className: 'email-application'
+  //   }
+  // },
+  // {
+  //   element: <CommentsList />,
+  //   path: '/apps/email/:folder',
+  //   meta: {
+  //     appLayout: true,
+  //     className: 'email-application'
+  //   }
+  // },
+  // {
+  //   element: <CommentsList />,
+  //   path: '/apps/email/label/:label',
+  //   meta: {
+  //     appLayout: true,
+  //     className: 'email-application'
+  //   }
+  // },
+  // {
+  //   element: <CommentsList />,
+  //   path: '/apps/email/:filter'
+  // },
 ];
 
 const getRouteMeta = (route) => {

@@ -244,7 +244,7 @@ const CoursesYours = () => {
               <DropdownItem
                 tag={Link}
                 className="w-100"
-                to={`/apps/user/view/${row.id}`}
+                // to={`/apps/user/view/${row.id}`}
               >
                 <FileText size={14} className="me-50" />
                 <Link to="/courses-view">

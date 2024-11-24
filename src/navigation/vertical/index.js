@@ -34,6 +34,25 @@ export default [
     ],
   },
   {
+    id: "Articles",
+    title: "مدیریت اخبار و مقالات",
+    icon: <User size={20} />,
+    children: [
+      {
+        id: "list",
+        title: "لیست اخبار و مقالات",
+        icon: <Circle size={12} />,
+        navLink: "/articles-list",
+      },
+      {
+        id: "add",
+        title: "افزدون اخبار و مقاله",
+        icon: <Circle size={12} />,
+        navLink: "/articles-add",
+      },
+    ],
+  },
+  {
     id: "comment",
     title: "مدیریت کامنت ها",
     icon: <Mail size={20} />,
