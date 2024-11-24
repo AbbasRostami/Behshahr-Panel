@@ -23,7 +23,6 @@ import {
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import AddUserModal from "./AddUser";
-import { getApi } from "../../../core/api/api";
 
 const CustomHeader = ({
   handlePerPage,
@@ -34,19 +33,21 @@ const CustomHeader = ({
   return (
     <div className="invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75">
       <Row>
-        <Col xl="6" className="d-flex align-items-center p-0">
-          <div className="d-flex align-items-center w-100">
-            <label htmlFor="rows-per-page">نمایش</label>
+
+        <Col xl='6' className='d-flex align-items-center p-0'>
+          <div className='d-flex align-items-center w-100'>
+            <label htmlFor='rows-per-page'>نمایش</label>
             <Input
-              className="mx-50 w-25"
-              type="select"
-              id="rows-per-page"
+              className='mx-50'
+              type='select'
+              id='rows-per-page'
               value={rowsPerPage}
               onChange={handlePerPage}
-              style={{ width: "5rem" }}
+              style={{ width: '5rem' }}
             >
-              <option value="active">فعال</option>
-              <option value="deactive">غیرفعال</option>
+              <option value='10'>10</option>
+              <option value='25'>25</option>
+              <option value='50'>50</option>
             </Input>
           </div>
         </Col>
@@ -81,19 +82,8 @@ const CustomHeader = ({
   );
 };
 
-const UsersList = () => {
-  const [data, setData] = useState([]);
-
-  const GetUsersList = async () => {
-    const path = `/User/UserMannage?PageNumber=2&RowsOfPage=20&SortingCol=DESC&SortType=InsertDate&IsActiveUser=true&IsDeletedUser=true&roleId=5`;
-    const response = await getApi({ path });
-    console.log("UserLists: ",response.data.listUser);
-    setData(response.data.listUser);
-  };
-
-  useEffect(() => {
-    GetUsersList();
-  }, []);
+const UsersList = ({data}) => {
+  
 
 
   const [sort, setSort] = useState("desc");
@@ -116,10 +106,10 @@ const UsersList = () => {
   });
 
   const roleOptions = [
-    { value: "", label: "Select Role" },
-    { value: "admin", label: "ادمین" },
-    { value: "author", label: "استاد" },
-    { value: "editor", label: "دانشجو" },
+    { value: "", label: "انتخاب کنید..." },
+    { value: "Administrator", label: "ادمین" },
+    { value: "Teachher", label: "استاد" },
+    { value: "Student", label: "دانشجو" },
   ];
 
   const planOptions = [
@@ -131,7 +121,7 @@ const UsersList = () => {
   ];
 
   const statusOptions = [
-    { value: "", label: "Select Status", number: 0 },
+    { value: "", label: "انتخاب کنید", number: 0 },
     { value: "active", label: "فعال", number: 1 },
     { value: "inactive", label: "غیرفعال", number: 2 },
   ];

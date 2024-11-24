@@ -3,8 +3,24 @@ import { Row, Col } from "reactstrap";
 import StatsHorizontal from "@components/widgets/stats/StatsHorizontal";
 import { User, UserPlus, UserCheck, UserX } from "react-feather";
 import "@styles/react/apps/app-users.scss";
+import { useEffect, useState } from "react";
+import { getApi } from "../../../core/api/api";
 
-const UserLists = () => {
+const Staticies = () => {
+
+  const [data, setData] = useState([]);
+
+  const GetUsersList = async () => {
+    const path = `/User/UserMannage?PageNumber=2&RowsOfPage=20&SortingCol=DESC&SortType=InsertDate&IsActiveUser=true&IsDeletedUser=true&roleId=1`;
+    const response = await getApi({ path });
+    console.log("UserLists: ",response.data.listUser);
+    setData(response.data.listUser);
+  };
+
+  useEffect(() => {
+    GetUsersList();
+  }, []);
+  
   return (
     <div className="app-user-list">
       <Row>
@@ -41,9 +57,9 @@ const UserLists = () => {
           />
         </Col>
       </Row>
-      <Table />
+      <Table data={data} />
     </div>
   );
 };
 
-export default UserLists;
+export default Staticies;

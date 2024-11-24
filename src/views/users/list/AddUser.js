@@ -14,6 +14,7 @@ import {
 
 import { useForm, Controller } from "react-hook-form";
 import "@styles/react/libs/react-select/_react-select.scss";
+import { postApi } from "../../../core/api/api";
 
 const AddUserModal = () => {
   const [show, setShow] = useState(false);
@@ -22,10 +23,35 @@ const AddUserModal = () => {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+    register,
+    setValue,
+    watch,
+  } = useForm({
+    defaultValues: {
+      isStudent: false,
+      isTeacher: false
+    },
+  });
 
-  const onSubmit = (data) => {
-   
+  const onSubmit = async (data) => {
+        
+    const path = `/User/CreateUser`;
+    const body = data;
+    const response = await postApi({ path, body });
+    console.log("Create User:", response);
+  };
+
+  const isStudent = watch("isStudent");
+  const isTeacher = watch("isTeacher");
+
+  const handleCheckboxChange = (name) => {
+    if (name === "isStudent") {
+      setValue("isStudent", true);
+      setValue("isTeacher", false);
+    } else if (name === "isTeacher") {
+      setValue("isStudent", false);
+      setValue("isTeacher", true);
+    }
   };
 
   return (
@@ -45,7 +71,6 @@ const AddUserModal = () => {
           toggle={() => setShow(!show)}
         ></ModalHeader>
 
-        
         <ModalBody className="px-sm-5 mx-50 pb-5">
           <div className="text-center mb-2">
             <h1 className="mb-1">اطلاعات کاربر را وارد کنید</h1>
@@ -75,7 +100,7 @@ const AddUserModal = () => {
                 }}
               />
               {errors.firstName && (
-                <FormFeedback>Please enter a valid First Name</FormFeedback>
+                <FormFeedback>لطفا نام را وارد کنید</FormFeedback>
               )}
             </Col>
             <Col md={6} xs={12}>
@@ -95,15 +120,8 @@ const AddUserModal = () => {
                 )}
               />
               {errors.lastName && (
-                <FormFeedback>Please enter a valid Last Name</FormFeedback>
+                <FormFeedback>لطفا نام خانوادگی را وارد کنید</FormFeedback>
               )}
-            </Col>
-
-            <Col md={6} xs={12}>
-              <Label className="form-label" for="email">
-                ایمیل
-              </Label>
-              <Input type="email" id="email" placeholder="example@domain.com" />
             </Col>
 
             <Col xs={6}>
@@ -111,30 +129,57 @@ const AddUserModal = () => {
                 شماره موبایل
               </Label>
               <Controller
-                name="username"
+                name="gmail"
+                control={control}
+                render={({ field }) => (
+                  <Input {...field} id="gmail" placeholder="Johe@gmail.com" />
+                )}
+              />
+              {errors.username && (
+                <FormFeedback>لطفا ایمیل را وارد کنید</FormFeedback>
+              )}
+            </Col>
+
+            <Col xs={6}>
+              <Label className="form-label" for="username">
+                شماره موبایل
+              </Label>
+              <Controller
+                name="phoneNumber"
                 control={control}
                 render={({ field }) => (
                   <Input
                     {...field}
-                    id="username"
+                    id="phoneNumber"
                     placeholder="09111111111"
                     invalid={errors.username && true}
                   />
                 )}
               />
               {errors.username && (
-                <FormFeedback>Please enter a valid Username</FormFeedback>
+                <FormFeedback>شماره موبایل را وارد کنید</FormFeedback>
               )}
             </Col>
 
-            <Col md={6} xs={12}>
-              <Label className="form-label" for="tax-id">
+            <Col xs={6}>
+              <Label className="form-label" for="password">
                 رمز عبور
               </Label>
-              <Input
-                id="tax-id"
-                placeholder="*****"
+              <Controller
+                name="password"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    id="password"
+                    placeholder="******"
+                    invalid={errors.username && true}
+                  />
+                )}
               />
+              {errors.username && (
+                <FormFeedback>شماره موبایل را وارد کنید</FormFeedback>
+              )}
             </Col>
 
             <Col md={6} xs={12} className=" d-flex mt-4">
@@ -143,13 +188,25 @@ const AddUserModal = () => {
               </Label>
 
               <div className="form-check form-check-warning ms-1">
-                <Input type="checkbox" id="warning-checkbox"  />
+                <Input
+                  type="checkbox"
+                  name="isStudent"
+                  {...register("isStudent")}
+                  checked={isStudent}
+                  onChange={() => handleCheckboxChange("isStudent")}
+                />
                 <Label className="form-check-label" for="warning-checkbox">
                   دانشجو
                 </Label>
               </div>
               <div className="form-check form-check-info ms-1">
-                <Input type="checkbox" id="info-checkbox"  />
+                <Input
+                  type="checkbox"
+                  name="isTeacher"
+                  {...register("isTeacher")}
+                  checked={isTeacher}
+                  onChange={() => handleCheckboxChange("isTeacher")}
+                />
                 <Label className="form-check-label" for="info-checkbox">
                   استاد
                 </Label>
