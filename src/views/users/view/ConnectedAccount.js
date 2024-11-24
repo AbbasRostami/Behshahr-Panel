@@ -1,62 +1,13 @@
-import { Card, CardBody, CardTitle, Input, Label, Progress } from "reactstrap";
+import { Card, CardBody, CardTitle } from "reactstrap";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import slackIcon from "./../../../assets/images/icons/social/slack.png";
 import asanaIcon from "./../../../assets/images/icons/social/asana.png";
 import googleIcon from "./../../../assets/images/icons/social/google.png";
 import githubIcon from "./../../../assets/images/icons/social/github.png";
-import mailchimpIcon from "./../../../assets/images/icons/social/mailchimp.png";
-import { useEffect, useState } from "react";
-import { getApi } from "../../../core/api/api";
-import { useParams } from "react-router-dom";
+import monkey from "./../../../assets/images/icons/social/mailchimp.png";
 import moment from "moment/moment";
 
-const connectedAccounts = [
-  {
-    checked: true,
-    title: "Google",
-    subtitle: "Calendar and contacts",
-    logo: googleIcon,
-  },
-  {
-    checked: false,
-    title: "Slack",
-    subtitle: "Communication",
-    logo: slackIcon,
-  },
-  {
-    checked: true,
-    title: "Github",
-    subtitle: "Git repositories",
-    logo: githubIcon,
-  },
-  {
-    checked: false,
-    title: "Mailchimp",
-    subtitle: "Email marketing service",
-    logo: mailchimpIcon,
-  },
-  {
-    checked: false,
-    title: "Asana",
-    subtitle: "Communication",
-    logo: asanaIcon,
-  },
-];
-
-const ConnectedAccount = () => {
-  const [data, setData] = useState([]);
-  const params = useParams();
-  console.log(params);
-  const GetUsersAccount = async () => {
-    const path = `/User/UserDetails/${params.id}`;
-    const response = await getApi({ path });
-    console.log(response.data);
-    setData(response.data);
-  };
-
-  useEffect(() => {
-    GetUsersAccount();
-  }, []);
+const ConnectedAccount = ({data}) => {
 
   return (
     <Card>
@@ -67,7 +18,7 @@ const ConnectedAccount = () => {
           <div className="flex-shrink-0">
             <img
               className="me-1 rounded-5"
-              src={data.currentPictureAddress}
+              src={githubIcon}
               alt={data.title}
               height="38"
               width="38"
@@ -84,7 +35,7 @@ const ConnectedAccount = () => {
           <div className="flex-shrink-0">
             <img
               className="me-1 rounded-4"
-              src={data.currentPictureAddress}
+              src={slackIcon}
               alt={data.title}
               height="38"
               width="38"
@@ -101,7 +52,7 @@ const ConnectedAccount = () => {
           <div className="flex-shrink-0">
             <img
               className="me-1 rounded-4"
-              src={data.currentPictureAddress}
+              src={monkey}
               alt={data.title}
               height="38"
               width="38"
@@ -118,7 +69,7 @@ const ConnectedAccount = () => {
           <div className="flex-shrink-0">
             <img
               className="me-1 rounded-4"
-              src={data.currentPictureAddress}
+              src={googleIcon}
               alt={data.title}
               height="38"
               width="38"
@@ -135,7 +86,7 @@ const ConnectedAccount = () => {
           <div className="flex-shrink-0">
             <img
               className="me-1 rounded-4"
-              src={data.currentPictureAddress}
+              src={asanaIcon}
               alt={data.title}
               height="38"
               width="38"
@@ -152,7 +103,7 @@ const ConnectedAccount = () => {
           <div className="flex-shrink-0">
             <img
               className="me-1 rounded-4"
-              src={data.currentPictureAddress}
+              src={monkey}
               alt={data.title}
               height="38"
               width="38"
@@ -173,7 +124,7 @@ const ConnectedAccount = () => {
           <div className="flex-shrink-0">
             <img
               className="me-1 rounded-4"
-              src={data.currentPictureAddress}
+              src={googleIcon}
               alt={data.title}
               height="38"
               width="38"

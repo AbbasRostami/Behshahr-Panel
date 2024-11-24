@@ -124,7 +124,6 @@ export const columns = [
             <DropdownItem
               tag={Link}
               className="w-100"
-              // to="/users-view"
               to={`/users-view/${row.id}`}
             >
               <FileText size={14} className="me-50" />

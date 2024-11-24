@@ -116,20 +116,8 @@ export const columns = [
   },
 ];
 
-const UserProjectsList = () => {
-  const [data, setData] = useState([]);
-  const params = useParams();
-  console.log(params);
-  const GetUsersCourses = async () => {
-    const path = `/User/UserDetails/${params.id}`;
-    const response = await getApi({ path });
-    console.log(response.data.courses);
-    setData(response.data.courses);
-  };
+const UserProjectsList = ({data}) => {
 
-  useEffect(() => {
-    GetUsersCourses();
-  }, []);
   return (
     <Card>
       <div className="text-truncate react-dataTable user-view-account-projects">

@@ -1,19 +1,11 @@
 import { Fragment, useState, useEffect } from "react";
 import { columns } from "./columns";
-
 import Select from "react-select";
 import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
 import {
   ChevronDown,
-  Share,
-  Printer,
-  FileText,
-  File,
-  Grid,
-  Copy,
 } from "react-feather";
-
 import { selectThemeColors } from "@utils";
 
 import {
@@ -31,19 +23,12 @@ import {
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import AddUserModal from "./AddUser";
-
-import avatar2 from "./../../../../src/assets/images/pages/2.png";
-import avatar6 from "./../../../../src/assets/images/pages/6.png";
-import avatar11 from "./../../../../src/assets/images/pages/11.png";
-import avatar12 from "./../../../../src/assets/images/pages/12.png";
 import { getApi } from "../../../core/api/api";
-import { useParams } from "react-router-dom";
 
 const CustomHeader = ({
   handlePerPage,
   rowsPerPage,
   handleFilter,
-  toggleSidebar,
   searchTerm,
 }) => {
   return (
@@ -98,29 +83,18 @@ const CustomHeader = ({
 
 const UsersList = () => {
   const [data, setData] = useState([]);
-  // const params = useParams();
-  // const [ebi, setEbi] = useState(obj + 1);
-  // const obj = {
-  //   PageNumber: "",
-  //   RowsOfPage: "",
-  // };
+
   const GetUsersList = async () => {
     const path = `/User/UserMannage?PageNumber=2&RowsOfPage=20&SortingCol=DESC&SortType=InsertDate&IsActiveUser=true&IsDeletedUser=true&roleId=5`;
     const response = await getApi({ path });
-    console.log(response.data.listUser);
+    console.log("UserLists: ",response.data.listUser);
     setData(response.data.listUser);
   };
 
   useEffect(() => {
     GetUsersList();
   }, []);
-  // ** States
 
-  const datas = [
-    { name: "a", lastname: "b", progress: 78, progressColor: "success" },
-    { name: "a", lastname: "b", progress: 55, progressColor: "info" },
-    { name: "a", lastname: "b", progress: 34, progressColor: "danger" },
-  ];
 
   const [sort, setSort] = useState("desc");
   const [searchTerm, setSearchTerm] = useState("");

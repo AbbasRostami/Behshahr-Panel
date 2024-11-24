@@ -67,7 +67,7 @@ const AddUserModal = () => {
                     <Input
                       {...field}
                       id="firstName"
-                      placeholder="John"
+                      placeholder="نام..."
                       value={field.value}
                       invalid={errors.firstName && true}
                     />
@@ -89,7 +89,7 @@ const AddUserModal = () => {
                   <Input
                     {...field}
                     id="lastName"
-                    placeholder="Doe"
+                    placeholder="نام خانوادگی..."
                     invalid={errors.lastName && true}
                   />
                 )}
@@ -117,7 +117,7 @@ const AddUserModal = () => {
                   <Input
                     {...field}
                     id="username"
-                    placeholder="john.doe.007"
+                    placeholder="09111111111"
                     invalid={errors.username && true}
                   />
                 )}

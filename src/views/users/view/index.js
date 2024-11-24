@@ -35,7 +35,7 @@ const UsersView = () => {
           <UserInfoCard data={data} />
         </Col>
         <Col xl="8" lg="7" xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
-          <UserTabs active={active} toggleTab={toggleTab} />
+          <UserTabs data={data} active={active} toggleTab={toggleTab} />
         </Col>
       </Row>
     </div>

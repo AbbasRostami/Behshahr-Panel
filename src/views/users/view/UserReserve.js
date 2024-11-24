@@ -181,20 +181,8 @@ export const columns = [
   },
 ];
 
-const UserReserve = () => {
-  const params = useParams();
-  const [data, setData] = useState([]);
-  const GetUsersReserve = async () => {
-    // const path = `/CourseReserve/${params?.CourseId}`;
-    const path = `/CourseReserve/9bd12534-af26-ef11-b6c7-cc06a3e06235`;
-    const response = await getApi({ path });
-    console.log(response.data);
-    setData(response.data);
-  };
+const UserReserve = ({data}) => {
 
-  useEffect(() => {
-    GetUsersReserve();
-  }, []);
   return (
     <Card>
       <div className="react-dataTable user-view-account-projects">
