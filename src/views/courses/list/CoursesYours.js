@@ -1,22 +1,36 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 // import { columns } from "./columns";
 
 import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
-import { Archive, ChevronDown, FileText, MoreVertical, Trash2 } from "react-feather";
+import {
+  Archive,
+  ChevronDown,
+  FileText,
+  MoreVertical,
+  Trash2,
+} from "react-feather";
 
-import { Row, Col, Card, Input, Button, Badge, UncontrolledDropdown, DropdownToggle, DropdownItem, DropdownMenu } from "reactstrap";
+import {
+  Row,
+  Col,
+  Card,
+  Input,
+  Button,
+  Badge,
+  UncontrolledDropdown,
+  DropdownToggle,
+  DropdownItem,
+  DropdownMenu,
+} from "reactstrap";
 
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getApi } from "../../../core/api/api";
 
-const CustomHeader = ({
-  handlePerPage,
-  rowsPerPage,
-  searchTerm,
-}) => {
-
+const CustomHeader = ({ handlePerPage, rowsPerPage, searchTerm }) => {
   return (
     <div className="invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75">
       <Row>
@@ -63,6 +77,17 @@ const CustomHeader = ({
 };
 
 const CoursesYours = () => {
+  const [data, setData] = useState([]);
+  const GetCouresesView = async () => {
+    const path = `/Course/CourseList?PageNumber=1&RowsOfPage=10&SortingCol=DESC&SortType=Expire&Query`;
+    const response = await getApi({ path });
+    console.log(response.data.courseDtos);
+    setData(response.data.courseDtos);
+  };
+
+  useEffect(() => {
+    GetCouresesView();
+  }, []);
 
   const datas = [
     { name: "a", lastname: "b" },
@@ -93,163 +118,165 @@ const CoursesYours = () => {
     );
   };
 
-
   const statusObj = {
-    pending: 'light-warning',
-    active: 'light-success',
-    inactive: 'light-secondary'
-  }
-  
-   const columns = [
-  
-  
+    pending: "light-warning",
+    active: "light-success",
+    inactive: "light-secondary",
+  };
+
+  const columns = [
     {
-      name: 'نام دوره',
+      name: "نام دوره",
       sortable: true,
-      minWidth: '200px',
-      sortField: 'fullName',
-      selector: row => row.name,
-      cell: row => (
-        <div className='d-flex justify-content-left align-items-center'>
-             {/* <Avatar className='me-1' img={row.avatar} width='32' height='32' /> */}
-          {row.name}
-          
-       
-          <div className='d-flex flex-column'>
+      minWidth: "200px",
+      sortField: "fullName",
+      selector: (row) => row.title,
+      cell: (row) => (
+        <div className="d-flex justify-content-left align-items-center">
+          {/* <Avatar className='me-1' img={row.avatar} width='32' height='32' /> */}
+          {row.title}
+
+          <div className="d-flex flex-column">
             <Link
               to={`/apps/user/view/${row.id}`}
-              className='user_name text-truncate text-body'
-              onClick={() => store.dispatch(getUser(row.id))}
-            >
-            </Link>
-            
-            <small className='text-truncate text-muted mb-0'>{row.email}</small>
+              className="user_name text-truncate text-body"
+            ></Link>
+
+            <small className="text-truncate text-muted mb-0">{row.email}</small>
           </div>
         </div>
-      )
+      ),
     },
-  
+
     {
-      name: 'نوع دوره',
+      name: "نوع دوره",
       sortable: true,
-      minWidth: '200px',
-      sortField: 'fullName',
-      selector: row => row.lastname,
-      cell: row => (
-        <div className='d-flex justify-content-left align-items-center'>
-          {row.lastname}
-          <div className='d-flex flex-column'>
-            
-              <span className='fw-bolder'>{row.lastname}</span>
-            
-          </div>
+      minWidth: "200px",
+      sortField: "fullName",
+      selector: (row) => row.typeName,
+      cell: (row) => (
+        <div className="d-flex justify-content-left align-items-center">
+          {row.typeName}
         </div>
-      )
+      ),
     },
-  
+
     {
-      name: 'سطح دوره',
+      name: "سطح دوره",
       sortable: true,
-      minWidth: '200px',
-      sortField: 'fullName',
-      selector: row => row.lastname,
-      cell: row => (
-        <div className='d-flex justify-content-left align-items-center'>
-          {row.lastname}
-          <div className='d-flex flex-column'>
+      minWidth: "200px",
+      sortField: "fullName",
+      selector: (row) => row.levelName,
+      cell: (row) => (
+        <div className="d-flex justify-content-left align-items-center">
+          {row.levelName}
+          <div className="d-flex flex-column">
             <Link
               to={`/apps/user/view/${row.id}`}
-              className='user_name text-truncate text-body'
-              onClick={() => store.dispatch(getUser(row.id))}
+              className="user_name text-truncate text-body"
             >
-              <span className='fw-bolder'>{row.lastnamelastname}</span>
+              <span className="fw-bolder">{row.lastnamelastname}</span>
             </Link>
-            <small className='text-truncate text-muted mb-0'>{row.email}</small>
+            <small className="text-truncate text-muted mb-0">{row.email}</small>
           </div>
         </div>
-      )
+      ),
     },
-  
+
     {
-      name: 'وضعیت فعال بودن',
-      minWidth: '138px',
+      name: "وضعیت فعال بودن",
+      minWidth: "138px",
       sortable: true,
-      sortField: 'status',
-      selector: row => row.status,
-      cell: row => (
-        <Badge className='text-capitalize' color='success' pill  >
-          {row.status} success
+      sortField: "status",
+      selector: (row) => row.isActive,
+      cell: (row) => (
+        <Badge className="text-capitalize" color="success" pill>
+          {row.isActive ? (
+            <span> فعال</span>
+          ) : (
+            <span className="text-capitalize" color="danger">
+              غیرفعال
+            </span>
+          )}
         </Badge>
-  
+
         // color={statusObj[row.status]} pill
         // color='success' pill
         // color='danger' pill
         // color='secondary' pill
-  
-      )
+      ),
     },
-  
+
     {
-      name: 'وضعیت موجود بودن',
-      minWidth: '138px',
+      name: "وضعیت موجود بودن",
+      minWidth: "138px",
       sortable: true,
-      sortField: 'status',
-      selector: row => row.status,
-      cell: row => (
-        <Badge className='text-capitalize' color='danger' pill  >
-          {row.status} danger
+      sortField: "status",
+      selector: (row) => row.status,
+      cell: (row) => (
+        <Badge className="text-capitalize" color="danger" pill>
+          {row.isdelete ? (
+            <span> خذف شده</span>
+          ) : (
+            <span className="text-capitalize" color="danger">
+              موجود
+            </span>
+          )}
         </Badge>
-  
+
         // color={statusObj[row.status]} pill
         // color='success' pill
         // color='danger' pill
         // color='secondary' pill
-  
-      )
+      ),
     },
-  
-  
+
     {
-      name: 'اقدام',
-      minWidth: '100px',
-      cell: row => (
-        <div className='column-action'>
+      name: "اقدام",
+      minWidth: "100px",
+      cell: (row) => (
+        <div className="column-action">
           <UncontrolledDropdown>
-            <DropdownToggle tag='div' className='btn btn-sm'>
-              <MoreVertical size={14} className='cursor-pointer' />
+            <DropdownToggle tag="div" className="btn btn-sm">
+              <MoreVertical size={14} className="cursor-pointer" />
             </DropdownToggle>
             <DropdownMenu>
               <DropdownItem
                 tag={Link}
-                className='w-100'
+                className="w-100"
                 to={`/apps/user/view/${row.id}`}
-                onClick={() => store.dispatch(getUser(row.id))}
               >
-                <FileText size={14} className='me-50' />
-                <span className='align-middle'>جزئیات</span>
-              </DropdownItem>
-              <DropdownItem tag='a' href='/' className='w-100' onClick={e => e.preventDefault()}>
-                <Archive size={14} className='me-50' />
-                <span className='align-middle'>ویرایش</span>
+                <FileText size={14} className="me-50" />
+                <Link to="/courses-view">
+                  <span className="align-middle">جزئیات</span>
+                </Link>
               </DropdownItem>
               <DropdownItem
-                tag='a'
-                href='/'
-                className='w-100'
-                onClick={e => {
-                  e.preventDefault()
-                  store.dispatch(deleteUser(row.id))
+                tag="a"
+                href="/"
+                className="w-100"
+                onClick={(e) => e.preventDefault()}
+              >
+                <Archive size={14} className="me-50" />
+                <span className="align-middle">ویرایش</span>
+              </DropdownItem>
+              <DropdownItem
+                tag="a"
+                href="/"
+                className="w-100"
+                onClick={(e) => {
+                  e.preventDefault();
                 }}
               >
-                <Trash2 size={14} className='me-50' />
-                <span className='align-middle'>حذف</span>
+                <Trash2 size={14} className="me-50" />
+                <span className="align-middle">حذف</span>
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
         </div>
-      )
-    }
-  ]
+      ),
+    },
+  ];
 
   return (
     <Fragment>
@@ -266,11 +293,8 @@ const CoursesYours = () => {
             sortIcon={<ChevronDown />}
             className="react-dataTable"
             paginationComponent={CustomPagination}
-            data={datas}
-            subHeaderComponent={
-              <CustomHeader
-              />
-            }
+            data={data}
+            subHeaderComponent={<CustomHeader />}
           />
         </div>
       </Card>

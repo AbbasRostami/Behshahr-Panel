@@ -1,7 +1,5 @@
-// ** React Imports
 import { useState, Fragment, useEffect } from "react";
 
-// ** Reactstrap Imports
 import {
   Row,
   Col,
@@ -17,36 +15,15 @@ import {
   ModalHeader,
 } from "reactstrap";
 
-// ** Third Party Components
 import Swal from "sweetalert2";
 import Select from "react-select";
-import { Check, Briefcase, X } from "react-feather";
+import { Check, Briefcase } from "react-feather";
 import { useForm, Controller } from "react-hook-form";
 import withReactContent from "sweetalert2-react-content";
-
-// ** Custom Components
 import Avatar from "@components/avatar";
-
-// ** Utils
 import { selectThemeColors } from "@utils";
-
-// ** Styles
 import "@styles/react/libs/react-select/_react-select.scss";
 import { getApi } from "../../../core/api/api";
-
-const roleColors = {
-  editor: "light-info",
-  admin: "light-danger",
-  author: "light-warning",
-  maintainer: "light-success",
-  subscriber: "light-primary",
-};
-
-const statusColors = {
-  active: "light-success",
-  pending: "light-warning",
-  inactive: "light-secondary",
-};
 
 const statusOptions = [
   { value: "active", label: "Active" },
@@ -60,14 +37,6 @@ const countryOptions = [
   { value: "france", label: "France" },
   { value: "russia", label: "Russia" },
   { value: "canada", label: "Canada" },
-];
-
-const languageOptions = [
-  { value: "english", label: "English" },
-  { value: "spanish", label: "Spanish" },
-  { value: "french", label: "French" },
-  { value: "german", label: "German" },
-  { value: "dutch", label: "Dutch" },
 ];
 
 const MySwal = withReactContent(Swal);
@@ -84,10 +53,8 @@ const UserInfoCard = ({ selectedUser }) => {
   useEffect(() => {
     GetCouresesView();
   }, []);
-  // ** State
   const [show, setShow] = useState(false);
 
-  // ** Hook
   const {
     reset,
     control,
@@ -101,40 +68,6 @@ const UserInfoCard = ({ selectedUser }) => {
       // firstName: selectedUser.fullName.split(' ')[0]
     },
   });
-
-  // ** render user img
-  const renderUserImg = () => {
-    if (selectedUser !== null && selectedUser.avatar.length) {
-      return (
-        <img
-          height="110"
-          width="110"
-          alt="user-avatar"
-          src={selectedUser.avatar}
-          className="img-fluid rounded mt-3 mb-2"
-        />
-      );
-    } else {
-      return (
-        <Avatar
-          initials
-          color={selectedUser.avatarColor || "light-primary"}
-          className="rounded mt-3 mb-2"
-          content={selectedUser.fullName}
-          contentStyles={{
-            borderRadius: 0,
-            fontSize: "calc(48px)",
-            width: "100%",
-            height: "100%",
-          }}
-          style={{
-            height: "110px",
-            width: "110px",
-          }}
-        />
-      );
-    }
-  };
 
   const onSubmit = (data) => {
     if (Object.values(data).every((field) => field.length > 0)) {

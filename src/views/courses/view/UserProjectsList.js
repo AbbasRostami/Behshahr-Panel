@@ -1,8 +1,16 @@
 // ** Reactstrap Imports
-import { Card, CardHeader, Progress } from "reactstrap";
+import {
+  Card,
+  CardHeader,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  Progress,
+  UncontrolledDropdown,
+} from "reactstrap";
 
 // ** Third Party Components
-import { ChevronDown } from "react-feather";
+import { Archive, ChevronDown, MoreVertical, Trash2 } from "react-feather";
 import DataTable from "react-data-table-component";
 
 // ** Custom Components
@@ -16,6 +24,9 @@ import reactLabel from "@src/assets/images/icons/brands/react-label.png";
 import sketchLabel from "@src/assets/images/icons/brands/sketch-label.png";
 // ** Styles
 import "@styles/react/libs/tables/react-dataTable-component.scss";
+import { useEffect, useState } from "react";
+import { getApi } from "../../../core/api/api";
+import { useParams } from "react-router-dom";
 
 const projectsArr = [
   {
@@ -89,7 +100,7 @@ export const columns = [
     sortable: true,
     minWidth: "300px",
     name: "نام کاربر",
-    selector: (row) => row.title,
+    selector: (row) => row.fullName,
     cell: (row) => {
       return (
         <div className="d-flex justify-content-left align-items-center ">
@@ -102,7 +113,7 @@ export const columns = [
             />
           </div>
           <div className="d-flex flex-column">
-            <span className="text-truncate fw-bolder">{row.title}</span>
+            <span className="text-truncate fw-bolder">{row.fullName}</span>
             <small className="text-muted">{row.subtitle}</small>
           </div>
         </div>
@@ -111,32 +122,78 @@ export const columns = [
   },
   {
     name: "نام دوره ",
-    selector: (row) => row.totalTasks,
+    selector: (row) => row.title,
   },
   {
     name: "وضعیت",
-    selector: (row) => row.progress,
+    selector: (row) => row.isExpire,
     sortable: true,
     cell: (row) => {
       return (
         <div className="d-flex flex-column w-100">
-          <small className="mb-1">{`${row.progress}%`}</small>
-          <Progress
-            value={row.progress}
-            style={{ height: "6px" }}
-            className={`w-100 progress-bar-${row.progressColor}`}
-          />
+          <small className="mb-1">
+            {row.isActive ? (
+              <span className="bg-success rounded-pill fs-5 ">تائید شده</span>
+            ) : (
+              <span className="bg-danger rounded-pill fs-5">تائید نشده</span>
+            )}
+          </small>
         </div>
       );
     },
   },
   {
     name: "اقدام",
-    selector: (row) => row.hours,
+    minWidth: "100px",
+    cell: (row) => (
+      <div className="column-action">
+        <UncontrolledDropdown>
+          <DropdownToggle tag="div" className="btn btn-sm">
+            <MoreVertical size={14} className="cursor-pointer" />
+          </DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem
+              tag="a"
+              href="/"
+              className="w-100"
+              onClick={(e) => e.preventDefault()}
+            >
+              <Archive size={14} className="me-50" />
+              <span className="align-middle">ویرایش</span>
+            </DropdownItem>
+            <DropdownItem
+              tag="a"
+              href="/"
+              className="w-100"
+              onClick={(e) => {
+                e.preventDefault();
+              }}
+            >
+              <Trash2 size={14} className="me-50" />
+              <span className="align-middle">حذف</span>
+            </DropdownItem>
+          </DropdownMenu>
+        </UncontrolledDropdown>
+      </div>
+    ),
   },
 ];
 
 const UserProjectsList = () => {
+  const [data, setData] = useState([]);
+  const params = useParams();
+  console.log(params);
+
+  const GetCouresesUser = async () => {
+    const path = `/Home/GetCourseDetails?CourseId=${params.CourseId}`;
+    const response = await getApi({ path });
+    console.log(response);
+    setData(response);
+  };
+
+  useEffect(() => {
+    GetCouresesUser();
+  }, []);
   return (
     <Card>
       <div className="react-dataTable user-view-account-projects">
@@ -144,7 +201,7 @@ const UserProjectsList = () => {
           noHeader
           responsive
           columns={columns}
-          data={projectsArr}
+          data={data}
           className="react-dataTable"
           sortIcon={<ChevronDown size={10} />}
         />

@@ -1,8 +1,16 @@
 // ** Reactstrap Imports
-import { Card, CardHeader, Progress } from "reactstrap";
+import {
+  Card,
+  CardHeader,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  Progress,
+  UncontrolledDropdown,
+} from "reactstrap";
 
 // ** Third Party Components
-import { ChevronDown } from "react-feather";
+import { Archive, ChevronDown, MoreVertical, Trash2 } from "react-feather";
 import DataTable from "react-data-table-component";
 
 // ** Custom Components
@@ -89,66 +97,99 @@ const projectsArr = [
 export const columns = [
   {
     sortable: true,
-    minWidth: "300px",
+    maxWidth: "200px",
     name: "نام کاربر",
-    selector: (row) => row.title,
+    selector: (row) => row.userFullName,
     cell: (row) => {
       return (
-        <div className="d-flex justify-content-left align-items-center ">
-          <div className="avatar-wrapper">
-            <Avatar
-              className="me-1"
-              img={row.img}
-              alt={row.title}
-              imgWidth="32"
-            />
-          </div>
+        <div className="d-flex justify-content-left align-items-center text-truncate ">
+          <div className="avatar-wrapper"></div>
           <div className="d-flex flex-column">
-            <span className="text-truncate fw-bolder">{row.title}</span>
-            <small className="text-muted">{row.subtitle}</small>
+            <span className="text-truncate fw-bolder">{row.userFullName}</span>
           </div>
         </div>
       );
     },
   },
   {
-    name: "متن کامنت ",
-    selector: (row) => row.totalTasks,
+    maxWidth: "200px",
+    name: " عنوان کامنت ",
+    selector: (row) => row.commentTitle,
   },
   {
+    maxWidth: "200px",
+    name: "متن کامنت ",
+    selector: (row) => row.describe,
+  },
+  {
+    maxWidth: "200px",
     name: "وضعیت",
-    selector: (row) => row.progress,
+    selector: (row) => row.accept,
     sortable: true,
     cell: (row) => {
       return (
         <div className="d-flex flex-column w-100">
-          <small className="mb-1">{`${row.progress}%`}</small>
-          <Progress
+          <small className="mb-1">
+            {row.accept ? <span>تائید شده</span> : <span>تائید نشده</span>}
+          </small>
+          {/* <Progress
             value={row.progress}
             style={{ height: "6px" }}
             className={`w-100 progress-bar-${row.progressColor}`}
-          />
+          /> */}
         </div>
       );
     },
   },
   {
     name: "اقدام",
-    selector: (row) => row.hours,
+    maxWidth: "200px",
+    cell: (row) => (
+      <div className="column-action">
+        <UncontrolledDropdown>
+          <DropdownToggle tag="div" className="btn btn-sm">
+            <MoreVertical size={14} className="cursor-pointer" />
+          </DropdownToggle>
+          <DropdownMenu>
+            <DropdownItem
+              tag="a"
+              href="/"
+              className="w-100"
+              onClick={(e) => e.preventDefault()}
+            >
+              <Archive size={14} className="me-50" />
+              <span className="align-middle">ویرایش</span>
+            </DropdownItem>
+            <DropdownItem
+              tag="a"
+              href="/"
+              className="w-100"
+              onClick={(e) => {
+                e.preventDefault();
+                store.dispatch(deleteUser(row.id));
+              }}
+            >
+              <Trash2 size={14} className="me-50" />
+              <span className="align-middle">حذف</span>
+            </DropdownItem>
+          </DropdownMenu>
+        </UncontrolledDropdown>
+      </div>
+    ),
   },
 ];
 
 const Comments = () => {
   const [data, setData] = useState([]);
-  const GetCouresesView = async () => {
-    const path = ``;
+  const GetCouresComments = async () => {
+    const path = `/Course/CommentManagment?PageNumber=1&RowsOfPage=10&SortingCol=DESC&SortType=InsertDate&Query=`;
     const response = await getApi({ path });
-    console.log(response.data);
-    setData(response.data);
+    console.log(response.data.comments);
+    setData(response.data.comments);
   };
 
   useEffect(() => {
-    GetCouresesView();
+    GetCouresComments();
   }, []);
   return (
     <Card>
@@ -157,7 +198,7 @@ const Comments = () => {
           noHeader
           responsive
           columns={columns}
-          data={projectsArr}
+          data={data}
           className="react-dataTable"
           sortIcon={<ChevronDown size={10} />}
         />
