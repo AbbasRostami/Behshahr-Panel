@@ -41,6 +41,7 @@ import "./assets/scss/style.scss";
 
 // ** Service Worker
 import * as serviceWorker from "./serviceWorker";
+import { ToastContainer } from "react-toastify";
 
 // ** Lazy load app
 const LazyApp = lazy(() => import("./App"));
@@ -61,6 +62,7 @@ root.render(
         </ThemeContext>
       </Suspense>
     </Provider>
+    <ToastContainer />
   </BrowserRouter>
 );
 

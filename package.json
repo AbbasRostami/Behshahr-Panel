@@ -73,6 +73,7 @@
     "react-shepherd": "^4.1.0",
     "react-slidedown": "^2.4.7",
     "react-sortablejs": "6.0.0",
+    "react-toastify": "^10.0.6",
     "reactstrap": "^9.1.5",
     "recharts": "^2.1.9",
     "redux": "^4.2.0",
