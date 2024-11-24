@@ -13,7 +13,7 @@ const UsersView = () => {
   const GetUsersView = async () => {
     const path = `/User/UserDetails/${params.id}`;
     const response = await getApi({ path });
-    console.log(response.data);
+    console.log("Details: ",response.data);
     setData(response.data);
   };
 

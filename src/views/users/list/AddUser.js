@@ -29,12 +29,11 @@ const AddUserModal = () => {
   } = useForm({
     defaultValues: {
       isStudent: false,
-      isTeacher: false
+      isTeacher: false,
     },
   });
 
   const onSubmit = async (data) => {
-        
     const path = `/User/CreateUser`;
     const body = data;
     const response = await postApi({ path, body });
@@ -228,6 +227,9 @@ const AddUserModal = () => {
             </Col>
           </Row>
         </ModalBody>
+
+
+        
       </Modal>
     </Fragment>
   );
