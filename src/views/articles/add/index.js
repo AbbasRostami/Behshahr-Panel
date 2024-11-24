@@ -1,95 +1,157 @@
 // ** Reactstrap Imports
-import { Card, CardHeader, CardTitle, CardBody, Row, Col, Input, Form, Button, Label } from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardBody,
+  Row,
+  Col,
+  Input,
+  Form,
+  Button,
+  Label,
+} from "reactstrap";
 // ** Third Party Components
-import Select from 'react-select'
+import Select from "react-select";
 
 // ** Utils
-import { selectThemeColors } from '@utils'
+import { selectThemeColors } from "@utils";
+import { useForm, Controller } from "react-hook-form";
+
+import { postApi } from "../../../core/api/api";
 
 // ** Reactstrap Imports
 
 const colourOptions = [
-  { value: 'ocean', label: 'اخبار پژوهشگاه' },
-  { value: 'blue', label: 'Blue' },
-  { value: 'purple', label: 'Purple' },
-
-]
+  { value: "ocean", label: "اخبار پژوهشگاه" },
+  { value: "blue", label: "Blue" },
+  { value: "purple", label: "Purple" },
+];
 
 const ArticlesAdd = () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    register,
+    setValue,
+    watch,
+  } = useForm();
+
+  const onSubmit = async (values) => {
+    const formData = new FormData();
+
+    const datas = {
+      Title: values.Title,
+      GoogleTitle: values.GoogleTitle,
+      GoogleDescribe: values.GoogleDescribe,
+      MiniDescribe: values.MiniDescribe,
+      Describe: values.Describe,
+      Keyword: values.Keyword,
+      NewsCatregoryId: 12,
+    };
+    Object.entries(datas).forEach(([key, value]) =>
+      formData.append(key, value)
+    );
+
+    formData.forEach((value, key) => {
+      console.log(key, ":", value);
+    });
+    const path = `/User/CreateUser`;
+    const body = formData;
+    const response = await postApi({ path, body });
+    console.log(response);
+    console.log(values);
+  };
+
   return (
     <Card>
       <CardHeader>
-        <CardHeader tag='h2'>افزودن اخبار و مقاله جدید</CardHeader>
-        
+        <CardHeader tag="h2">افزودن اخبار و مقاله جدید</CardHeader>
       </CardHeader>
 
       <CardBody>
-        <Form>
+        <Form onSubmit={handleSubmit(onSubmit)}>
           <Row>
-            <Col md='6' sm='12' className='mb-1'>
-              <Label className='form-label' for='nameMulti'>
-              <h5 className='font-weight-bold'> عنوان خبر </h5>
+            <Col md={4} xs={12}>
+              <Label className="form-label" for="GoogleTitle">
+                عنوان گوگل
               </Label>
-              <Input type='text' name='name' id='nameMulti' placeholder='تیتر...' />
+              <Controller
+                control={control}
+                name="Title"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
             </Col>
-            <Col md='6' sm='12' className='mb-1'>
-              <Label className='form-label' for='lastNameMulti'>
-              <h5 className='font-weight-bold'>  عنوان گوگل </h5>
+            <Col md={4} xs={12}>
+              <Label className="form-label" for="GoogleTitle">
+                عنوان
               </Label>
-              <Input type='text' name='lastname' id='lastNameMulti' placeholder='لینک' />
+              <Controller
+                control={control}
+                name="GoogleTitle"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
             </Col>
-            <Col md='6' sm='12' className='mb-1'>
-              <Label className='form-label' for='cityMulti'>
-              <h5 className='font-weight-bold'>  توضیحات گوگل</h5>
+            <Col md={4} xs={12}>
+              <Label className="form-label" for="GoogleTitle">
+                عنوان گوگل
               </Label>
-              <textarea class="form-control" id="cityMulti" rows="3"></textarea>
+              <Controller
+                control={control}
+                name="GoogleDescribe"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
             </Col>
-            <Col md='6' sm='12' className='mb-1'>
-              <Label className='form-label' for='CountryMulti'>
-              <h5 className='font-weight-bold'>توضیح کوتاه</h5>
+            <Col md={4} xs={12}>
+              <Label className="form-label" for="GoogleTitle">
+                عنوان گوگل
               </Label>
-              <textarea class="form-control" id="cityMulti" rows="3"></textarea>
+              <Controller
+                control={control}
+                name="MiniDescribe"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
             </Col>
-            <Col md='6' sm='12' className='mb-1'>
-              <Label className='form-label' for='CompanyMulti'>
-              <h5 className='font-weight-bold'> کلمات کلیدی </h5>
+            <Col md={4} xs={12}>
+              <Label className="form-label" for="GoogleTitle">
+                عنوان گوگل
               </Label>
-              <Input type='text' name='company' id='CompanyMulti' placeholder='کلیدی' />
+              <Controller
+                control={control}
+                name="Describe"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
             </Col>
-            <Col md='6' sm='12' className='mb-1'>
-              <Label className='form-label' for='EmailMulti'>
-              <h5 className='font-weight-bold'> دسته بندی خبر</h5>
+            <Col md={4} xs={12}>
+              <Label className="form-label" for="GoogleTitle">
+                عنوان گوگل
               </Label>
-              
-
-            <Select
-              theme={selectThemeColors}
-              className='react-select'
-              classNamePrefix='select'
-              defaultValue={colourOptions[0]}
-              options={colourOptions}
-              isClearable={false}
-            />
-
-
-
+              <Controller
+                control={control}
+                name="Keyword"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
             </Col>
 
-            <Col md='12' sm='12' className='mb-1'>
-              <Label className='form-label col-sm-3' for='CountryMulti'>
-             <h5 className='font-weight-bold'>توضیحات </h5>
-              </Label>
-              <textarea class="form-control" id="cityMulti" rows="3" placeholder='توضیحات تکمیلی...'></textarea>
-            </Col>
-
-
-
-            <Col sm='12' className='mt-2'>
-              <div className='d-flex'>
-                <Button className='me-1 ' color='primary' type='submit' onClick={e => e.preventDefault()}>
+            <Col sm="12" className="mt-2">
+              <div className="d-flex">
+                <Button className="me-1 " color="primary" type="submit">
                   ثبت
                 </Button>
-                <Button outline color='secondary' type='reset'>
+                <Button outline color="secondary" type="reset">
                   پاک کردن همه
                 </Button>
               </div>
@@ -98,6 +160,6 @@ const ArticlesAdd = () => {
         </Form>
       </CardBody>
     </Card>
-  )
-}
-export default ArticlesAdd
+  );
+};
+export default ArticlesAdd;
