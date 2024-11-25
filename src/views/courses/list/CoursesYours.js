@@ -138,7 +138,7 @@ const CoursesYours = () => {
 
           <div className="d-flex flex-column">
             <Link
-              to={`/courses-view/${row.CourseId}`}
+              to={`/courses-view/${row.courseId}`}
               className="user_name text-truncate text-body"
             ></Link>
 
@@ -244,7 +244,7 @@ const CoursesYours = () => {
               <DropdownItem
                 tag={Link}
                 className="w-100"
-                to={`/courses-view/${row.CourseId}`}
+                to={`/courses-view/${row.courseId}`}
               >
                 <FileText size={14} className="me-50" />
 
