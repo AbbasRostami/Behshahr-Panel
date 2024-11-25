@@ -190,15 +190,17 @@ const CoursesYours = () => {
       sortField: "status",
       selector: (row) => row.isActive,
       cell: (row) => (
-        <Badge className="text-capitalize" color="success" pill>
+        <span>
           {row.isActive ? (
-            <span> فعال</span>
+            <Badge className="text-capitalize" color="success" pill>
+              فعال
+            </Badge>
           ) : (
-            <span className="text-capitalize" color="danger">
+            <Badge className="text-capitalize" color="danger">
               غیرفعال
-            </span>
+            </Badge>
           )}
-        </Badge>
+        </span>
 
         // color={statusObj[row.status]} pill
         // color='success' pill
