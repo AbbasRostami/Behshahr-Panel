@@ -1,4 +1,4 @@
-import { Fragment, useState} from "react";
+import { Fragment, useEffect, useState } from "react";
 import {
   Share2,
   GitHub,
@@ -11,6 +11,7 @@ import {
   MessageSquare,
 } from "react-feather";
 import Avatar from "@components/avatar";
+import googleIcon from "./../../../assets/images/icons/social/google.png";
 
 import {
   Row,
@@ -37,9 +38,25 @@ import "@styles/base/pages/page-blog.scss";
 import avatar from "./../../../assets/images/portrait/small/avatar-s-11.jpg";
 import { Controller, useForm } from "react-hook-form";
 import StateManagedSelect from "react-select";
+import { useParams } from "react-router-dom";
+import { getApi } from "../../../core/api/api";
+import moment from "moment";
 
 const ArticlesView = () => {
- 
+  const [data, setData] = useState([]);
+  const params = useParams();
+  console.log(params);
+  const GetArticlesView = async () => {
+    const path = `/News/${params.id}`;
+    const response = await getApi({ path });
+    console.log(response.data.detailsNewsDto);
+    setData(response.data.detailsNewsDto);
+  };
+
+  useEffect(() => {
+    GetArticlesView();
+  }, []);
+
   const [show, setShow] = useState(false);
 
   const {
@@ -69,37 +86,40 @@ const ArticlesView = () => {
     }
   };
 
-
-  const countryOptions = [
-    { value: "uk", label: "اخبار پژوهشگاه" },
-  ];
+  const countryOptions = [{ value: "uk", label: "اخبار پژوهشگاه" }];
 
   const renderComments = () => {
-   
-      return (
-        <Card className='mb-3'>
-          <CardBody>
-            <div className='d-flex'>
-              <div>
-                <Avatar className='me-75' img={avatar} imgHeight='38' imgWidth='38' />
-              </div>
-              <div>
-                <h6 className='fw-bolder mb-25'>Chad Alexander</h6>
-                <CardText>May 24, 2020</CardText>
-                <CardText>A variation on the question technique above, the multiple-choice question great way to engage your reader.</CardText>
-                <a href='/' onClick={e => e.preventDefault()}>
-                  <div className='d-inline-flex align-items-center'>
-                    <CornerUpLeft size={18} className='me-50' />
-                    <span>Reply</span>
-                  </div>
-                </a>
-              </div>
+    return (
+      <Card className="mb-3">
+        <CardBody>
+          <div className="d-flex">
+            <div>
+              <Avatar
+                className="me-75"
+                img={avatar}
+                imgHeight="38"
+                imgWidth="38"
+              />
             </div>
-          </CardBody>
-        </Card>
-      )
-   
-  }
+            <div>
+              <h6 className="fw-bolder mb-25">Chad Alexander</h6>
+              <CardText>May 24, 2020</CardText>
+              <CardText>
+                A variation on the question technique above, the multiple-choice
+                question great way to engage your reader.
+              </CardText>
+              <a href="/" onClick={(e) => e.preventDefault()}>
+                <div className="d-inline-flex align-items-center">
+                  <CornerUpLeft size={18} className="me-50" />
+                  <span>Reply</span>
+                </div>
+              </a>
+            </div>
+          </div>
+        </CardBody>
+      </Card>
+    );
+  };
 
   return (
     <Fragment>
@@ -111,13 +131,11 @@ const ArticlesView = () => {
                 <Card className="mb-3">
                   <img
                     class="h-[30rem]"
-                    src="https://sonigaracorp.com/images/blog/5_Eco-Friendly/5-Eco-Friendly-Home-Features.jpg"
+                    src={data.currentImageAddressTumb}
                     top
                   />
                   <CardBody>
-                    <CardTitle tag="h4">
-                      The Best Features Coming to iOS and Web design
-                    </CardTitle>
+                    <CardTitle tag="h4">نام نویسنده: {data.title}</CardTitle>
                     <div className="d-flex">
                       <Avatar
                         className="me-50"
@@ -126,48 +144,83 @@ const ArticlesView = () => {
                         imgWidth="24"
                       />
                       <div>
-                        <small className="text-muted me-25">by</small>
                         <small>
                           <a
-                            className="text-body"
+                            className="text-muted ms-50 "
                             href="/"
                             onClick={(e) => e.preventDefault()}
                           >
-                            Ghani Pradita
+                            تاریخ استارت:{" "}
                           </a>
                         </small>
-                        <span className="text-muted ms-50 me-25">|</span>
-                        <small className="text-muted">Jan 10, 2020</small>
+                        <span className="text-muted ms-50 me-25"></span>
+
+                        <small className="text-muted">
+                          {" "}
+                          {moment(data?.insertDate)
+                            .locale("fa")
+                            .format("YYYY/MM/DD")}
+                        </small>
+
+                        <small>
+                          <a
+                            className="text-muted ms-50 "
+                            href="/"
+                            onClick={(e) => e.preventDefault()}
+                          >
+                            تاریخ به روز رسانی:{" "}
+                          </a>
+                        </small>
+                        <span className="text-muted ms-50 me-25"></span>
+
+                        <small className="text-muted">
+                          {" "}
+                          {moment(data?.updateDate)
+                            .locale("fa")
+                            .format("YYYY/MM/DD")}
+                        </small>
                       </div>
                     </div>
                     <h6 className="rtl mt-2">
-                      Before you get into the nitty-gritty of coming up with a
-                      perfect title, start with a rough draft: your working
-                      title. What is that, exactly? A lot of people confuse
-                      working titles with topics. Let's clear that Topics are
-                      very general and could yield several different blog posts.
-                      Think "raising healthy kids," or "kitchen storage." A
-                      writer might look at either of those topics and choose to
-                      take them in very, very different directions.A working
-                      title, on the other hand, is very specific and guides the
-                      creation of a single blog post. For example, from the
-                      topic "raising healthy kids," you could derive the
-                      following working title See how different and specific
-                      each of those is? That's what makes them working titles,
-                      instead of overarching topics. Unprecedented Challenge{" "}
-                      <br/>
+                      دسته بندی: {data.newsCatregoryName}
                       <br />
-                      Preliminary thinking systems
                       <br />
-                      Bandwidth efficient
+                    </h6>
+
+                    <h6 className="rtl mt-2 ">
+                      <div>
+                        <Avatar
+                          img={avatar}
+                          className="me-10"
+                          imgHeight="20"
+                          imgWidth="20"
+                        />
+                        {"                          "}
+                        توضیحات کوتاه: {data.describe}
+                      </div>
+
                       <br />
-                      Green space
                       <br />
-                      Social impact
+                    </h6>
+                    <h6 className="rtl mt-2 ">
+                      <img
+                        className="me-1 rounded-6 "
+                        src={googleIcon}
+                        alt={data.title}
+                        height="20"
+                        width="22"
+                      />
+                      عنوان گوگل: {data.googleTitle}
                       <br />
-                      Thought partnership
                       <br />
-                      Fully ethical life
+                      <img
+                        className="me-1 rounded-6"
+                        src={googleIcon}
+                        alt={data.title}
+                        height="20"
+                        width="22"
+                      />
+                      توضیحات گوگل: {data.googleDescribe}
                       <br />
                     </h6>
                     <div className="d-flex mt-5">
@@ -180,12 +233,9 @@ const ArticlesView = () => {
                         />
                       </div>
                       <div>
-                        <h6 className="fw-bolder mx-2">Willie Clark</h6>
+                        <h6 className="fw-bolder mx-2"> توضیحات دوره:</h6>
                         <CardText className="mb-0 mx-2 ">
-                          Based in London, Uncode is a blog by Willie Clark. His
-                          posts explore modern design trends through photos and
-                          quotes by influential creatives and web designer
-                          around the world.
+                          {data.describe}
                         </CardText>
                       </div>
                     </div>
@@ -287,9 +337,11 @@ const ArticlesView = () => {
                             />
                           </div>
                         </Col>
-                      
+
                         <Col sm="12">
-                          <Button color="primary" onClick={() => setShow(true)}>ویرایش</Button>
+                          <Button color="primary" onClick={() => setShow(true)}>
+                            ویرایش
+                          </Button>
                         </Col>
                       </Row>
                     </Form>
@@ -316,11 +368,9 @@ const ArticlesView = () => {
           </div>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Row className="gy-1 pt-75">
-
-
               <Col md={6} xs={12}>
                 <Label className="form-label" for="firstName">
-                 عنوان
+                  عنوان
                 </Label>
                 <Controller
                   defaultValue=""
@@ -354,10 +404,10 @@ const ArticlesView = () => {
                   )}
                 />
               </Col>
-             
+
               <Col md={6} xs={12}>
                 <Label className="form-label" for="lastName">
-                 کلمات کلیدی
+                  کلمات کلیدی
                 </Label>
                 <Controller
                   defaultValue=""
@@ -373,7 +423,7 @@ const ArticlesView = () => {
                   )}
                 />
               </Col>
-              
+
               <Col md={6} xs={12}>
                 <Label className="form-label" for="country">
                   انتخاب دسته بندی
@@ -387,15 +437,12 @@ const ArticlesView = () => {
                   defaultValue={countryOptions[0]}
                 />
               </Col>
-              
+
               <Col md={6} xs={12}>
                 <Label className="form-label" for="billing-email">
-                 توضیح کوتاه
+                  توضیح کوتاه
                 </Label>
-                <Input
-                  type="email"
-                  id="billing-email"
-                />
+                <Input type="email" id="billing-email" />
               </Col>
 
               <Col md={6} xs={12}>
@@ -407,10 +454,10 @@ const ArticlesView = () => {
                   // defaultValue={selectedUser.contact.substr(selectedUser.contact.length - 4)}
                 />
               </Col>
-              
+
               <Col md={12} xs={12}>
                 <Label className="form-label" for="firstName">
-                 توضیحات گوگل
+                  توضیحات گوگل
                 </Label>
                 <Controller
                   defaultValue=""
@@ -427,7 +474,7 @@ const ArticlesView = () => {
                 />
               </Col>
               <Col md={8} xs={12} className="mt-2">
-              <Button color="primary">ثبت</Button>
+                <Button color="primary">ثبت</Button>
               </Col>
             </Row>
           </Form>

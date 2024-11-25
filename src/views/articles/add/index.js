@@ -59,7 +59,6 @@ const ArticlesAdd = () => {
       console.log(key, ":", value);
     });
 
-
     const path = `/News/CreateNews`;
     const body = formData;
     const response = await postApi({ path, body });
@@ -80,7 +79,7 @@ const ArticlesAdd = () => {
           <Row>
             <Col md={4} xs={12}>
               <Label className="form-label" for="Title">
-               1
+                1
               </Label>
               <Controller
                 control={control}
@@ -92,7 +91,7 @@ const ArticlesAdd = () => {
             </Col>
             <Col md={4} xs={12}>
               <Label className="form-label" for="GoogleTitle">
-               2
+                2
               </Label>
               <Controller
                 control={control}
@@ -104,7 +103,7 @@ const ArticlesAdd = () => {
             </Col>
             <Col md={4} xs={12}>
               <Label className="form-label" for="GoogleDescribe">
-               3
+                3
               </Label>
               <Controller
                 control={control}
@@ -116,7 +115,7 @@ const ArticlesAdd = () => {
             </Col>
             <Col md={4} xs={12}>
               <Label className="form-label" for="MiniDescribe">
-               4
+                4
               </Label>
               <Controller
                 control={control}

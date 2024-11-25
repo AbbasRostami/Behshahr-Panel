@@ -205,8 +205,8 @@ export const columns = [
               tag={Link}
               className="w-100"
               // to={`/apps/user/view/${row.id}`}
-              to={`/articles-view`}
-              onClick={() => store.dispatch(getUser(row.id))}
+              to={`/articles-view/${row.id}`}
+              // onClick={() => store.dispatch(getUser(row.id))}
             >
               <FileText size={14} className="me-50" />
               <span className="align-middle">جزئیات</span>
