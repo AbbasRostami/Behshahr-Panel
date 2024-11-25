@@ -59,11 +59,10 @@ const UserInfoCard = ({ selectedUser, data }) => {
         longitude: data.longitude,
         insertDate: data.insertDate,
         currentPictureAddress: data.currentPictureAddress,
-        birthDay: data.birthDay,
+        birthDay: data.birthDay?.slice(0,10) || "", 
       });
     }
   }, [data, reset]);
-
   const onSubmit = async (values) => {
     console.log("values Put:", values);
     const path = `/User/UpdateUser`;
@@ -75,40 +74,40 @@ const UserInfoCard = ({ selectedUser, data }) => {
     }
   };
 
-  const handleSuspendedClick = () => {
-    return MySwal.fire({
-      title: "آیا مطمئن هستید؟",
-      text: "البته امکان بازگشت نیست وجود دارد",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "بله",
-      customClass: {
-        confirmButton: "btn btn-primary ssss",
-        cancelButton: "btn btn-outline-danger ms-1",
-      },
-      buttonsStyling: false,
-    }).then(function (result) {
-      if (result.value) {
-        MySwal.fire({
-          icon: "success",
-          title: "موفقیت",
-          text: "عملیات با موفقیت انجام گردید",
-          customClass: {
-            confirmButton: "btn btn-success",
-          },
-        });
-      } else if (result.dismiss === MySwal.DismissReason.cancel) {
-        MySwal.fire({
-          title: "لغو",
-          text: "عملیات لغو گردید",
-          icon: "error",
-          customClass: {
-            confirmButton: "btn btn-success",
-          },
-        });
-      }
-    });
-  };
+  // const handleSuspendedClick = () => {
+  //   return MySwal.fire({
+  //     title: "آیا مطمئن هستید؟",
+  //     text: "البته امکان بازگشت نیست وجود دارد",
+  //     icon: "warning",
+  //     showCancelButton: true,
+  //     confirmButtonText: "بله",
+  //     customClass: {
+  //       confirmButton: "btn btn-primary ssss",
+  //       cancelButton: "btn btn-outline-danger ms-1",
+  //     },
+  //     buttonsStyling: false,
+  //   }).then(function (result) {
+  //     if (result.value) {
+  //       MySwal.fire({
+  //         icon: "success",
+  //         title: "موفقیت",
+  //         text: "عملیات با موفقیت انجام گردید",
+  //         customClass: {
+  //           confirmButton: "btn btn-success",
+  //         },
+  //       });
+  //     } else if (result.dismiss === MySwal.DismissReason.cancel) {
+  //       MySwal.fire({
+  //         title: "لغو",
+  //         text: "عملیات لغو گردید",
+  //         icon: "error",
+  //         customClass: {
+  //           confirmButton: "btn btn-success",
+  //         },
+  //       });
+  //     }
+  //   });
+  // };
 
   return (
     <Fragment>
@@ -121,14 +120,17 @@ const UserInfoCard = ({ selectedUser, data }) => {
                   height="110"
                   width="110"
                   alt="user-avatar"
-                  src={avatar}
+                  src={data?.currentPictureAddress}
                   className="img-fluid rounded mt-3 mb-2"
                 />
-                <div className="user-info">
+                {data?.roles?.map((data) => (
+                  <div className="user-info flex">
                   <Badge className="text-capitalize" color="success" pill>
-                    Adminstrator
+                    {data?.roleName}
                   </Badge>
                 </div>
+                ))}
+                
               </div>
             </div>
           </div>
@@ -138,7 +140,7 @@ const UserInfoCard = ({ selectedUser, data }) => {
                 <Check className="font-medium-2" />
               </Badge>
               <div className="ms-75">
-                <h4 className="mb-0">1.23k</h4>
+                <h4 className="mb-0">96</h4>
                 <small className="fs-4"> دوره ها </small>
               </div>
             </div>
@@ -147,7 +149,7 @@ const UserInfoCard = ({ selectedUser, data }) => {
                 <Briefcase className="font-medium-2" />
               </Badge>
               <div className="ms-75">
-                <h4 className="mb-0">568</h4>
+                <h4 className="mb-0">24</h4>
                 <small className="fs-4">دوره های رزرو </small>
               </div>
             </div>
@@ -201,14 +203,14 @@ const UserInfoCard = ({ selectedUser, data }) => {
             <Button color="primary" onClick={() => setShow(true)}>
               ویرایش
             </Button>
-            <Button
+            {/* <Button
               className="ms-1"
               color="danger"
               outline
               onClick={handleSuspendedClick}
             >
               غیرفعال کردن
-            </Button>
+            </Button> */}
           </div>
         </CardBody>
       </Card>
