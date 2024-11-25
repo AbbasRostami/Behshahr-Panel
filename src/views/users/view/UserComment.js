@@ -97,8 +97,8 @@ export const columns = [
       return (
         <div className="d-flex justify-content-left align-items-center ">
           <div className="avatar-wrapper"></div>
-          <div className="d-flex flex-column">
-            <span className="text-truncate fw-bolder">{row.courseTitle}</span>
+          <div className="d-flex flex-column text-truncate">
+            <span className="text-truncate fw-bolder text-truncate ...">{row.courseTitle}</span>
           </div>
         </div>
       );

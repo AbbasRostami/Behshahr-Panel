@@ -1,10 +1,9 @@
-import { useState, Fragment, useEffect} from "react";
+import { useState, Fragment, useEffect } from "react";
 
 import {
   Row,
   Col,
   Card,
-  Form,
   CardBody,
   Button,
   Badge,
@@ -20,73 +19,63 @@ import { useForm, Controller } from "react-hook-form";
 import withReactContent from "sweetalert2-react-content";
 import "@styles/react/libs/react-select/_react-select.scss";
 import avatar from "./../../../assets/images/portrait/small/avatar-s-2.jpg";
-
-
+import toast from "react-hot-toast";
+import { editApi } from "../../../core/api/api";
 
 const MySwal = withReactContent(Swal);
 
 const UserInfoCard = ({ selectedUser, data }) => {
   const [show, setShow] = useState(false);
-console.log("Data Get def: ", data.fName);
+  console.log("Data Get: ", data);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
     register,
-    reset
+    reset,
   } = useForm();
 
   useEffect(() => {
     if (data) {
       reset({
+        id: data.id,
         fName: data.fName || "",
         lName: data.lName || "",
-        phoneNumber: data.phoneNumber || "",
+        userName: data.userName,
         gmail: data.gmail || "",
-        nationalCode: data.nationalCode || "",
-        telegramLink: data.telegramLink || "",
-        linkdinProfile: data.linkdinProfile || "",
-        homeAdderess: data.homeAdderess || "",
+        phoneNumber: data.phoneNumber || "",
+        active: data.active,
+        isTecher: data.isTecher,
+        isStudent: data.isStudent,
+        recoveryEmail: data.recoveryEmail,
         userAbout: data.userAbout || "",
+        linkdinProfile: data.linkdinProfile || "",
+        telegramLink: data.telegramLink || "",
+        homeAdderess: data.homeAdderess || "",
+        nationalCode: data.nationalCode || "",
+        gender: data.gender,
+        latitude: data.latitude,
+        longitude: data.longitude,
+        insertDate: data.insertDate,
+        currentPictureAddress: data.currentPictureAddress,
+        birthDay: data.birthDay,
       });
     }
   }, [data, reset]);
 
-
-  
-
-
-  const onSubmit = (values) => {
-        console.log("values Put:",values);
-
-        const formData = new FormData();
-
-    const data = {
-      FName: values.FName,
-      LName: values.LName,
-      UserAbout: values.UserAbout,
-      LinkdinProfile: values.LinkdinProfile,
-      TelegramLink: values.TelegramLink,
-      HomeAdderess: values.HomeAdderess,
-      phoneNumber: values.phoneNumber,
-      NationalCode: values.NationalCode,
-      email: values.email,
-      Gender: values.Gender,
-      BirthDay: values.BirthDay,
-    };
-
-    Object.entries(data).forEach(([key, value]) => formData.append(key, value));
-
-    formData.forEach((value, key) => {
-      console.log(key, ":", value);
-    });
-        
+  const onSubmit = async (values) => {
+    console.log("values Put:", values);
+    const path = `/User/UpdateUser`;
+    const body = values;
+    const response = await editApi({ path, body });
+    console.log("Response: ", response);
+    if (response.data.success) {
+      toast.success(response.data.message);
+    }
   };
 
-      
   const handleSuspendedClick = () => {
-
     return MySwal.fire({
       title: "آیا مطمئن هستید؟",
       text: "البته امکان بازگشت نیست وجود دارد",
@@ -216,7 +205,7 @@ console.log("Data Get def: ", data.fName);
               className="ms-1"
               color="danger"
               outline
-              // onClick={handleSuspendedClick}
+              onClick={handleSuspendedClick}
             >
               غیرفعال کردن
             </Button>
@@ -237,175 +226,147 @@ console.log("Data Get def: ", data.fName);
             <h1 className="mb-1">ویرایش اطلاعات کاربر</h1>
           </div>
 
-
-            <Row
+          <Row
             tag="form"
             className="gy-1 pt-75"
             onSubmit={handleSubmit(onSubmit)}
-            >
-              <Col md={4} xs={12}>
-                <Label className="form-label" for="fName">
-                 نام
-                </Label>
-                <Controller
-                  control={control}
-                  name="fName"
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      id="name"
-                      {...register("fName", { required: true })} 
-                      invalid={errors.firstName && true}
-                    />
-                  )}
-                />
-              </Col>
-              <Col md={4} xs={12}>
-                <Label className="form-label" for="lName">
+          >
+            <Col md={4} xs={12}>
+              <Label className="form-label" for="fName">
+                نام
+              </Label>
+              <Controller
+                control={control}
+                name="fName"
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    id="name"
+                    invalid={errors.firstName && true}
+                  />
+                )}
+              />
+            </Col>
+            <Col md={4} xs={12}>
+              <Label className="form-label" for="lName">
                 نام خانوادگی
-                </Label>
-                <Controller
-                  control={control}
-                  name="lName"
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      invalid={errors.firstName && true}
-                    />
-                  )}
-                />
-              </Col>
-              
-              <Col md={4} xs={12}>
-                <Label className="form-label" for="phoneNumber">
-                 شماره تلفن
-                </Label>
-                <Controller
-                  control={control}
-                  name="phoneNumber"
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      invalid={errors.firstName && true}
-                    />
-                  )}
-                />
-              </Col>
+              </Label>
+              <Controller
+                control={control}
+                name="lName"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
+            </Col>
 
-              <Col md={6} xs={12}>
-                <Label className="form-label" for="gmail">
+            <Col md={4} xs={12}>
+              <Label className="form-label" for="phoneNumber">
+                شماره تلفن
+              </Label>
+              <Controller
+                control={control}
+                name="phoneNumber"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
+            </Col>
+
+            <Col md={4} xs={12}>
+              <Label className="form-label" for="gmail">
                 ایمیل
-                </Label>
-                <Controller
-                  control={control}
-                  name="gmail"
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      invalid={errors.firstName && true}
-                    />
-                  )}
-                />
-              </Col>
+              </Label>
+              <Controller
+                control={control}
+                name="gmail"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
+            </Col>
 
-              <Col md={6} xs={12}>
-                <Label className="form-label" for="nationalCode">
-                 کد ملی
-                </Label>
-                <Controller
-                  control={control}
-                  name="nationalCode"
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      invalid={errors.firstName && true}
-                    />
-                  )}
-                />
-              </Col>
-              {/* <Col md={4} xs={12}>
-                <Label className="form-label" for="date">
-                    تاریخ تولد
-                </Label>
-                <Controller
-                  control={control}
-                  name="date"
-                  render={({ field }) => (
-                    <Input
+            <Col md={4} xs={12}>
+              <Label className="form-label" for="nationalCode">
+                کد ملی
+              </Label>
+              <Controller
+                control={control}
+                name="nationalCode"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
+            </Col>
+            <Col md={4} xs={12}>
+              <Label className="form-label" for="date">
+                تاریخ تولد
+              </Label>
+              <Controller
+                control={control}
+                name="birthDay"
+                render={({ field }) => (
+                  <Input
                     {...field}
                     type="date"
-                    {...register("dateOfBirth", { required: "Date is required" })}
+                    // {...register("birthDay")}
                     invalid={errors.firstName && true}
-                    />
-                  )}
-                />
-              </Col> */}
-              <Col md={6} xs={12}>
-                <Label className="form-label" for="telegramLink">
-                  لینک تلگرام
-                </Label>
-                <Controller
-                  control={control}
-                  name="telegramLink"
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      invalid={errors.firstName && true}
-                    />
-                  )}
-                />
-              </Col>
-              <Col md={6} xs={12}>
-                <Label className="form-label" for="linkdinProfile">
-                  لینک لینکدین
-                </Label>
-                <Controller
-                  control={control}
-                  name="linkdinProfile"
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      invalid={errors.firstName && true}
-                    />
-                  )}
-                />
-              </Col>
-              <Col md={6} xs={12}>
-                <Label className="form-label" for="homeAdderess">
-                 آدرس کاربر
-                </Label>
-                <Controller
-                  control={control}
-                  name="homeAdderess"
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      invalid={errors.firstName && true}
-                    />
-                  )}
-                />
-              </Col>
-              <Col md={6} xs={12}>
-                <Label className="form-label" for="userAbout">
-                  درباره کاربر
-                </Label>
-                <Controller
-                  control={control}
-                  name="userAbout"
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      invalid={errors.firstName && true}
-                    />
-                  )}
-                />
-              </Col>
-              <Button type="submit" color="primary">ثبت</Button>
-            </Row>
-
-
-
-
+                  />
+                )}
+              />
+            </Col>
+            <Col md={6} xs={12}>
+              <Label className="form-label" for="telegramLink">
+                لینک تلگرام
+              </Label>
+              <Controller
+                control={control}
+                name="telegramLink"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
+            </Col>
+            <Col md={6} xs={12}>
+              <Label className="form-label" for="linkdinProfile">
+                لینک لینکدین
+              </Label>
+              <Controller
+                control={control}
+                name="linkdinProfile"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
+            </Col>
+            <Col md={6} xs={12}>
+              <Label className="form-label" for="homeAdderess">
+                آدرس کاربر
+              </Label>
+              <Controller
+                control={control}
+                name="homeAdderess"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
+            </Col>
+            <Col md={6} xs={12}>
+              <Label className="form-label" for="userAbout">
+                درباره کاربر
+              </Label>
+              <Controller
+                control={control}
+                name="userAbout"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
+            </Col>
+            <Button type="submit" color="primary">
+              ثبت
+            </Button>
+          </Row>
         </ModalBody>
       </Modal>
     </Fragment>
