@@ -19,6 +19,7 @@ import { selectThemeColors } from "@utils";
 import { useForm, Controller } from "react-hook-form";
 
 import { postApi } from "../../../core/api/api";
+import toast from "react-hot-toast";
 
 // ** Reactstrap Imports
 
@@ -48,7 +49,7 @@ const ArticlesAdd = () => {
       MiniDescribe: values.MiniDescribe,
       Describe: values.Describe,
       Keyword: values.Keyword,
-      NewsCatregoryId: 12,
+      NewsCatregoryId: "12",
     };
     Object.entries(datas).forEach(([key, value]) =>
       formData.append(key, value)
@@ -57,11 +58,15 @@ const ArticlesAdd = () => {
     formData.forEach((value, key) => {
       console.log(key, ":", value);
     });
-    const path = `/User/CreateUser`;
+
+
+    const path = `/News/CreateNews`;
     const body = formData;
     const response = await postApi({ path, body });
     console.log(response);
-    console.log(values);
+    if (response.data.success) {
+      toast.success(response.data.message);
+    }
   };
 
   return (
@@ -74,8 +79,8 @@ const ArticlesAdd = () => {
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Row>
             <Col md={4} xs={12}>
-              <Label className="form-label" for="GoogleTitle">
-                عنوان گوگل
+              <Label className="form-label" for="Title">
+               1
               </Label>
               <Controller
                 control={control}
@@ -87,7 +92,7 @@ const ArticlesAdd = () => {
             </Col>
             <Col md={4} xs={12}>
               <Label className="form-label" for="GoogleTitle">
-                عنوان
+               2
               </Label>
               <Controller
                 control={control}
@@ -98,8 +103,8 @@ const ArticlesAdd = () => {
               />
             </Col>
             <Col md={4} xs={12}>
-              <Label className="form-label" for="GoogleTitle">
-                عنوان گوگل
+              <Label className="form-label" for="GoogleDescribe">
+               3
               </Label>
               <Controller
                 control={control}
@@ -110,8 +115,8 @@ const ArticlesAdd = () => {
               />
             </Col>
             <Col md={4} xs={12}>
-              <Label className="form-label" for="GoogleTitle">
-                عنوان گوگل
+              <Label className="form-label" for="MiniDescribe">
+               4
               </Label>
               <Controller
                 control={control}
@@ -122,8 +127,8 @@ const ArticlesAdd = () => {
               />
             </Col>
             <Col md={4} xs={12}>
-              <Label className="form-label" for="GoogleTitle">
-                عنوان گوگل
+              <Label className="form-label" for="Describe">
+                5
               </Label>
               <Controller
                 control={control}
@@ -134,8 +139,8 @@ const ArticlesAdd = () => {
               />
             </Col>
             <Col md={4} xs={12}>
-              <Label className="form-label" for="GoogleTitle">
-                عنوان گوگل
+              <Label className="form-label" for="Keyword">
+                6
               </Label>
               <Controller
                 control={control}
