@@ -39,7 +39,7 @@ import avatar from "./../../../assets/images/portrait/small/avatar-s-11.jpg";
 import { Controller, useForm } from "react-hook-form";
 import StateManagedSelect from "react-select";
 import { useParams } from "react-router-dom";
-import { getApi } from "../../../core/api/api";
+import { editApi, getApi } from "../../../core/api/api";
 import moment from "moment";
 
 const ArticlesView = () => {
@@ -64,26 +64,50 @@ const ArticlesView = () => {
     setError,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      // username: selectedUser.username,
-      // lastName: selectedUser.fullName.split(' ')[1],
-      // firstName: selectedUser.fullName.split(' ')[0]
-    },
-  });
+    reset,
+  } = useForm();
 
-  const onSubmit = (data) => {
-    if (Object.values(data).every((field) => field.length > 0)) {
-      setShow(false);
-    } else {
-      for (const key in data) {
-        if (data[key].length === 0) {
-          setError(key, {
-            type: "manual",
-          });
-        }
-      }
+  useEffect(() => {
+    if (data) {
+      reset({
+        id: data.id,
+        Title: data.Title || "",
+        GoogleTitle: data.GoogleTitle || "",
+        GoogleDescribe: data.GoogleDescribe || "",
+        MiniDescribe: data.MiniDescribe || "",
+        Describe: data.Describe || "",
+        Keyword: data.Keyword || "",
+      });
     }
+  }, [data, reset]);
+
+  const onSubmit = async (values) => {
+    const formData = new FormData();
+
+    const datas = {
+      Title: values.Title,
+      GoogleTitle: values.GoogleTitle,
+      GoogleDescribe: values.GoogleDescribe,
+      MiniDescribe: values.MiniDescribe,
+      Describe: values.Describe,
+      Keyword: values.Keyword,
+      NewsCatregoryId: "12",
+    };
+    Object.entries(datas).forEach(([key, value]) =>
+      formData.append(key, value)
+    );
+
+    formData.forEach((value, key) => {
+      console.log(key, ":", value);
+    });
+
+    const path = `/News/UpdateNews`;
+    const body = formData;
+    const response = await editApi({ path, body });
+    console.log(response);
+    // if (response.data.success) {
+    //   toast.success(response.data.message);
+    // }
   };
 
   const countryOptions = [{ value: "uk", label: "اخبار پژوهشگاه" }];
@@ -368,108 +392,75 @@ const ArticlesView = () => {
           </div>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Row className="gy-1 pt-75">
-              <Col md={6} xs={12}>
-                <Label className="form-label" for="firstName">
-                  عنوان
+              <Col md={4} xs={12}>
+                <Label className="form-label" for="Title">
+                  1
                 </Label>
                 <Controller
-                  defaultValue=""
                   control={control}
-                  id="firstName"
-                  name="firstName"
+                  name="Title"
                   render={({ field }) => (
-                    <Input
-                      {...field}
-                      id="firstName"
-                      invalid={errors.firstName && true}
-                    />
+                    <Input {...field} invalid={errors.firstName && true} />
                   )}
                 />
               </Col>
-              <Col md={6} xs={12}>
-                <Label className="form-label" for="lastName">
-                  عنوان گوگل
+              <Col md={4} xs={12}>
+                <Label className="form-label" for="GoogleTitle">
+                  2
                 </Label>
                 <Controller
-                  defaultValue=""
                   control={control}
-                  id="lastName"
-                  name="lastName"
+                  name="GoogleTitle"
                   render={({ field }) => (
-                    <Input
-                      {...field}
-                      id="lastName"
-                      invalid={errors.lastName && true}
-                    />
+                    <Input {...field} invalid={errors.firstName && true} />
                   )}
                 />
               </Col>
-
-              <Col md={6} xs={12}>
-                <Label className="form-label" for="lastName">
-                  کلمات کلیدی
+              <Col md={4} xs={12}>
+                <Label className="form-label" for="GoogleDescribe">
+                  3
                 </Label>
                 <Controller
-                  defaultValue=""
                   control={control}
-                  id="lastName"
-                  name="lastName"
+                  name="GoogleDescribe"
                   render={({ field }) => (
-                    <Input
-                      {...field}
-                      id="lastName"
-                      invalid={errors.lastName && true}
-                    />
+                    <Input {...field} invalid={errors.firstName && true} />
                   )}
                 />
               </Col>
-
-              <Col md={6} xs={12}>
-                <Label className="form-label" for="country">
-                  انتخاب دسته بندی
-                </Label>
-                <StateManagedSelect
-                  id="country"
-                  isClearable={false}
-                  className="react-select"
-                  classNamePrefix="select"
-                  options={countryOptions}
-                  defaultValue={countryOptions[0]}
-                />
-              </Col>
-
-              <Col md={6} xs={12}>
-                <Label className="form-label" for="billing-email">
-                  توضیح کوتاه
-                </Label>
-                <Input type="email" id="billing-email" />
-              </Col>
-
-              <Col md={6} xs={12}>
-                <Label className="form-label" for="tax-id">
-                  توضیحات
-                </Label>
-                <Input
-                  id="tax-id"
-                  // defaultValue={selectedUser.contact.substr(selectedUser.contact.length - 4)}
-                />
-              </Col>
-
-              <Col md={12} xs={12}>
-                <Label className="form-label" for="firstName">
-                  توضیحات گوگل
+              <Col md={4} xs={12}>
+                <Label className="form-label" for="MiniDescribe">
+                  4
                 </Label>
                 <Controller
-                  defaultValue=""
                   control={control}
-                  id="firstName"
-                  name="firstName"
+                  name="MiniDescribe"
                   render={({ field }) => (
-                    <Input
-                      {...field}
-                      id="firstName"
-                      invalid={errors.firstName && true}
-                    />
+                    <Input {...field} invalid={errors.firstName && true} />
+                  )}
+                />
+              </Col>
+              <Col md={4} xs={12}>
+                <Label className="form-label" for="Describe">
+                  5
+                </Label>
+                <Controller
+                  control={control}
+                  name="Describe"
+                  render={({ field }) => (
+                    <Input {...field} invalid={errors.firstName && true} />
+                  )}
+                />
+              </Col>
+              <Col md={4} xs={12}>
+                <Label className="form-label" for="Keyword">
+                  6
+                </Label>
+                <Controller
+                  control={control}
+                  name="Keyword"
+                  render={({ field }) => (
+                    <Input {...field} invalid={errors.firstName && true} />
                   )}
                 />
               </Col>
