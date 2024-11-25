@@ -37,10 +37,10 @@ import "@styles/base/pages/page-blog.scss";
 
 import avatar from "./../../../assets/images/portrait/small/avatar-s-11.jpg";
 import { Controller, useForm } from "react-hook-form";
-import StateManagedSelect from "react-select";
 import { useParams } from "react-router-dom";
 import { editApi, getApi } from "../../../core/api/api";
 import moment from "moment";
+import toast from "react-hot-toast";
 
 const ArticlesView = () => {
   const [data, setData] = useState([]);
@@ -49,7 +49,7 @@ const ArticlesView = () => {
   const GetArticlesView = async () => {
     const path = `/News/${params.id}`;
     const response = await getApi({ path });
-    console.log(response.data.detailsNewsDto);
+    console.log("Get Details News:",response.data.detailsNewsDto);
     setData(response.data.detailsNewsDto);
   };
 
@@ -70,13 +70,12 @@ const ArticlesView = () => {
   useEffect(() => {
     if (data) {
       reset({
-        id: data.id,
-        Title: data.Title || "",
-        GoogleTitle: data.GoogleTitle || "",
-        GoogleDescribe: data.GoogleDescribe || "",
-        MiniDescribe: data.MiniDescribe || "",
-        Describe: data.Describe || "",
-        Keyword: data.Keyword || "",
+        Title: data.title || "",
+        GoogleTitle: data.googleTitle || "",
+        GoogleDescribe: data.googleDescribe || "",
+        MiniDescribe: data.miniDescribe || "",
+        Describe: data.describe || "",
+        Keyword: data.keyword || "",
       });
     }
   }, [data, reset]);
@@ -85,13 +84,14 @@ const ArticlesView = () => {
     const formData = new FormData();
 
     const datas = {
+      id: data.id,
       Title: values.Title,
       GoogleTitle: values.GoogleTitle,
       GoogleDescribe: values.GoogleDescribe,
       MiniDescribe: values.MiniDescribe,
       Describe: values.Describe,
       Keyword: values.Keyword,
-      NewsCatregoryId: "12",
+      NewsCatregoryId: "10",
     };
     Object.entries(datas).forEach(([key, value]) =>
       formData.append(key, value)
@@ -105,12 +105,11 @@ const ArticlesView = () => {
     const body = formData;
     const response = await editApi({ path, body });
     console.log(response);
-    // if (response.data.success) {
-    //   toast.success(response.data.message);
-    // }
+    if (response.data.success) {
+      toast.success(response.data.message);
+    }
   };
 
-  const countryOptions = [{ value: "uk", label: "اخبار پژوهشگاه" }];
 
   const renderComments = () => {
     return (
