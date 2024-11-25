@@ -185,10 +185,10 @@ const UserProjectsList = () => {
   console.log(params);
 
   const GetCouresesUser = async () => {
-    const path = `/Home/GetCourseDetails?CourseId=${params.CourseId}`;
+    const path = `/Home/GetCourseDetails/?CourseId=${params.CourseId}`;
     const response = await getApi({ path });
-    console.log(response);
-    setData(response);
+    console.log(response.data);
+    setData(response.data);
   };
 
   useEffect(() => {

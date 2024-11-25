@@ -138,7 +138,7 @@ const CoursesYours = () => {
 
           <div className="d-flex flex-column">
             <Link
-              to={`/apps/user/view/${row.id}`}
+              to={`/courses-view/${row.CourseId}`}
               className="user_name text-truncate text-body"
             ></Link>
 
@@ -172,7 +172,7 @@ const CoursesYours = () => {
           {row.levelName}
           <div className="d-flex flex-column">
             <Link
-              to={`/apps/user/view/${row.id}`}
+              to={`/courses-view/${row.CourseId}`}
               className="user_name text-truncate text-body"
             >
               <span className="fw-bolder">{row.lastnamelastname}</span>
@@ -244,12 +244,11 @@ const CoursesYours = () => {
               <DropdownItem
                 tag={Link}
                 className="w-100"
-                // to={`/apps/user/view/${row.id}`}
+                to={`/courses-view/${row.CourseId}`}
               >
                 <FileText size={14} className="me-50" />
-                <Link to="/courses-view">
-                  <span className="align-middle">جزئیات</span>
-                </Link>
+
+                <span className="align-middle">جزئیات</span>
               </DropdownItem>
               <DropdownItem
                 tag="a"
