@@ -180,20 +180,20 @@ export const columns = [
 ];
 
 const UserProjectsList = () => {
-  const [data, setData] = useState([]);
-  const params = useParams();
-  console.log(params);
+  // const [data, setData] = useState([]);
+  // const params = useParams();
+  // console.log(params);
 
-  const GetCouresesUser = async () => {
-    const path = `/Home/GetCourseDetails/?CourseId=${params.CourseId}`;
-    const response = await getApi({ path });
-    console.log(response.data);
-    setData(response.data);
-  };
+  // const GetCouresesUser = async () => {
+  //   const path = `/Home/GetCourseDetails/?CourseId=${params.CourseId}`;
+  //   const response = await getApi({ path });
+  //   console.log(response.data);
+  //   setData(response.data);
+  // };
 
-  useEffect(() => {
-    GetCouresesUser();
-  }, []);
+  // useEffect(() => {
+  //   GetCouresesUser();
+  // }, []);
   return (
     <Card>
       <div className="react-dataTable user-view-account-projects">
@@ -201,7 +201,7 @@ const UserProjectsList = () => {
           noHeader
           responsive
           columns={columns}
-          data={data}
+          // data={data}
           className="react-dataTable"
           sortIcon={<ChevronDown size={10} />}
         />

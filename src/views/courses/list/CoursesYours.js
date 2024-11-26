@@ -225,11 +225,6 @@ const CoursesYours = () => {
             </span>
           )}
         </Badge>
-
-        // color={statusObj[row.status]} pill
-        // color='success' pill
-        // color='danger' pill
-        // color='secondary' pill
       ),
     },
 
