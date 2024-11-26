@@ -88,7 +88,7 @@ const CoursesInfo = ({ selectedUser, data, selectedOption }) => {
       TeacherId: selectedCourseType.TeacherId,
       TremId: selectedCourseType.TremId,
       CourseLvlId: selectedCourseType.CourseLvlId,
-      ImageAddress: imageup
+      ImageAddress: imageup,
     };
     Object.entries(datas).forEach(([key, value]) =>
       formData.append(key, value)
@@ -114,7 +114,7 @@ const CoursesInfo = ({ selectedUser, data, selectedOption }) => {
       });
     }
   };
-  
+
   const [selectedCourseType, setSelectedCourseType] = useState({
     CourseTypeId: "1",
     ClassId: "1",
@@ -122,16 +122,16 @@ const CoursesInfo = ({ selectedUser, data, selectedOption }) => {
     TremId: "1",
     CourseLvlId: "1",
   });
-  
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setSelectedCourseType((prevState) => ({
-      ...prevState, 
-      [name]: value, 
+      ...prevState,
+      [name]: value,
     }));
     console.log("selectedCourseType: ", selectedCourseType);
   };
-  
+
   useEffect(() => {
     setSelectedCourseType((prevState) => ({
       ...prevState,
@@ -143,21 +143,13 @@ const CoursesInfo = ({ selectedUser, data, selectedOption }) => {
     }));
   }, [selectedOption]);
 
-  const [imageup, setImageup] = useState("")
+  const [imageup, setImageup] = useState("");
   const uploadImage = (e) => {
-    setImageup(e.target.files[0])
+    setImageup(e.target.files[0]);
     console.log(e.target.files[0]);
-  }
-  
-  const handleSuspendedClick = async (values) => {
+  };
 
-
-    console.log("values Put:", values);
-    // const path = `/Course/ActiveAndDeactiveCourse`;
-    // const body = body;
-    // const response = await editApi({ path, body });
-    // console.log("Response Put: ", response);
-
+  const handleSuspendedClick = async () => {
     return MySwal.fire({
       title: "آیا مطمئن هستید؟",
       text: "البته امکان بازگشت نیست وجود دارد",
@@ -170,7 +162,19 @@ const CoursesInfo = ({ selectedUser, data, selectedOption }) => {
         cancelButton: "btn btn-outline-danger ms-1",
       },
       buttonsStyling: false,
-    }).then(function (result) {
+    }).then(async function (result) {
+      const values = {
+        active: true,
+        id: data?.courseId,
+      };
+      values.active = !values.active;
+      // console.log("Value Active/Deactive: ", values);
+
+      const path = `/Course/ActiveAndDeactiveCourse`;
+      const body = values;
+      const response = await editApi({ path, body });
+      // console.log("Response Put Active/Deative: ", response);
+
       if (result.value) {
         MySwal.fire({
           icon: "success",
@@ -212,16 +216,16 @@ const CoursesInfo = ({ selectedUser, data, selectedOption }) => {
             />
             <span className="fw-semibold mt-1">{data?.title}</span>
             <span className="fw-semibold mt-1">
-          {data?.isActive ? (
-            <Badge className="text-capitalize" color="success" pill>
-              فعال
-            </Badge>
-          ) : (
-            <Badge className="text-capitalize" color="danger">
-              غیرفعال
-            </Badge>
-          )}
-        </span>
+              {data?.isActive ? (
+                <Badge className="text-capitalize" color="success" pill>
+                  فعال
+                </Badge>
+              ) : (
+                <Badge className="text-capitalize" color="danger">
+                  غیرفعال
+                </Badge>
+              )}
+            </span>
           </div>
 
           <div className="d-flex justify-content-around my-2 pt-75">
@@ -298,7 +302,7 @@ const CoursesInfo = ({ selectedUser, data, selectedOption }) => {
               outline
               onClick={handleSuspendedClick}
             >
-              غیرفعال کردن
+              غیرفعال / فعال
             </Button>
           </div>
         </CardBody>
@@ -510,19 +514,26 @@ const CoursesInfo = ({ selectedUser, data, selectedOption }) => {
                 />
               </Col>
               <Col md={4} xs={12}>
-            <Label className='form-label' for='ImageAddress'>
-                   تصویر دوره
-            </Label>
-            <Controller
-              id='ImageAddress'
-              name='ImageAddress'
-              control={control}
-              render={({ field }) => (
-                <Input {...field} type='file' onChange={uploadImage} invalid={errors.Image && true} />
-              )}
-            />
-            {errors.Image && <FormFeedback>{errors.Image.message}</FormFeedback>}
-          </Col>
+                <Label className="form-label" for="ImageAddress">
+                  تصویر دوره
+                </Label>
+                <Controller
+                  id="ImageAddress"
+                  name="ImageAddress"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      type="file"
+                      onChange={uploadImage}
+                      invalid={errors.Image && true}
+                    />
+                  )}
+                />
+                {errors.Image && (
+                  <FormFeedback>{errors.Image.message}</FormFeedback>
+                )}
+              </Col>
               <Button color="primary">ثبت</Button>
             </Row>
           </Form>
