@@ -105,7 +105,7 @@ const UsersList = ({ data, setSearchDataParams, searchDataParams }) => {
   });
 
   const roleOptions = [
-    { value: "", label: "انتخاب کنید..." },
+    { value: "", label: "انتخاب کنید" },
     { value: 1, label: "ادمین" },
     { value: 2, label: "استاد" },
     { value: 5, label: "دانشجو" },
@@ -229,16 +229,15 @@ const UsersList = ({ data, setSearchDataParams, searchDataParams }) => {
         <CardBody>
           <Row>
             <Col md="4">
-              <Label for="role-select" tag="h4">
-                نقش
-              </Label>
+              <Label for="status-select">نقش</Label>
               <Select
+                theme={selectThemeColors}
                 isClearable={false}
-                value={currentRole}
-                options={roleOptions}
                 className="react-select"
                 classNamePrefix="select"
-                theme={selectThemeColors}
+                options={roleOptions}
+                placeholder="انتخاب کنید ...."
+                // value={currentStatus}
                 onChange={(data) => {
                   handlRole(data);
                   // dispatch(
@@ -263,9 +262,10 @@ const UsersList = ({ data, setSearchDataParams, searchDataParams }) => {
                 theme={selectThemeColors}
                 isClearable={false}
                 className="react-select"
+                placeholder="انتخاب کنید ...."
                 classNamePrefix="select"
                 options={statusOptions}
-                value={currentStatus}
+                // value={currentStatus}
                 onChange={(data) => {
                   handleStatus(data);
                   // dispatch(
