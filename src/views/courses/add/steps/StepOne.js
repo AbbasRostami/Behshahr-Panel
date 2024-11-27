@@ -1,65 +1,145 @@
-import { Fragment } from 'react'
-import { ArrowLeft, ArrowRight } from 'react-feather'
-import { Label, Row, Col, Input, Form, Button } from 'reactstrap'
+import { Fragment, useState } from "react";
+import { ArrowLeft, ArrowRight } from "react-feather";
+import { Controller, useForm } from "react-hook-form";
+import { Label, Row, Col, Input, Form, Button } from "reactstrap";
 
-const StepOne = ({ stepper, type }) => {
+const StepOne = ({ stepper }) => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+
+  const [data, setData] = useState({
+    Title: '',
+    Describe: '',
+    Capacity: 1,
+    MiniDescribe: '',
+  });
+
+
+  const onSubmit = (values) => {
+    console.log(values);
+
+    const formData = new FormData();
+
+    const datas = {
+      Title: values.Title,
+      Describe: values.Describe,
+      Capacity: values.Capacity,
+      MiniDescribe: values.MiniDescribe,
+    };
+    Object.entries(datas).forEach(([key, value]) =>
+      formData.append(key, value)
+    );
+
+    formData.forEach((value, key) => {
+      console.log(key, ":", value);
+    });
+  };
 
   return (
     <Fragment>
-   
-      <Form onSubmit={e => e.preventDefault()}>
-        <Row className=' mt-3'>
-          <Col md='6' className='mb-1'>
-            <Label className='form-label'>
-              موضوع دوره
-            </Label>
-            <Input type='text' placeholder='موضوع دوره' />
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <Row className=" mt-3">
+          <Col md="6" className="mb-1">
+            <Label className="form-label" for="Title">موضوع دوره</Label>
+            <Controller
+                  defaultValue=""
+                  control={control}
+                  name="Title"
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      id="Title"
+                      placeholder="عنوان یا موضوع دوره"
+                      invalid={errors.Title && true}
+                    />
+                  )}
+                />
           </Col>
-          <Col md='6' className='mb-1'>
-            <Label className='form-label' >
-              توضیحات
-            </Label>
-            <Input
-              type='email'
-              placeholder='توضیحات'
-            />
+
+          <Col md="6" className="mb-1">
+            <Label className="form-label">توضیحات</Label>
+            <Controller
+                  defaultValue=""
+                  control={control}
+                  name="Describe"
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      id="Describe"
+                      placeholder="توضیحات"
+                      invalid={errors.Title && true}
+                    />
+                  )}
+                />          </Col>
+        </Row>
+        <Row className=" mt-2">
+          <Col md="6" className="mb-1">
+            <Label className="form-label">توضیحات کوتاه</Label>
+            <Controller
+                  defaultValue=""
+                  control={control}
+                  name="MiniDescribe"
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      id="MiniDescribe"
+                      placeholder="توضیحات کوتاه"
+                      invalid={errors.Title && true}
+                    />
+                  )}
+                />
+          </Col>
+
+          <Col md="6" className="mb-1">
+            <Label className="form-label">ظرفیت دوره</Label>
+            <Controller
+                  defaultValue=""
+                  control={control}
+                  name="Capacity"
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      id="Capacity"
+                      placeholder="ظرفیت دوره : 50"
+                      invalid={errors.Title && true}
+                    />
+                  )}
+                />
           </Col>
         </Row>
 
-
-        <Row className=' mt-2'>
-          <Col md='6' className='mb-1'>
-            <Label className='form-label'>
-              توضیحات کوتاه
-            </Label>
-            <Input type='text' placeholder='توضیحات کوتاه' />
-          </Col>
-          <Col md='6' className='mb-1'>
-            <Label className='form-label'>
-              ظرفیت دوره
-            </Label>
-            <Input
-              type='email'
-              placeholder='ظرفیت دوره'
-            />
-          </Col>
-        </Row>
-
-
-
-        <div className='d-flex justify-content-between '>
-          <Button color='secondary' className='btn-prev' outline disabled>
-            <ArrowLeft size={14} className='align-middle me-sm-25 me-0'></ArrowLeft>
-            <span className='align-middle d-sm-inline-block d-none'>بازگشت</span>
+        <div className="d-flex justify-content-between ">
+          <Button color="secondary" className="btn-prev" outline disabled>
+            <ArrowLeft
+              size={14}
+              className="align-middle me-sm-25 me-0"
+            ></ArrowLeft>
+            <span className="align-middle d-sm-inline-block d-none">
+              بازگشت
+            </span>
           </Button>
-          <Button color='primary' className='btn-next' onClick={() => stepper.next()}>
-            <span className='align-middle d-sm-inline-block d-none'>مرحله بعدی</span>
-            <ArrowRight size={14} className='align-middle ms-sm-25 ms-0'></ArrowRight>
+          <Button
+            type="submit"
+            color="primary"
+            className="btn-next"
+            onClick={() => stepper.next()}
+          >
+            <span className="align-middle d-sm-inline-block d-none">
+              مرحله بعدی
+            </span>
+            <ArrowRight
+              size={14}
+              className="align-middle ms-sm-25 ms-0"
+            ></ArrowRight>
           </Button>
         </div>
       </Form>
     </Fragment>
-  )
-}
+  );
+};
 
-export default StepOne
+export default StepOne;

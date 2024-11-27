@@ -1,7 +1,5 @@
 import { Fragment } from 'react'
-import Select from 'react-select'
 import { ArrowLeft, ArrowRight } from 'react-feather'
-import { selectThemeColors } from '@utils'
 import { Label, Row, Col, Form, Input, Button } from 'reactstrap'
 import '@styles/react/libs/react-select/_react-select.scss'
 

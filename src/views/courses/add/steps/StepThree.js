@@ -1,13 +1,8 @@
-// ** React Imports
 import { Fragment } from 'react'
-
-// ** Icons Imports
 import { ArrowLeft, ArrowRight } from 'react-feather'
-
-// ** Reactstrap Imports
 import { Label, Row, Col, Input, Form, Button } from 'reactstrap'
 
-const StepThree = ({ stepper, type }) => {
+const StepThree = ({ stepper }) => {
   return (
     <Fragment>
       <div className='content-header'>
@@ -17,35 +12,34 @@ const StepThree = ({ stepper, type }) => {
       <Form onSubmit={e => e.preventDefault()}>
         <Row>
           <Col md='6' className='mb-1'>
-            <Label className='form-label' for={`address-${type}`}>
+            <Label className='form-label'>
               Address
             </Label>
             <Input
               type='text'
-              id={`address-${type}`}
-              name={`address-${type}`}
+
               placeholder='98  Borough bridge Road, Birmingham'
             />
           </Col>
           <Col md='6' className='mb-1'>
-            <Label className='form-label' for={`landmark-${type}`}>
+            <Label className='form-label'>
               Landmark
             </Label>
-            <Input type='text' name={`landmark-${type}`} id={`landmark-${type}`} placeholder='Borough bridge' />
+            <Input type='text' placeholder='Borough bridge' />
           </Col>
         </Row>
         <Row>
           <Col md='6' className='mb-1'>
-            <Label className='form-label' for={`pincode-${type}`}>
+            <Label className='form-label'>
               Pincode
             </Label>
-            <Input type='text' name={`pincode-${type}`} id={`pincode-${type}`} placeholder='658921' />
+            <Input type='text'placeholder='658921' />
           </Col>
           <Col md='6' className='mb-1'>
-            <Label className='form-label' for={`city-${type}`}>
+            <Label className='form-label'>
               City
             </Label>
-            <Input type='text' name={`city-${type}`} id={`city-${type}`} placeholder='Birmingham' />
+            <Input type='text'placeholder='Birmingham' />
           </Col>
         </Row>
         <div className='d-flex justify-content-between'>

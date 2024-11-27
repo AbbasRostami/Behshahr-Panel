@@ -2,9 +2,9 @@ import { Fragment } from 'react'
 import Select from 'react-select'
 import { selectThemeColors } from '@utils'
 import { ArrowLeft } from 'react-feather'
-import { Label, Row, Col, Form, Input, Button } from 'reactstrap'
+import { Label, Row, Col, Form, Button } from 'reactstrap'
 
-const StepFour = ({ stepper, type }) => {
+const StepFour = ({ stepper}) => {
 
   const languageOptions = [
     { value: 'FrontEnd', label: 'فرانت اند' },
@@ -12,7 +12,21 @@ const StepFour = ({ stepper, type }) => {
     { value: 'ReactJS', label: 'ReactJS' },
     { value: 'NextJS', label: 'NextJS' },
   ]
-
+ // console.log("values Put:", values);
+    // const path = `/Course`;
+    // const body = formData;
+    // const response = await editApi({ path, body });
+    // console.log("Response Put: ", response);
+    // if (response.data.success) {
+    //   MySwal.fire({
+    //     icon: "success",
+    //     title: "موفقیت",
+    //     text: "عملیات با موفقیت انجام گردید",
+    //     customClass: {
+    //       confirmButton: "btn btn-success",
+    //     },
+    //   });
+    // }
   return (
     <Fragment>
 
@@ -38,7 +52,7 @@ const StepFour = ({ stepper, type }) => {
             <span className='align-middle d-sm-inline-block d-none '>بازگشت</span>
           </Button>
 
-          <Button color='success' className='btn-submit' onClick={() => alert('submitted')}>
+          <Button color='success' type='submit' className='btn-submit'>
             ثبت نهایی
           </Button>
         </div>
