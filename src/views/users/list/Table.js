@@ -3,9 +3,7 @@ import { columns } from "./columns";
 import Select from "react-select";
 import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
-import {
-  ChevronDown,
-} from "react-feather";
+import { ChevronDown } from "react-feather";
 import { selectThemeColors } from "@utils";
 
 import {
@@ -26,28 +24,32 @@ import AddUserModal from "./AddUser";
 
 const CustomHeader = ({
   handlePerPage,
+  handlePagination,
+  handlQuery,
   rowsPerPage,
   handleFilter,
   searchTerm,
+  searchDataParams,
 }) => {
+  console.log("searchParams", searchDataParams);
+
   return (
     <div className="invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75">
       <Row>
-
-        <Col xl='6' className='d-flex align-items-center p-0'>
-          <div className='d-flex align-items-center w-100'>
-            <label htmlFor='rows-per-page'>نمایش</label>
+        <Col xl="6" className="d-flex align-items-center p-0">
+          <div className="d-flex align-items-center w-100">
+            <label htmlFor="rows-per-page">نمایش</label>
             <Input
-              className='mx-50'
-              type='select'
-              id='rows-per-page'
-              value={rowsPerPage}
+              className="mx-50"
+              type="select"
+              id="rows-per-page"
+              // value={searchDataParams}
               onChange={handlePerPage}
-              style={{ width: '5rem' }}
+              style={{ width: "5rem" }}
             >
-              <option value='10'>10</option>
-              <option value='25'>25</option>
-              <option value='50'>50</option>
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
             </Input>
           </div>
         </Col>
@@ -61,8 +63,8 @@ const CustomHeader = ({
               id="search-invoice"
               className="ms-50 w-100"
               type="text"
-              value={searchTerm}
-              onChange={(e) => handleFilter(e.target.value)}
+              // value={searchTerm}
+              onChange={(e) => handlQuery(e.target.value)}
               placeholder="جستجو..."
             />
           </div>
@@ -82,10 +84,7 @@ const CustomHeader = ({
   );
 };
 
-const UsersList = ({data}) => {
-  
-
-
+const UsersList = ({ data, setSearchDataParams, searchDataParams }) => {
   const [sort, setSort] = useState("desc");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -107,9 +106,9 @@ const UsersList = ({data}) => {
 
   const roleOptions = [
     { value: "", label: "انتخاب کنید..." },
-    { value: "Administrator", label: "ادمین" },
-    { value: "Teachher", label: "استاد" },
-    { value: "Student", label: "دانشجو" },
+    { value: 1, label: "ادمین" },
+    { value: 2, label: "استاد" },
+    { value: 5, label: "دانشجو" },
   ];
 
   const planOptions = [
@@ -121,42 +120,47 @@ const UsersList = ({data}) => {
   ];
 
   const statusOptions = [
-    { value: "", label: "انتخاب کنید", number: 0 },
-    { value: "active", label: "فعال", number: 1 },
-    { value: "inactive", label: "غیرفعال", number: 2 },
+    { value: "", label: "انتخاب کنید" },
+    { value: true, label: "فعال" },
+    { value: false, label: "غیرفعال" },
   ];
 
   const handlePagination = (page) => {
-    // dispatch(
-    //   getData({
-    //     sort,
-    //     sortColumn,
-    //     q: searchTerm,
-    //     perPage: rowsPerPage,
-    //     page: page.selected + 1,
-    //     role: currentRole.value,
-    //     status: currentStatus.value,
-    //     currentPlan: currentPlan.value,
-    //   })
-    // );
+    console.log(page);
+
+    setSearchDataParams((prev) => {
+      return { ...prev, PageNumber: page.selected };
+    });
+
     setCurrentPage(page.selected + 1);
   };
 
   const handlePerPage = (e) => {
     const value = parseInt(e.currentTarget.value);
-    // dispatch(
-    //   getData({
-    //     sort,
-    //     sortColumn,
-    //     q: searchTerm,
-    //     perPage: value,
-    //     page: currentPage,
-    //     role: currentRole.value,
-    //     currentPlan: currentPlan.value,
-    //     status: currentStatus.value,
-    //   })
-    // );
-    setRowsPerPage(value);
+    setSearchDataParams((prev) => {
+      return { ...prev, RowsOfPage: value };
+    });
+  };
+  const handleStatus = (e) => {
+    console.log(e.value);
+
+    setSearchDataParams((prev) => {
+      return { ...prev, IsActiveUser: e.value };
+    });
+  };
+  const handlRole = (e) => {
+    console.log(e);
+
+    setSearchDataParams((prev) => {
+      return { ...prev, roleId: e.value };
+    });
+  };
+
+  const handlQuery = (e) => {
+    console.log(e);
+    setSearchDataParams((prev) => {
+      return { ...prev, Query: e };
+    });
   };
 
   const handleFilter = (val) => {
@@ -236,7 +240,7 @@ const UsersList = ({data}) => {
                 classNamePrefix="select"
                 theme={selectThemeColors}
                 onChange={(data) => {
-                  setCurrentRole(data);
+                  handlRole(data);
                   // dispatch(
                   //   getData({
                   //     sort,
@@ -263,7 +267,7 @@ const UsersList = ({data}) => {
                 options={statusOptions}
                 value={currentStatus}
                 onChange={(data) => {
-                  setCurrentStatus(data);
+                  handleStatus(data);
                   // dispatch(
                   //   getData({
                   //     sort,
@@ -313,6 +317,9 @@ const UsersList = ({data}) => {
             data={data}
             subHeaderComponent={
               <CustomHeader
+                handlePagination={handlePagination}
+                handlQuery={handlQuery}
+                searchDataParams={searchDataParams}
                 searchTerm={searchTerm}
                 rowsPerPage={rowsPerPage}
                 handleFilter={handleFilter}

@@ -101,7 +101,7 @@ export const columns = [
     selector: (row) => row.active,
     cell: (row) => (
       <Badge className="text-capitalize" color="success" pill>
-        {row.active ? <span>فعال</span> : <span>غیر فعال</span>}
+        {row.active == "True" ? <span>فعال</span> : <span>غیر فعال</span>}
       </Badge>
 
       // color={statusObj[row.status]} pill

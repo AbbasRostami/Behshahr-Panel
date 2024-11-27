@@ -7,20 +7,23 @@ import { useEffect, useState } from "react";
 import { getApi } from "../../../core/api/api";
 
 const Staticies = () => {
-
   const [data, setData] = useState([]);
+  const [searchDataParams, setSearchDataParams] = useState({
+    PageNumber: 1,
+    RowsOfPage: 10,
+  });
 
   const GetUsersList = async () => {
-    const path = `/User/UserMannage?PageNumber=2&RowsOfPage=20&SortingCol=DESC&SortType=InsertDate&IsActiveUser=true&IsDeletedUser=true&roleId=1`;
-    const response = await getApi({ path });
-    console.log("UserLists: ",response.data.listUser);
+    const path = `/User/UserMannage`;
+    const response = await getApi({ path, params: searchDataParams });
+    console.log("UserLists: ", response.data.listUser);
     setData(response.data.listUser);
   };
 
   useEffect(() => {
     GetUsersList();
-  }, []);
-  
+  }, [searchDataParams]);
+
   return (
     <div className="app-user-list">
       <Row>
@@ -57,7 +60,11 @@ const Staticies = () => {
           />
         </Col>
       </Row>
-      <Table data={data} />
+      <Table
+        data={data}
+        setSearchDataParams={setSearchDataParams}
+        searchDataParams={searchDataParams}
+      />
     </div>
   );
 };
