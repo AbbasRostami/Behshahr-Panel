@@ -344,7 +344,6 @@ const CoursesInfo = ({ selectedUser, data, selectedOption }) => {
                   )}
                 />
               </Col>
-
               <Col md={4} xs={12}>
                 <Label className="form-label" for="CourseTypeId">
                   نوع دوره
@@ -362,7 +361,6 @@ const CoursesInfo = ({ selectedUser, data, selectedOption }) => {
                   ))}
                 </Input>
               </Col>
-
               <Col md={7} xs={12}>
                 <Label className="form-label">توضیحات کوتاه</Label>
                 <Controller
@@ -464,7 +462,6 @@ const CoursesInfo = ({ selectedUser, data, selectedOption }) => {
                   ))}
                 </Input>
               </Col>
-
               <Col md={4} xs={12}>
                 <Label className="form-label">تاریخ شروع</Label>
                 <Controller

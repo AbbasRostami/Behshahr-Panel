@@ -7,15 +7,16 @@ import "@styles/react/apps/app-users.scss";
 import { getApi } from "../../../core/api/api";
 
 const CoursesView = () => {
-
   const [active, setActive] = useState("1");
   const [data, setData] = useState([]);
+  const [selectedOption, setSelectedOption] = useState([]);
+
   const params = useParams();
   console.log(params);
   const GetCoursesView = async () => {
     const path = `/Course/${params.id}`;
     const response = await getApi({ path });
-    console.log("Get Courses Details: ",response.data);
+    console.log("Get Courses Details: ", response.data);
     setData(response.data);
   };
 
@@ -23,12 +24,10 @@ const CoursesView = () => {
     GetCoursesView();
   }, []);
 
-  
-  const [selectedOption, setSelectedOption] = useState([]);
   const GetCoursesEdit = async () => {
     const path = `/Course/GetCreate`;
     const response = await getApi({ path });
-    console.log("Get Courses selectedOption: ",response.data);
+    console.log("Get Courses selectedOption: ", response.data);
     setSelectedOption(response.data);
   };
 
@@ -36,7 +35,6 @@ const CoursesView = () => {
     GetCoursesEdit();
   }, []);
 
-  
   const toggleTab = (tab) => {
     if (active !== tab) {
       setActive(tab);
@@ -50,7 +48,12 @@ const CoursesView = () => {
           <UserInfoCard data={data} selectedOption={selectedOption} />
         </Col>
         <Col xl="8" lg="7" xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
-          <UserTabs data={data} selectedOption={selectedOption} active={active} toggleTab={toggleTab} />
+          <UserTabs
+            data={data}
+            selectedOption={selectedOption}
+            active={active}
+            toggleTab={toggleTab}
+          />
         </Col>
       </Row>
     </div>
