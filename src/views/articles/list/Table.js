@@ -131,11 +131,11 @@ const UsersList = ({ data }) => {
   //   { value: 'team', label: 'Team' }
   // ]
 
-  // const statusOptions = [
-  //   { value: '', label: 'Select Status', number: 0 },
-  //   { value: 'active', label: 'فعال', number: 1 },
-  //   { value: 'inactive', label: 'غیرفعال', number: 2 }
-  // ]
+  const statusOptions = [
+    { value: "", label: "Select Status" },
+    { value: true, label: "فعال" },
+    { value: false, label: "غیرفعال" },
+  ];
 
   // ** Function in get data on page change
   const handlePagination = (page) => {
@@ -233,86 +233,83 @@ const UsersList = ({ data }) => {
 
   return (
     <Fragment>
-      {/* <Card>
+      <Card>
         <CardHeader>
-          <CardTitle tag='h4'>فیلتر</CardTitle>
+          <CardTitle tag="h4">فیلتر</CardTitle>
         </CardHeader>
         <CardBody>
           <Row>
-
-
-            <Col md='4'>
-              <Label for='role-select' tag='h4'>نقش</Label>
+            <Col md="4">
+              <Label for="role-select" tag="h4">
+                نقش
+              </Label>
               <Select
                 isClearable={false}
-                value={currentRole}
-                options={roleOptions}
-                className='react-select'
-                classNamePrefix='select'
+                // value={currentRole}
+                // options={roleOptions}
+                className="react-select"
+                classNamePrefix="select"
                 theme={selectThemeColors}
-                onChange={data => {
-                  setCurrentRole(data)
-                  dispatch(
-                    getData({
-                      sort,
-                      sortColumn,
-                      q: searchTerm,
-                      role: data.value,
-                      page: currentPage,
-                      perPage: rowsPerPage,
-                      status: currentStatus.value,
-                      currentPlan: currentPlan.value
-                    })
-                  )
+                onChange={(data) => {
+                  setCurrentRole(data);
+                  // dispatch(
+                  //   getData({
+                  //     sort,
+                  //     sortColumn,
+                  //     q: searchTerm,
+                  //     role: data.value,
+                  //     page: currentPage,
+                  //     perPage: rowsPerPage,
+                  //     status: currentStatus.value,
+                  //     currentPlan: currentPlan.value,
+                  //   })
+                  // );
                 }}
               />
             </Col>
 
-
-            <Col md='4'>
-              <Label for='status-select'> وضعیت </Label>
+            <Col md="4">
+              <Label for="status-select"> وضعیت </Label>
               <Select
                 theme={selectThemeColors}
                 isClearable={false}
-                className='react-select'
-                classNamePrefix='select'
+                className="react-select"
+                classNamePrefix="select"
                 options={statusOptions}
-                value={currentStatus}
-                onChange={data => {
-                  setCurrentStatus(data)
-                  dispatch(
-                    getData({
-                      sort,
-                      sortColumn,
-                      q: searchTerm,
-                      page: currentPage,
-                      status: data.value,
-                      perPage: rowsPerPage,
-                      role: currentRole.value,
-                      currentPlan: currentPlan.value
-                    })
-                  )
+                // value={currentStatus}
+                onChange={(data) => {
+                  setCurrentStatus(data);
+                  // dispatch(
+                  //   getData({
+                  //     sort,
+                  //     sortColumn,
+                  //     q: searchTerm,
+                  //     page: currentPage,
+                  //     status: data.value,
+                  //     perPage: rowsPerPage,
+                  //     role: currentRole.value,
+                  //     currentPlan: currentPlan.value,
+                  //   })
+                  // );
                 }}
               />
             </Col>
 
-
-            <Col className='my-md-0 my-1' md='4'>
-              <Label for='plan-select'>مرتب سازی</Label>
+            <Col className="my-md-0 my-1" md="4">
+              <Label for="plan-select">مرتب سازی</Label>
               <Select
                 theme={selectThemeColors}
                 isClearable={false}
-                className='react-select'
-                classNamePrefix='select'
-                options={planOptions}
-                value={currentPlan}
-                onChange={() => { }}
+                className="react-select"
+                classNamePrefix="select"
+                // options={planOptions}
+                // value={currentPlan}
+                onChange={() => {}}
               />
             </Col>
-            
           </Row>
         </CardBody>
-      </Card> */}
+      </Card>
 
       <Card className="overflow-hidden">
         <div className="react-dataTable">

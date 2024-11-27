@@ -49,7 +49,7 @@ const ArticlesView = () => {
   const GetArticlesView = async () => {
     const path = `/News/${params.id}`;
     const response = await getApi({ path });
-    console.log("Get Details News:",response.data.detailsNewsDto);
+    console.log("Get Details News:", response.data.detailsNewsDto);
     setData(response.data.detailsNewsDto);
   };
 
@@ -110,7 +110,6 @@ const ArticlesView = () => {
     }
   };
 
-
   const renderComments = () => {
     return (
       <Card className="mb-3">
@@ -153,7 +152,8 @@ const ArticlesView = () => {
               <Col sm="12">
                 <Card className="mb-3">
                   <img
-                    class="h-[30rem]"
+                    className="mx-auto"
+                    style={{ width: "100%", maxHeight: "450px" }}
                     src={data.currentImageAddressTumb}
                     top
                   />

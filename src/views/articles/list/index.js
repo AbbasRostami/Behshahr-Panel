@@ -1,11 +1,13 @@
 import "@styles/react/apps/app-users.scss";
 import { getApi } from "../../../core/api/api";
 import { useEffect, useState } from "react";
+import UsersList from "./Table";
 
 const ArticlesLists = () => {
   const [data, setData] = useState([]);
+  const [searchDataParams, setSearchDataParams] = useState({});
 
-  const GetUsersList = async (params) => {
+  const GetArticlesList = async (params) => {
     const path = `/News`;
     const response = await getApi({
       path,
@@ -16,7 +18,7 @@ const ArticlesLists = () => {
   };
 
   useEffect(() => {
-    GetUsersList();
+    GetArticlesList();
   }, []);
 
   return (
@@ -55,7 +57,7 @@ const ArticlesLists = () => {
           />
         </Col>
       </Row> */}
-      <Table data={data} />
+      <UsersList data={data} />
     </div>
   );
 };
