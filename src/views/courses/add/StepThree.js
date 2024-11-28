@@ -2,9 +2,9 @@ import { Fragment, useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight } from "react-feather";
 import { Controller, useForm } from "react-hook-form";
 import { Label, Row, Col, Input, Form, Button } from "reactstrap";
-import { editApi } from "../../../core/api/api";
+import { editApi, postApi } from "../../../core/api/api";
 
-const StepThree = ({ stepper, handleData, allData }) => {
+const StepThree = ({ stepper, allData }) => {
   const {
     reset,
     control,
@@ -61,10 +61,13 @@ const StepThree = ({ stepper, handleData, allData }) => {
 
     const path = `/Course`;
     const body = formData;
-    const response = await editApi({ path, body });
+    const response = await postApi({ path, body });
+    const { id } = response.data;
+      console.log("ID received:", id);
     console.log("Response Put: ", response);
   };
 
+    
   return (
     <Fragment>
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -168,7 +171,8 @@ const StepThree = ({ stepper, handleData, allData }) => {
           <Button
             color="primary"
             className="btn-next"
-            // onClick={() => stepper.next()}
+            type="submit"
+            onClick={() => stepper.next()}
           >
             <span className="align-middle d-sm-inline-block d-none">
               مرحله بعدی

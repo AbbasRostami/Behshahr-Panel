@@ -78,7 +78,7 @@ const CustomHeader = ({ handlePerPage, rowsPerPage, searchTerm }) => {
 
 const CoursesYours = () => {
   const [data, setData] = useState([]);
-  const GetCouresesView = async () => {
+  const GetCouresesList = async () => {
     const path = `/Course/CourseList?PageNumber=1&RowsOfPage=10&SortingCol=DESC&SortType=Expire&Query`;
     const response = await getApi({ path });
     console.log(response.data.courseDtos);
@@ -86,14 +86,10 @@ const CoursesYours = () => {
   };
 
   useEffect(() => {
-    GetCouresesView();
+    GetCouresesList();
   }, []);
 
-  const datas = [
-    { name: "a", lastname: "b" },
-    { name: "a", lastname: "b" },
-    { name: "a", lastname: "b" },
-  ];
+  
 
   const CustomPagination = () => {
     const count = 10;
@@ -201,11 +197,6 @@ const CoursesYours = () => {
             </Badge>
           )}
         </span>
-
-        // color={statusObj[row.status]} pill
-        // color='success' pill
-        // color='danger' pill
-        // color='secondary' pill
       ),
     },
 
@@ -216,15 +207,17 @@ const CoursesYours = () => {
       sortField: "status",
       selector: (row) => row.status,
       cell: (row) => (
-        <Badge className="text-capitalize" color="danger" pill>
+        <span>
           {row.isdelete ? (
-            <span> خذف شده</span>
+            <Badge className="text-capitalize" color="danger">
+              حذف شده
+            </Badge>
           ) : (
-            <span className="text-capitalize" color="danger">
+            <Badge className="text-capitalize" color="success" pill>
               موجود
-            </span>
+            </Badge>
           )}
-        </Badge>
+        </span>
       ),
     },
 
@@ -239,22 +232,15 @@ const CoursesYours = () => {
             </DropdownToggle>
             <DropdownMenu>
               <DropdownItem
-                tag={Link}
-                className="w-100"
-                to={`/courses-view/${row.courseId}`}
-              >
-                <FileText size={14} className="me-50" />
-
-                <span className="align-middle">جزئیات</span>
-              </DropdownItem>
-              <DropdownItem
                 tag="a"
                 href="/"
                 className="w-100"
-                onClick={(e) => e.preventDefault()}
+                onClick={(e) => {
+                  e.preventDefault();
+                }}
               >
-                <Archive size={14} className="me-50" />
-                <span className="align-middle">ویرایش</span>
+                <Trash2 size={14} className="me-50" />
+                <span className="align-middle">موجود کردن</span>
               </DropdownItem>
               <DropdownItem
                 tag="a"
@@ -265,7 +251,16 @@ const CoursesYours = () => {
                 }}
               >
                 <Trash2 size={14} className="me-50" />
-                <span className="align-middle">حذف</span>
+                <span className="align-middle">غیرفعال کردن</span>
+              </DropdownItem>
+              <DropdownItem
+                tag={Link}
+                className="w-100"
+                to={`/courses-view/${row.courseId}`}
+              >
+                <FileText size={14} className="me-50" />
+
+                <span className="align-middle">جزئیات</span>
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>

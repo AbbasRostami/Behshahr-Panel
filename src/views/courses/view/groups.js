@@ -176,17 +176,17 @@ export const columns = [
 ];
 
 const GroupsList = () => {
-  // const [data, setData] = useState([]);
-  // const GetCouresesView = async () => {
-  //   const path = `/CourseGroup`;
-  //   const response = await getApi({ path });
-  //   console.log(response.data?.courseGroupDtos);
-  //   setData(response.data?.courseGroupDtos);
-  // };
+  const [data, setData] = useState([]);
+  const GetCouresesView = async () => {
+    const path = `/CourseGroup`;
+    const response = await getApi({ path });
+    console.log(response.data?.courseGroupDtos);
+    setData(response.data?.courseGroupDtos);
+  };
 
-  // useEffect(() => {
-  //   GetCouresesView();
-  // }, []);
+  useEffect(() => {
+    GetCouresesView();
+  }, []);
   return (
     <Card>
       <div className="react-dataTable user-view-account-projects">
@@ -194,7 +194,7 @@ const GroupsList = () => {
           noHeader
           responsive
           columns={columns}
-          // data={data}
+          data={data}
           className="react-dataTable"
           sortIcon={<ChevronDown size={10} />}
         />

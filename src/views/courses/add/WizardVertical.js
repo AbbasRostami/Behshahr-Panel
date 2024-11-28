@@ -66,6 +66,7 @@ const WizardVertical = ({getCreate }) => {
         <SocialLinks
           handleData={handleData}
           stepper={stepper}
+          getCreate={getCreate}
           type="wizard-vertical"
         />
       ),

@@ -1,5 +1,4 @@
 import { Fragment, useEffect, useState } from "react";
-
 import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
 import {
@@ -9,13 +8,8 @@ import {
   MoreVertical,
   Trash2,
 } from "react-feather";
-
 import {
-  Row,
-  Col,
   Card,
-  Input,
-  Button,
   Badge,
   UncontrolledDropdown,
   DropdownToggle,
@@ -43,11 +37,7 @@ const CoursesReserve = () => {
   useEffect(() => {
     GetCouresesReserve();
   }, []);
-  const datas = [
-    { name: "a", lastname: "b" },
-    { name: "a", lastname: "b" },
-    { name: "a", lastname: "b" },
-  ];
+ 
 
   const CustomPagination = () => {
     const count = 10;
@@ -149,9 +139,17 @@ const CoursesReserve = () => {
       sortField: "status",
       selector: (row) => row.accept,
       cell: (row) => (
-        <Badge className="text-capitalize" color="danger" pill>
-          {row.accept ? <span>تائید شده</span> : <span>تائیدنشده</span>}
-        </Badge>
+        <span>
+          {row.accept ? (
+            <Badge className="text-capitalize" color="success" pill>
+              فعال
+            </Badge>
+          ) : (
+            <Badge className="text-capitalize" color="danger">
+              غیرفعال
+            </Badge>
+          )}
+        </span>
 
         // color={statusObj[row.status]} pill
         // color='success' pill

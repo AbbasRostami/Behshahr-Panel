@@ -1,51 +1,70 @@
 import { Fragment } from 'react'
-import Select from 'react-select'
-import { selectThemeColors } from '@utils'
 import { ArrowLeft } from 'react-feather'
-import { Label, Row, Col, Form, Button } from 'reactstrap'
+import { Label, Row, Col, Form, Button, Input } from 'reactstrap'
 
-const StepFour = ({ stepper}) => {
+const StepFour = ({ stepper,getCreate}) => {
 
-  const languageOptions = [
-    { value: 'FrontEnd', label: 'فرانت اند' },
-    { value: 'BackEnd', label: 'بک اند' },
-    { value: 'ReactJS', label: 'ReactJS' },
-    { value: 'NextJS', label: 'NextJS' },
-  ]
- // console.log("values Put:", values);
-    // const path = `/Course`;
-    // const body = formData;
-    // const response = await editApi({ path, body });
-    // console.log("Response Put: ", response);
-    // if (response.data.success) {
-    //   MySwal.fire({
-    //     icon: "success",
-    //     title: "موفقیت",
-    //     text: "عملیات با موفقیت انجام گردید",
-    //     customClass: {
-    //       confirmButton: "btn btn-success",
-    //     },
-    //   });
-    // }
+
+  const onSubmit = async (values) => {
+    const formData = new FormData();
+
+    const datas = {
+      ...allData,
+      ...values,
+    };
+
+    console.log("datas: ", datas);
+
+    Object.entries(datas).forEach(([key, value]) =>
+      formData.append(key, value)
+    );
+
+    formData.forEach((value, key) => {
+      console.log(key, ":", value);
+    });
+
+    const path = `/Course`;
+    const body = formData;
+    const response = await postApi({ path, body });
+    console.log("Response Put: ", response);
+    if (response.data.success) {
+      MySwal.fire({
+        icon: "success",
+        title: "موفقیت",
+        text: "عملیات با موفقیت انجام گردید",
+        customClass: {
+          confirmButton: "btn btn-success",
+        },
+      });
+    }
+  };
+
   return (
     <Fragment>
-
-      <Form onSubmit={e => e.preventDefault()}>
+{/* onSubmit={handleSubmit(onSubmit)} */}
+      <Form >
         <Row md="6" className="d-flex justify-content-center mt-">
-        <Col md='6' className='mb-1 mt-5'>
-            <Label className='form-label'>
-              Language
+        <Col md={6} xs={12}>
+            <Label className="form-label" for="techName">
+                افزدون تکنولوژِی
             </Label>
-            <Select
-              isMulti
-              isClearable={false}
-              theme={selectThemeColors}
-              options={languageOptions}
-              className='react-select'
-              classNamePrefix="select"
-            />
+            <Input
+              type="select"
+              name="techName"
+              id="techName"
+              onChange={(e) => handleData({ techName: Number(e.target.value) })}
+            >
+              <option value="" label="انتخاب کنید..."></option>
+              {getCreate?.technologyDtos?.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.techName}
+                </option>
+              ))}
+            </Input>
           </Col>
         </Row>
+
+
         <div className='d-flex justify-content-center mt-2'>
           <Button color='primary' className='btn-prev me-2' onClick={() => stepper.previous()}>
             <ArrowLeft size={14} className='align-middle me-sm-25 me-0'></ArrowLeft>
