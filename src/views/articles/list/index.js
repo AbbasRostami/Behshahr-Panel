@@ -11,7 +11,7 @@ const ArticlesLists = () => {
   });
 
   const GetArticlesList = async () => {
-    const path = `/News`;
+    const path = `/News/AdminNewsFilterList`;
     const response = await getApi({ path, params: searchDataParams });
     console.log(response.data.news);
     setData(response.data.news);

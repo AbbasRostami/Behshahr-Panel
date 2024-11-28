@@ -36,6 +36,7 @@ import {
 import "@styles/base/pages/page-blog.scss";
 
 import avatar from "./../../../assets/images/portrait/small/avatar-s-11.jpg";
+import articlesPic from "./../../../../src/assets/images/pages/noimage-760x460.png";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { editApi, getApi } from "../../../core/api/api";
@@ -154,7 +155,15 @@ const ArticlesView = () => {
                   <img
                     className="mx-auto"
                     style={{ width: "100%", maxHeight: "450px" }}
-                    src={data.currentImageAddressTumb}
+                    // src={data.currentImageAddressTumb}
+                    src={
+                      data?.currentImageAddressTumb &&
+                      /\.(jpg|jpeg|png|gif|webp)$/i.test(
+                        data.currentImageAddressTumb
+                      )
+                        ? data.currentImageAddressTumb
+                        : articlesPic
+                    }
                     top
                   />
                   <CardBody>
