@@ -5,21 +5,21 @@ import UsersList from "./Table";
 
 const ArticlesLists = () => {
   const [data, setData] = useState([]);
-  const [searchDataParams, setSearchDataParams] = useState({});
+  const [searchDataParams, setSearchDataParams] = useState({
+    PageNumber: 1,
+    RowsOfPage: 10,
+  });
 
-  const GetArticlesList = async (params) => {
+  const GetArticlesList = async () => {
     const path = `/News`;
-    const response = await getApi({
-      path,
-      params: { ...params, RowsOfPage: 10, PageNumber: 1 },
-    });
+    const response = await getApi({ path, params: searchDataParams });
     console.log(response.data.news);
     setData(response.data.news);
   };
 
   useEffect(() => {
     GetArticlesList();
-  }, []);
+  }, [searchDataParams]);
 
   return (
     <div className="app-user-list">
@@ -57,7 +57,11 @@ const ArticlesLists = () => {
           />
         </Col>
       </Row> */}
-      <UsersList data={data} />
+      <UsersList
+        data={data}
+        setSearchDataParams={setSearchDataParams}
+        searchDataParams={searchDataParams}
+      />
     </div>
   );
 };

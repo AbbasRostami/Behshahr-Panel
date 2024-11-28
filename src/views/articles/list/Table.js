@@ -47,12 +47,17 @@ import "@styles/react/libs/tables/react-dataTable-component.scss";
 // ** Table Header
 const CustomHeader = ({
   store,
+  handlePagination,
+  handlQuery,
   toggleSidebar,
   handlePerPage,
   rowsPerPage,
   handleFilter,
   searchTerm,
+  searchDataParams,
 }) => {
+  console.log(searchDataParams);
+
   return (
     <div className="invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75">
       <Row>
@@ -67,8 +72,8 @@ const CustomHeader = ({
               onChange={handlePerPage}
               style={{ width: "5rem" }}
             >
-              <option value="active">فعال</option>
-              <option value="deactive">غیرفعال</option>
+              {/* <option value="active">فعال</option>
+              <option value="deactive">غیرفعال</option> */}
             </Input>
           </div>
         </Col>
@@ -81,8 +86,8 @@ const CustomHeader = ({
               id="search-invoice"
               className="ms-50 w-100"
               type="text"
-              value={searchTerm}
-              onChange={(e) => handleFilter(e.target.value)}
+              // value={searchTerm}
+              onChange={(e) => handlQuery(e.target.value)}
               placeholder="جستجو..."
             />
           </div>
@@ -98,7 +103,7 @@ const CustomHeader = ({
   );
 };
 
-const UsersList = ({ data }) => {
+const UsersList = ({ data, searchDataParams, setSearchDataParams }) => {
   // ** States
 
   const datas = [
@@ -115,13 +120,12 @@ const UsersList = ({ data }) => {
   // const [currentPlan, setCurrentPlan] = useState({ value: '', label: 'انتخاب کنید...'  })
   // const [currentStatus, setCurrentStatus] = useState({ value: '', label: 'انتخاب کنید...' , number: 0 })
 
-  // const roleOptions = [
-  //   { value: '', label: 'Select Role' },
-  //   { value: 'admin', label: 'ادمین' },
-  //   { value: 'author', label: 'استاد' },
-  //   { value: 'editor', label: 'دانشجو' },
-
-  // ]
+  const roleOptions = [
+    { value: "", label: "Select Role" },
+    { value: "admin", label: "ادمین" },
+    { value: "author", label: "استاد" },
+    { value: "editor", label: "دانشجو" },
+  ];
 
   // const planOptions = [
   //   { value: '', label: 'Select Plan' },
@@ -132,26 +136,30 @@ const UsersList = ({ data }) => {
   // ]
 
   const statusOptions = [
-    { value: "", label: "Select Status" },
+    { value: "", label: "انتخاب کنید" },
     { value: true, label: "فعال" },
     { value: false, label: "غیرفعال" },
   ];
 
   // ** Function in get data on page change
   const handlePagination = (page) => {
-    // dispatch(
-    //   getData({
-    //     sort,
-    //     sortColumn,
-    //     q: searchTerm,
-    //     perPage: rowsPerPage,
-    //     page: page.selected + 1,
-    //     role: currentRole.value,
-    //     status: currentStatus.value,
-    //     currentPlan: currentPlan.value,
-    //   })
-    // );
+    console.log(page);
+    setSearchDataParams((prev) => {
+      return { ...prev, PageNumber: page.selected };
+    });
     setCurrentPage(page.selected + 1);
+  };
+  const handlQuery = (e) => {
+    console.log(e);
+    setSearchDataParams((prev) => {
+      return { ...prev, Query: e };
+    });
+  };
+  const handlStatus = (e) => {
+    console.log(e.value);
+    setSearchDataParams((prev) => {
+      return { ...prev, isActive: e.value };
+    });
   };
 
   // ** Function in get data on rows per page
@@ -246,7 +254,8 @@ const UsersList = ({ data }) => {
               <Select
                 isClearable={false}
                 // value={currentRole}
-                // options={roleOptions}
+                placeholder="انتخب کنید..."
+                options={roleOptions}
                 className="react-select"
                 classNamePrefix="select"
                 theme={selectThemeColors}
@@ -273,12 +282,13 @@ const UsersList = ({ data }) => {
               <Select
                 theme={selectThemeColors}
                 isClearable={false}
+                placeholder="انتخاب کنید..."
                 className="react-select"
                 classNamePrefix="select"
                 options={statusOptions}
                 // value={currentStatus}
                 onChange={(data) => {
-                  setCurrentStatus(data);
+                  handlStatus(data);
                   // dispatch(
                   //   getData({
                   //     sort,
@@ -328,6 +338,9 @@ const UsersList = ({ data }) => {
             data={data}
             subHeaderComponent={
               <CustomHeader
+                handlePagination={handlePagination}
+                handlQuery={handlQuery}
+                searchDataParams={searchDataParams}
                 searchTerm={searchTerm}
                 rowsPerPage={rowsPerPage}
                 handleFilter={handleFilter}

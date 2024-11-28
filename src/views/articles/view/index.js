@@ -158,12 +158,14 @@ const ArticlesView = () => {
                     top
                   />
                   <CardBody>
-                    <CardTitle tag="h4">نام نویسنده: {data.title}</CardTitle>
+                    <CardTitle tag="h4">
+                      نام نویسنده: {data.addUserFullName}
+                    </CardTitle>
                     <div className="d-flex">
                       <Avatar
                         className="me-50"
                         img={avatar}
-                        imgHeight="24"
+                        imgHeight="9"
                         imgWidth="24"
                       />
                       <div>

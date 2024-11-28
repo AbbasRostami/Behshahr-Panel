@@ -80,11 +80,11 @@ const renderRole = (row) => {
   );
 };
 
-const statusObj = {
-  pending: "light-warning",
-  active: "light-success",
-  inactive: "light-secondary",
-};
+// const statusObj = {
+//   pending: "light-warning",
+//   active: "light-success",
+//   inactive: "light-secondary",
+// };
 
 export const columns = [
   {
@@ -182,12 +182,20 @@ export const columns = [
     name: "وضعیت",
     maxWidth: "120px",
     sortable: true,
-    sortField: "status",
-    selector: (row) => row.status,
+    sortField: "isActive",
+    selector: (row) => row.isActive,
     cell: (row) => (
-      <Badge className="bg-success" color={statusObj[row.status]} pill>
-        {row.isActive ? <span>فعال</span> : <span>غیر فعال</span>}
-      </Badge>
+      <span>
+        {row.isActive == true ? (
+          <Badge color="success" pill>
+            فعال
+          </Badge>
+        ) : (
+          <Badge color="danger" pill>
+            غیر فعال
+          </Badge>
+        )}
+      </span>
     ),
   },
 
