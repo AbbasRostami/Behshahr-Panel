@@ -163,15 +163,11 @@ const CoursesInfo = ({ selectedUser, data, selectedOption }) => {
       },
       buttonsStyling: false,
     }).then(async function (result) {
-      const values = {
-        active: true,
+      const path = `/Course/ActiveAndDeactiveCourse`;
+      const body = {
+        active: !data.active,
         id: data?.courseId,
       };
-      values.active = !values.active;
-      // console.log("Value Active/Deactive: ", values);
-
-      const path = `/Course/ActiveAndDeactiveCourse`;
-      const body = values;
       const response = await editApi({ path, body });
       // console.log("Response Put Active/Deative: ", response);
 
