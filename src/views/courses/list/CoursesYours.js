@@ -78,7 +78,7 @@ const CustomHeader = ({ handlePerPage, rowsPerPage, searchTerm }) => {
 
 const CoursesYours = () => {
   const [data, setData] = useState([]);
-  const GetCouresesList = async () => {
+  const GetCouresesYours = async () => {
     const path = `/Course/CourseList?PageNumber=1&RowsOfPage=10&SortingCol=DESC&SortType=Expire&Query`;
     const response = await getApi({ path });
     console.log(response.data.courseDtos);
@@ -86,7 +86,7 @@ const CoursesYours = () => {
   };
 
   useEffect(() => {
-    GetCouresesList();
+    GetCouresesYours();
   }, []);
 
   
@@ -128,18 +128,9 @@ const CoursesYours = () => {
       sortField: "fullName",
       selector: (row) => row.title,
       cell: (row) => (
-        <div className="d-flex justify-content-left align-items-center">
+        <div className="d-flex fw-bolder justify-content-left align-items-center">
           {/* <Avatar className='me-1' img={row.avatar} width='32' height='32' /> */}
           {row.title}
-
-          <div className="d-flex flex-column">
-            <Link
-              to={`/courses-view/${row.courseId}`}
-              className="user_name text-truncate text-body"
-            ></Link>
-
-            <small className="text-truncate text-muted mb-0">{row.email}</small>
-          </div>
         </div>
       ),
     },
@@ -151,7 +142,7 @@ const CoursesYours = () => {
       sortField: "fullName",
       selector: (row) => row.typeName,
       cell: (row) => (
-        <div className="d-flex justify-content-left align-items-center">
+        <div className="d-flex fw-bolder justify-content-left align-items-center">
           {row.typeName}
         </div>
       ),
@@ -164,17 +155,8 @@ const CoursesYours = () => {
       sortField: "fullName",
       selector: (row) => row.levelName,
       cell: (row) => (
-        <div className="d-flex justify-content-left align-items-center">
+        <div className="d-flex fw-bolder justify-content-left align-items-center">
           {row.levelName}
-          <div className="d-flex flex-column">
-            <Link
-              to={`/courses-view/${row.CourseId}`}
-              className="user_name text-truncate text-body"
-            >
-              <span className="fw-bolder">{row.lastnamelastname}</span>
-            </Link>
-            <small className="text-truncate text-muted mb-0">{row.email}</small>
-          </div>
         </div>
       ),
     },
@@ -188,11 +170,11 @@ const CoursesYours = () => {
       cell: (row) => (
         <span>
           {row.isActive ? (
-            <Badge className="text-capitalize" color="success" pill>
+            <Badge className=" fw-bolder text-capitalize" color="success" pill>
               فعال
             </Badge>
           ) : (
-            <Badge className="text-capitalize" color="danger">
+            <Badge className="fw-bolder text-capitalize" color="danger">
               غیرفعال
             </Badge>
           )}
