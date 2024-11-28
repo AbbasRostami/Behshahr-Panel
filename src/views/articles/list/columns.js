@@ -25,6 +25,12 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
+import { deleteApi } from "../../../core/api/api";
+import toast from "react-hot-toast";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+
+const MySwal = withReactContent(Swal);
 
 // ** Renders Client Columns
 // const renderClient = row => {
@@ -85,6 +91,47 @@ const renderRole = (row) => {
 //   active: "light-success",
 //   inactive: "light-secondary",
 // };
+
+const deleteArticles = async (id) => {
+  return MySwal.fire({
+    title: "آیا مطمئن هستید؟",
+    text: "البته امکان بازگشت نیست وجود دارد",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "بله",
+    cancelButtonText: "انصراف",
+    customClass: {
+      confirmButton: "btn btn-primary ssss",
+      cancelButton: "btn btn-outline-danger ms-1",
+    },
+    buttonsStyling: false,
+  }).then(async function (result) {
+    const path = "/News/DeleteNewsFile";
+    const body = {
+      fileId: id,
+    };
+    const response = await deleteApi({ path, body });
+    if (response) {
+      MySwal.fire({
+        icon: "success",
+        title: "موفقیت",
+        text: "عملیات با موفقیت انجام گردید",
+        customClass: {
+          confirmButton: "btn btn-success",
+        },
+      });
+    } else if (result.dismiss === MySwal.DismissReason.cancel) {
+      MySwal.fire({
+        title: "لغو",
+        text: "عملیات لغو گردید",
+        icon: "error",
+        customClass: {
+          confirmButton: "btn btn-success",
+        },
+      });
+    }
+  });
+};
 
 export const columns = [
   {
@@ -234,7 +281,7 @@ export const columns = [
               className="w-100"
               onClick={(e) => {
                 e.preventDefault();
-                store.dispatch(deleteUser(row.id));
+                deleteArticles(row.id);
               }}
             >
               <Trash2 size={14} className="me-50" />
