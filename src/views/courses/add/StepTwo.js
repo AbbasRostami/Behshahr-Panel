@@ -13,10 +13,8 @@ const StepTwo = ({ stepper, handleData, getCreate }) => {
   } = useForm();
 
   const onSubmit = (values) => {
-
-    console.log("Step Two: ",values);
+    console.log("Step Two: ", values);
     handleData(values);
-    
   };
 
   return (
@@ -33,7 +31,7 @@ const StepTwo = ({ stepper, handleData, getCreate }) => {
               id="CourseTypeId"
               onChange={(e) => {
                 const value = Number(e.target.value);
-                console.log("Selected CourseTypeId: ", value);  // اضافه کردن لاگ اینجا
+                console.log("Selected CourseTypeId: ", value); // اضافه کردن لاگ اینجا
                 handleData({ CourseTypeId: value });
               }}
             >
@@ -53,7 +51,9 @@ const StepTwo = ({ stepper, handleData, getCreate }) => {
               type="select"
               name="TeacherId"
               id="TeacherId"
-              onChange={(e) => handleData({ TeacherId: Number(e.target.value) })}
+              onChange={(e) =>
+                handleData({ TeacherId: Number(e.target.value) })
+              }
             >
               <option value="" label="انتخاب کنید..."></option>
               {getCreate?.teachers?.map((option) => (
@@ -126,19 +126,19 @@ const StepTwo = ({ stepper, handleData, getCreate }) => {
             </Input>
           </Col>
           <Col md={6} xs={12}>
-        <Label className="form-label" for="SessionNumber">
-          تعداد جلسه
-        </Label>
-        <Controller
-          defaultValue="500"
-          id="SessionNumber"
-          control={control}
-          name="SessionNumber"
-          render={({ field }) => (
-            <Input {...field} invalid={errors.SessionNumber} />
-          )}
-        />
-      </Col>
+            <Label className="form-label" for="SessionNumber">
+              تعداد جلسه
+            </Label>
+            <Controller
+              defaultValue="500"
+              id="SessionNumber"
+              control={control}
+              name="SessionNumber"
+              render={({ field }) => (
+                <Input {...field} invalid={errors.SessionNumber} />
+              )}
+            />
+          </Col>
         </Row>
 
         <div className="d-flex justify-content-between mt-1">
@@ -156,7 +156,7 @@ const StepTwo = ({ stepper, handleData, getCreate }) => {
             </span>
           </Button>
           <Button
-          type="submit"
+            type="submit"
             color="primary"
             className="btn-next"
             onClick={() => stepper.next()}

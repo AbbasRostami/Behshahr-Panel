@@ -1,22 +1,25 @@
 import { useRef, useState } from "react";
 import Wizard from "@components/wizard";
-import Address from "./StepThree";
-import SocialLinks from "./StepFour";
-import PersonalInfo from "./StepTwo";
-import AccountDetails from "./StepOne";
 
-const WizardVertical = ({getCreate }) => {
+import StepOne from "./StepOne";
+import StepTwo from "./StepTwo";
+import StepThree from "./StepThree";
+import StepFour from "./StepFour";
+import StepFive from "./StepFive";
+
+const WizardVertical = ({ getCreate }) => {
   const ref = useRef(null);
 
   const [allData, setAllData] = useState({});
 
-  console.log("All Data: ",allData);
+  const [cID, setCID] = useState(null);
+
+  console.log("All Data: ", allData);
 
   const handleData = (data) => {
     setAllData({ ...allData, ...data });
   };
 
-  
   const [stepper, setStepper] = useState(null);
 
   const steps = [
@@ -25,7 +28,7 @@ const WizardVertical = ({getCreate }) => {
       title: "اطلاعات دوره مرحله اول",
       subtitle: "اطلاعات دوره را وارد کنید.",
       content: (
-        <AccountDetails
+        <StepOne
           handleData={handleData}
           stepper={stepper}
           type="wizard-vertical"
@@ -37,7 +40,7 @@ const WizardVertical = ({getCreate }) => {
       title: "اطلاعات دوره مرحله دوم",
       subtitle: "اطلاعات دوره را وارد کنید.",
       content: (
-        <PersonalInfo
+        <StepTwo
           handleData={handleData}
           getCreate={getCreate}
           stepper={stepper}
@@ -50,10 +53,23 @@ const WizardVertical = ({getCreate }) => {
       title: "اطلاعات دوره مرحله سوم",
       subtitle: "اطلاعات دوره را وارد کنید.",
       content: (
-        <Address
+        <StepThree
+          handleData={handleData}
+          stepper={stepper}
+          type="wizard-vertical"
+        />
+      ),
+    },
+    {
+      id: "step-image",
+      title: "اطلاعات دوره مرحله چهارم",
+      subtitle: "اطلاعات دوره را وارد کنید.",
+      content: (
+        <StepFour
           handleData={handleData}
           allData={allData}
           stepper={stepper}
+          cidHander={{ cID, setCID }}
           type="wizard-vertical"
         />
       ),
@@ -63,9 +79,10 @@ const WizardVertical = ({getCreate }) => {
       title: "افزدون تکنولوژی",
       subtitle: "اطلاعات تکنولوژی را وارد کنید.",
       content: (
-        <SocialLinks
+        <StepFive
           handleData={handleData}
           stepper={stepper}
+          cidHander={{ cID, setCID }}
           getCreate={getCreate}
           type="wizard-vertical"
         />

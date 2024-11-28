@@ -4,16 +4,14 @@ import { Controller, useForm } from "react-hook-form";
 import { Label, Row, Col, Input, Form, Button } from "reactstrap";
 
 const StepOne = ({ stepper, handleData }) => {
-
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-
   const onSubmit = (values) => {
-    console.log("Step One: ",values);
+    console.log("Step One: ", values);
 
     handleData(values);
   };

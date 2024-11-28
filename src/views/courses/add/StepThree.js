@@ -2,9 +2,8 @@ import { Fragment, useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight } from "react-feather";
 import { Controller, useForm } from "react-hook-form";
 import { Label, Row, Col, Input, Form, Button } from "reactstrap";
-import { editApi, postApi } from "../../../core/api/api";
 
-const StepThree = ({ stepper, allData }) => {
+const StepThree = ({ stepper, handleData }) => {
   const {
     reset,
     control,
@@ -35,39 +34,11 @@ const StepThree = ({ stepper, allData }) => {
     });
   }, [uniqueUrlString, reset]);
 
-  const [imageup, setImageup] = useState("");
-  const uploadImage = (e) => {
-    setImageup(e.target.files[0]);
-    console.log(e.target.files[0]);
+  const onSubmit = (values) => {
+    console.log("Step Three: ", values);
+    handleData(values);
   };
 
-  const onSubmit = async (values) => {
-    const formData = new FormData();
-
-    const datas = {
-      ...allData,
-      ...values,
-    };
-
-    console.log("datas: ", datas);
-
-    Object.entries(datas).forEach(([key, value]) =>
-      formData.append(key, value)
-    );
-
-    formData.forEach((value, key) => {
-      console.log(key, ":", value);
-    });
-
-    const path = `/Course`;
-    const body = formData;
-    const response = await postApi({ path, body });
-    const { id } = response.data;
-      console.log("ID received:", id);
-    console.log("Response Put: ", response);
-  };
-
-    
   return (
     <Fragment>
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -137,21 +108,17 @@ const StepThree = ({ stepper, allData }) => {
               )}
             />
           </Col>
-          {/* <Col md={6} xs={12}>
-            <Label className="form-label">تصویر دوره</Label>
+          <Col md={6} xs={12}>
+            <Label className="form-label">توضیحات گوگل</Label>
             <Controller
+              defaultValue="توضیحات گوگل"
               control={control}
-              name="ImageAddress"
-              onChange={uploadImage}
+              name="GoogleSchema"
               render={({ field }) => (
-                <Input
-                  type="file"
-                  {...field}
-                  invalid={errors.lastName && true}
-                />
+                <Input {...field} invalid={errors.lastName && true} />
               )}
             />
-          </Col> */}
+          </Col>
         </Row>
 
         <div className="d-flex justify-content-between mt-1">
@@ -170,8 +137,8 @@ const StepThree = ({ stepper, allData }) => {
           </Button>
           <Button
             color="primary"
-            className="btn-next"
             type="submit"
+            className="btn-next"
             onClick={() => stepper.next()}
           >
             <span className="align-middle d-sm-inline-block d-none">
