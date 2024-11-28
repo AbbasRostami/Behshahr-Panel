@@ -5,12 +5,12 @@ import { getApi } from "../../../core/api/api";
 
 const CoursesAdd = () => {
 
-  const [data, setData] = useState([])
+  const [getCreate, setGetCreate] = useState([])
   const GetCoursesCreate = async () => {
     const path = `/Course/GetCreate`;
     const response = await getApi({ path });
     console.log("Get Create Courses: ", response.data);
-    setData(response.data);
+    setGetCreate(response.data);
   };
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const CoursesAdd = () => {
     <Fragment>
       <Row>
         <Col sm="12">
-          <WizardVertical data={data} />
+          <WizardVertical  getCreate={getCreate} />
         </Col>
       </Row>
     </Fragment>
