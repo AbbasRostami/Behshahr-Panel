@@ -186,7 +186,7 @@ export const columns = [
     selector: (row) => row.isActive,
     cell: (row) => (
       <span>
-        {row.isActive == true ? (
+        {row.isActive ? (
           <Badge color="success" pill>
             فعال
           </Badge>
