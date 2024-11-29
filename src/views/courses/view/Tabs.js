@@ -6,7 +6,7 @@ import GroupsList from "./groups";
 import Comments from "./comments";
 import Status from "./status";
 
-const CoursesTab = ({ active, toggleTab }) => {
+const CoursesTab = ({ active, toggleTab, data }) => {
   return (
     <Fragment>
       <Nav pills className="mb-2">
@@ -39,7 +39,7 @@ const CoursesTab = ({ active, toggleTab }) => {
 
       <TabContent activeTab={active}>
         <TabPane tabId="1">
-          <UserProjectsList />
+          <UserProjectsList data={data}/>
         </TabPane>
 
         <TabPane tabId="2">
@@ -47,7 +47,7 @@ const CoursesTab = ({ active, toggleTab }) => {
         </TabPane>
 
         <TabPane tabId="3">
-          <Comments />
+          <Comments  data={data}/>
         </TabPane>
 
         <TabPane tabId="4">

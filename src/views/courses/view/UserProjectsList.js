@@ -1,28 +1,20 @@
-// ** Reactstrap Imports
 import {
+  Badge,
   Card,
-  CardHeader,
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
-  Progress,
   UncontrolledDropdown,
 } from "reactstrap";
 
-// ** Third Party Components
 import { Archive, ChevronDown, MoreVertical, Trash2 } from "react-feather";
 import DataTable from "react-data-table-component";
-
-// ** Custom Components
 import Avatar from "@components/avatar";
-
-// ** Label Images
 import xdLabel from "@src/assets/images/icons/brands/xd-label.png";
 import vueLabel from "@src/assets/images/icons/brands/vue-label.png";
 import htmlLabel from "@src/assets/images/icons/brands/html-label.png";
 import reactLabel from "@src/assets/images/icons/brands/react-label.png";
 import sketchLabel from "@src/assets/images/icons/brands/sketch-label.png";
-// ** Styles
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { useEffect, useState } from "react";
 import { getApi } from "../../../core/api/api";
@@ -98,31 +90,33 @@ const projectsArr = [
 export const columns = [
   {
     sortable: true,
-    minWidth: "300px",
+    minWidth: "280px",
     name: "نام کاربر",
-    selector: (row) => row.fullName,
+    selector: (row) => row.studentName,
     cell: (row) => {
       return (
         <div className="d-flex justify-content-left align-items-center ">
-          <div className="avatar-wrapper">
-            <Avatar
-              className="me-1"
-              img={row.img}
-              alt={row.title}
-              imgWidth="32"
-            />
-          </div>
           <div className="d-flex flex-column">
-            <span className="text-truncate fw-bolder">{row.fullName}</span>
-            <small className="text-muted">{row.subtitle}</small>
+            <span className="text-truncate fw-bolder">{row.studentName}</span>
           </div>
         </div>
       );
     },
   },
   {
-    name: "نام دوره ",
-    selector: (row) => row.title,
+    sortable: true,
+    minWidth: "150px",
+    name: "نام دوره",
+    selector: (row) => row.courseName,
+    cell: (row) => {
+      return (
+        <div className="d-flex justify-content-left align-items-center ">
+          <div className="d-flex flex-column">
+            <span className=" text-truncate text-truncate fw-bolder">{row.courseName}</span>
+          </div>
+        </div>
+      );
+    },
   },
   {
     name: "وضعیت",
@@ -130,15 +124,17 @@ export const columns = [
     sortable: true,
     cell: (row) => {
       return (
-        <div className="d-flex flex-column w-100">
-          <small className="mb-1">
-            {row.isActive ? (
-              <span className="bg-success rounded-pill fs-5 ">تائید شده</span>
-            ) : (
-              <span className="bg-danger rounded-pill fs-5">تائید نشده</span>
-            )}
-          </small>
-        </div>
+        <span>
+          {row.accept ? (
+            <Badge className="text-capitalize" color="success" >
+             تایید شده
+            </Badge>
+          ) : (
+            <Badge className="text-capitalize"color="danger"  pill>
+              تایید نشده
+            </Badge>
+          )}
+        </span>
       );
     },
   },
@@ -159,7 +155,7 @@ export const columns = [
               onClick={(e) => e.preventDefault()}
             >
               <Archive size={14} className="me-50" />
-              <span className="align-middle">ویرایش</span>
+              <span className="align-middle">تایید</span>
             </DropdownItem>
             <DropdownItem
               tag="a"
@@ -179,21 +175,21 @@ export const columns = [
   },
 ];
 
-const UserProjectsList = () => {
-  // const [data, setData] = useState([]);
-  // const params = useParams();
-  // console.log(params);
+const UserProjectsList = ({data}) => {
+   const [courseRev, setCourseRev] = useState([]);
 
-  // const GetCouresesUser = async () => {
-  //   const path = `/Home/GetCourseDetails/?CourseId=${params.CourseId}`;
-  //   const response = await getApi({ path });
-  //   console.log(response.data);
-  //   setData(response.data);
-  // };
+   const GetCouresesUser = async (courseId) => {
+     const path = `/CourseReserve/${courseId}`;
+     const response = await getApi({ path });
+     console.log("CouresesUser: ",response.data);
+     setCourseRev(response.data);
+   };
 
-  // useEffect(() => {
-  //   GetCouresesUser();
-  // }, []);
+    console.log("fshudskj",courseRev);
+    
+    useEffect(() => {
+      GetCouresesUser(data?.courseId); // ارسال courseId به متد
+    }, [data?.courseId]);
   return (
     <Card>
       <div className="react-dataTable user-view-account-projects">
@@ -201,7 +197,7 @@ const UserProjectsList = () => {
           noHeader
           responsive
           columns={columns}
-          // data={data}
+          data={courseRev}
           className="react-dataTable"
           sortIcon={<ChevronDown size={10} />}
         />
