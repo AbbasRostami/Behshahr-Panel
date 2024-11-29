@@ -103,11 +103,6 @@ export const columns = [
       <Badge className="text-capitalize" color="success" pill>
         {row.active ? <span>فعال</span> : <span>غیر فعال</span>}
       </Badge>
-
-      // color={statusObj[row.status]} pill
-      // color='success' pill
-      // color='danger' pill
-      // color='secondary' pill
     ),
   },
 
