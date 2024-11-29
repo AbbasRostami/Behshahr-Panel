@@ -1,5 +1,6 @@
 
 import {
+  Badge,
   Card,
   DropdownItem,
   DropdownMenu,
@@ -17,13 +18,13 @@ export const columns = [
     sortable: true,
     maxWidth: "200px",
     name: "نام کاربر",
-    selector: (row) => row.userFullName,
+    selector: (row) => row.author,
     cell: (row) => {
       return (
         <div className="d-flex justify-content-left align-items-center text-truncate ">
           <div className="avatar-wrapper"></div>
           <div className="d-flex flex-column">
-            <span className="text-truncate fw-bolder">{row.userFullName}</span>
+            <span className="text-truncate fw-bolder">{row.author}</span>
           </div>
         </div>
       );
@@ -32,12 +33,32 @@ export const columns = [
   {
     maxWidth: "200px",
     name: " عنوان کامنت ",
-    selector: (row) => row.commentTitle,
+    selector: (row) => row.title,
+    cell: (row) => {
+      return (
+        <div className="d-flex justify-content-left align-items-center text-truncate ">
+          <div className="avatar-wrapper"></div>
+          <div className="d-flex flex-column">
+            <span className="text-truncate fw-bolder">{row.title}</span>
+          </div>
+        </div>
+      );
+    },
   },
   {
     maxWidth: "200px",
     name: "متن کامنت ",
     selector: (row) => row.describe,
+    cell: (row) => {
+      return (
+        <div className="d-flex justify-content-left align-items-center text-truncate ">
+          <div className="avatar-wrapper"></div>
+          <div className="d-flex flex-column">
+            <span className="text-truncate fw-bolder">{row.describe}</span>
+          </div>
+        </div>
+      );
+    },
   },
   {
     maxWidth: "200px",
@@ -46,16 +67,17 @@ export const columns = [
     sortable: true,
     cell: (row) => {
       return (
-        <div className="d-flex flex-column w-100">
-          <small className="mb-1">
-            {row.accept ? <span>تائید شده</span> : <span>تائید نشده</span>}
-          </small>
-          {/* <Progress
-            value={row.progress}
-            style={{ height: "6px" }}
-            className={`w-100 progress-bar-${row.progressColor}`}
-          /> */}
-        </div>
+        <span>
+        {row.accept ? (
+          <Badge className="text-capitalize" color="success" >
+           تایید شده
+          </Badge>
+        ) : (
+          <Badge className="text-capitalize"color="danger"  pill>
+            تایید نشده
+          </Badge>
+        )}
+      </span>
       );
     },
   },
@@ -76,7 +98,7 @@ export const columns = [
               onClick={(e) => e.preventDefault()}
             >
               <Archive size={14} className="me-50" />
-              <span className="align-middle">ویرایش</span>
+              <span className="align-middle">تایید</span>
             </DropdownItem>
             <DropdownItem
               tag="a"
@@ -97,18 +119,22 @@ export const columns = [
   },
 ];
 
-const Comments = () => {
-  // const [data, setData] = useState([]);
-  // const GetCouresComments = async () => {
-  //   const path = `/Course/CommentManagment?PageNumber=1&RowsOfPage=10&SortingCol=DESC&SortType=InsertDate&Query=`;
-  //   const response = await getApi({ path });
-  //   console.log(response.data.comments);
-  //   setData(response.data.comments);
-  // };
+const Comments = ({data}) => {
+  const [comCourses, setCourses] = useState([])
+   const GetCouresComments = async (courseId) => {
+     const path = `/Course/GetCourseCommnets/${courseId}`;
+     const response = await getApi({ path });
+     console.log("res comment: ",response.data);
+     setCourses(response.data)
+   };
 
-  // useEffect(() => {
-  //   GetCouresComments();
-  // }, []);
+   useEffect(() => {
+    GetCouresComments(data?.courseId); // ارسال courseId به متد
+  }, [data?.courseId]);
+
+  console.log("Comment:", data);
+  
+  //572707a8-c98f-ef11-b6e6-82fc07f68400
   return (
     <Card>
       <div className="react-dataTable user-view-account-projects">
@@ -116,7 +142,7 @@ const Comments = () => {
           noHeader
           responsive
           columns={columns}
-          // data={data}
+          data={comCourses}
           className="react-dataTable"
           sortIcon={<ChevronDown size={10} />}
         />
