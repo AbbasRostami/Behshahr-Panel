@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState } from "react";
 import { columns } from "./columns";
 import Select from "react-select";
 import ReactPaginate from "react-paginate";
@@ -24,11 +24,7 @@ import AddUserModal from "./AddUser";
 
 const CustomHeader = ({
   handlePerPage,
-  handlePagination,
   handlQuery,
-  rowsPerPage,
-  handleFilter,
-  searchTerm,
   searchDataParams,
 }) => {
   console.log("searchParams", searchDataParams);
@@ -112,11 +108,10 @@ const UsersList = ({ data, setSearchDataParams, searchDataParams }) => {
   ];
 
   const planOptions = [
-    { value: "", label: "Select Plan" },
-    { value: "basic", label: "Basic" },
-    { value: "company", label: "Company" },
-    { value: "enterprise", label: "Enterprise" },
-    { value: "team", label: "Team" },
+    { value: "", label: "همه وضعیت‌ها" },
+    { value: 100, label: "تکمیل شده" }, 
+    { value: "in-progress", label: "در حال تکمیل" }, 
+    { value: 0, label: "تکمیل نشده" }, 
   ];
 
   const statusOptions = [
@@ -141,6 +136,7 @@ const UsersList = ({ data, setSearchDataParams, searchDataParams }) => {
       return { ...prev, RowsOfPage: value };
     });
   };
+  
   const handleStatus = (e) => {
     console.log(e.value);
 
@@ -165,18 +161,6 @@ const UsersList = ({ data, setSearchDataParams, searchDataParams }) => {
 
   const handleFilter = (val) => {
     setSearchTerm(val);
-    // dispatch(
-    //   getData({
-    //     sort,
-    //     q: val,
-    //     sortColumn,
-    //     page: currentPage,
-    //     perPage: rowsPerPage,
-    //     role: currentRole.value,
-    //     status: currentStatus.value,
-    //     currentPlan: currentPlan.value,
-    //   })
-    // );
   };
 
   const CustomPagination = () => {
@@ -206,20 +190,27 @@ const UsersList = ({ data, setSearchDataParams, searchDataParams }) => {
   const handleSort = (column, sortDirection) => {
     setSort(sortDirection);
     setSortColumn(column.sortField);
-    // dispatch(
-    //   getData({
-    //     sort,
-    //     sortColumn,
-    //     q: searchTerm,
-    //     page: currentPage,
-    //     perPage: rowsPerPage,
-    //     role: currentRole.value,
-    //     status: currentStatus.value,
-    //     currentPlan: currentPlan.value,
-    //   })
-    // );
+  };
+  
+  const handlePlanChange = (selectedOption) => {
+    setCurrentPlan(selectedOption); 
+  
+    setSearchDataParams((prev) => ({
+      ...prev,
+      profileCompletionStatus: selectedOption.value, 
+    }));
   };
 
+  const filteredData = data.filter((row) => {
+    const completionPercentage = parseInt(row.profileCompletionPercentage, 10);
+    const status = searchDataParams.profileCompletionStatus;
+  
+    if (status === "") return true;
+    if (status === 100) return completionPercentage === 100;
+    if (status === "in-progress") return completionPercentage > 0 && completionPercentage < 100; 
+    if (status === 0) return completionPercentage === 0; 
+    return true;
+  });
   return (
     <Fragment>
       <Card>
@@ -237,21 +228,8 @@ const UsersList = ({ data, setSearchDataParams, searchDataParams }) => {
                 classNamePrefix="select"
                 options={roleOptions}
                 placeholder="انتخاب کنید ...."
-                // value={currentStatus}
                 onChange={(data) => {
                   handlRole(data);
-                  // dispatch(
-                  //   getData({
-                  //     sort,
-                  //     sortColumn,
-                  //     q: searchTerm,
-                  //     role: data.value,
-                  //     page: currentPage,
-                  //     perPage: rowsPerPage,
-                  //     status: currentStatus.value,
-                  //     currentPlan: currentPlan.value,
-                  //   })
-                  // );
                 }}
               />
             </Col>
@@ -265,68 +243,55 @@ const UsersList = ({ data, setSearchDataParams, searchDataParams }) => {
                 placeholder="انتخاب کنید ...."
                 classNamePrefix="select"
                 options={statusOptions}
-                // value={currentStatus}
                 onChange={(data) => {
                   handleStatus(data);
-                  // dispatch(
-                  //   getData({
-                  //     sort,
-                  //     sortColumn,
-                  //     q: searchTerm,
-                  //     page: currentPage,
-                  //     status: data.value,
-                  //     perPage: rowsPerPage,
-                  //     role: currentRole.value,
-                  //     currentPlan: currentPlan.value,
-                  //   })
-                  // );
                 }}
               />
             </Col>
 
             <Col className="my-md-0 my-1" md="4">
-              <Label for="plan-select">مرتب سازی</Label>
-              <Select
-                theme={selectThemeColors}
-                isClearable={false}
-                className="react-select"
-                classNamePrefix="select"
-                options={planOptions}
-                value={currentPlan}
-                onChange={() => {}}
-              />
-            </Col>
+  <Label for="plan-select">مرتب سازی تکمیل پروفایل</Label>
+  <Select
+    theme={selectThemeColors}
+    isClearable={false}
+    className="react-select"
+    classNamePrefix="select"
+    options={planOptions}
+    value={currentPlan}
+    onChange={handlePlanChange} // اتصال تابع تغییر
+  />
+</Col>
           </Row>
         </CardBody>
       </Card>
 
       <Card className="overflow-hidden">
         <div className="react-dataTable">
-          <DataTable
-            noHeader
-            subHeader
-            sortServer
-            pagination
-            responsive
-            paginationServer
-            columns={columns}
-            onSort={handleSort}
-            sortIcon={<ChevronDown />}
-            className="react-dataTable"
-            paginationComponent={CustomPagination}
-            data={data}
-            subHeaderComponent={
-              <CustomHeader
-                handlePagination={handlePagination}
-                handlQuery={handlQuery}
-                searchDataParams={searchDataParams}
-                searchTerm={searchTerm}
-                rowsPerPage={rowsPerPage}
-                handleFilter={handleFilter}
-                handlePerPage={handlePerPage}
-              />
-            }
-          />
+        <DataTable
+  noHeader
+  subHeader
+  sortServer
+  pagination
+  responsive
+  paginationServer
+  columns={columns}
+  onSort={handleSort}
+  sortIcon={<ChevronDown />}
+  className="react-dataTable"
+  paginationComponent={CustomPagination}
+  data={filteredData} // ارسال داده‌های فیلترشده
+  subHeaderComponent={
+    <CustomHeader
+      handlePagination={handlePagination}
+      handlQuery={handlQuery}
+      searchDataParams={searchDataParams}
+      searchTerm={searchTerm}
+      rowsPerPage={rowsPerPage}
+      handleFilter={handleFilter}
+      handlePerPage={handlePerPage}
+    />
+  }
+/>
         </div>
       </Card>
     </Fragment>

@@ -40,7 +40,7 @@ const Staticies = () => {
             color="danger"
             statTitle="ادمین ها"
             icon={<UserPlus size={20} />}
-            renderStats={<h3 className="fw-bolder mb-75">4,567</h3>}
+            renderStats={<h3 className="fw-bolder mb-75">90</h3>}
           />
         </Col>
         <Col lg="3" sm="6">
@@ -48,7 +48,7 @@ const Staticies = () => {
             color="success"
             statTitle="اساتید"
             icon={<UserCheck size={20} />}
-            renderStats={<h3 className="fw-bolder mb-75">19,860</h3>}
+            renderStats={<h3 className="fw-bolder mb-75">112</h3>}
           />
         </Col>
         <Col lg="3" sm="6">
@@ -56,7 +56,7 @@ const Staticies = () => {
             color="warning"
             statTitle="دانشجویان"
             icon={<UserX size={20} />}
-            renderStats={<h3 className="fw-bolder mb-75">237</h3>}
+            renderStats={<h3 className="fw-bolder mb-75">180</h3>}
           />
         </Col>
       </Row>

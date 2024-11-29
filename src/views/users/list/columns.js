@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { MoreVertical, FileText, Trash2, Archive } from "react-feather";
+import { MoreVertical, FileText, Trash2 } from "react-feather";
 import {
   Badge,
   UncontrolledDropdown,
@@ -8,28 +8,11 @@ import {
   DropdownItem,
   Progress,
 } from "reactstrap";
-import toast from "react-hot-toast";
 import { deleteApi } from "../../../core/api/api";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
-
+import AvatarGroup from "@components/avatar-group";
 const MySwal = withReactContent(Swal);
-
-// const deleteUser = async (id) => {
-//   console.log(id);
-//   const path = "/User/DeleteUser";
-//   const body = {
-//     userId: id,
-//   };
-//   const response = await deleteApi({ path, body });
-
-//   console.log("Delete:", response);
-
-//   if (response.data.success) {
-//     toast.success(response.data.message);
-//   }
-// };
-
 const deleteUser = async (id) => {
   return MySwal.fire({
     title: "آیا مطمئن هستید؟",
@@ -44,20 +27,43 @@ const deleteUser = async (id) => {
     },
     buttonsStyling: false,
   }).then(async function (result) {
-    const path = "/User/DeleteUser";
-    const body = {
-      userId: id,
-    };
-    const response = await deleteApi({ path, body });
-    if (response.data.success) {
-      MySwal.fire({
-        icon: "success",
-        title: "موفقیت",
-        text: "عملیات با موفقیت انجام گردید",
-        customClass: {
-          confirmButton: "btn btn-success",
-        },
-      });
+    if (result.isConfirmed) {
+      try {
+        const path = "/User/DeleteUser";
+        const body = {
+          userId: id,
+        };
+        const response = await deleteApi({ path, body });
+
+        if (response.data) {
+          MySwal.fire({
+            icon: "success",
+            title: "موفقیت",
+            text: "عملیات با موفقیت انجام گردید",
+            customClass: {
+              confirmButton: "btn btn-success",
+            },
+          });
+        } else {
+          MySwal.fire({
+            icon: "error",
+            title: "عدم موفقیت",
+            text: "شما مجوز کافی برای انجام این عملیات را ندارید",
+            customClass: {
+              confirmButton: "btn btn-danger",
+            },
+          });
+        }
+      } catch (error) {
+        MySwal.fire({
+          icon: "error",
+          title: "خطا",
+          text: "مشکلی در ارتباط با سرور به وجود آمد",
+          customClass: {
+            confirmButton: "btn btn-danger",
+          },
+        });
+      }
     } else if (result.dismiss === MySwal.DismissReason.cancel) {
       MySwal.fire({
         title: "لغو",
@@ -69,6 +75,12 @@ const deleteUser = async (id) => {
       });
     }
   });
+};
+
+const rolesToAvatars = {
+  Student: "./../../../../src/assets/images/icons/brands/vue-label.png",
+  Teacher: "./../../../../src/assets/images/icons/brands/sketch-label.png",
+  Administrator: "./../../../../src/assets/images/icons/brands/react-label.png",
 };
 
 export const columns = [
@@ -97,58 +109,95 @@ export const columns = [
   {
     name: "نقش",
     sortable: true,
-    minWidth: "200px",
+    minWidth: "250px",
     sortField: "fullName",
     selector: (row) => row.userRoles,
-    cell: (row) => (
-      <div className="d-flex justify-content-left align-items-center">
-        {row.userRoles}
-        <div className="d-flex flex-column">
-          <Link
-            to={`/apps/user/view/${row.id}`}
-            className="user_name text-truncate text-body"
-          >
-            <span className="fw-bolder">{row.lastnamelastname}</span>
-          </Link>
-          <small className="text-truncate text-muted mb-0">{row.email}</small>
+    cell: (row) => {
+      const allowedRoles = ["Student", "Teacher", "Administrator"];
+
+      const roles = row.userRoles
+        ? row.userRoles
+            .split(", ")
+            .filter((role) => allowedRoles.includes(role.trim()))
+        : [];
+
+      const avatars = roles.map((role) => ({
+        img:
+          rolesToAvatars[role.trim()] ||
+          "./../../../../src/assets/images/icons/brands/twitter-label.png",
+        name: role.trim(),
+        tooltip:
+          role.trim() === "Administrator"
+            ? "ادمین"
+            : role.trim() === "Student"
+            ? "دانشجو"
+            : role.trim() === "Teacher"
+            ? "استاد"
+            : role.trim(),
+      }));
+
+      return (
+        <div className="d-flex justify-content-left align-items-center">
+          <AvatarGroup
+            data={avatars.map((avatar) => ({
+              ...avatar,
+              title: avatar.tooltip,
+            }))}
+            size="sm"
+            max={5}
+          />
         </div>
-      </div>
-    ),
+      );
+    },
   },
 
   {
     name: "ایمیل",
     sortable: true,
-    minWidth: "200px",
+    minWidth: "250px",
     sortField: "fullName",
     selector: (row) => row.gmail,
     cell: (row) => (
       <div className="d-flex justify-content-left align-items-center">
         {row.gmail}
-        <div className="d-flex flex-column">
-          <Link
-            to={`/apps/user/view/${row.id}`}
-            className="user_name text-truncate text-body"
-          >
-            <span className="fw-bolder">{row.lastnamelastname}</span>
-          </Link>
-          <small className="text-truncate text-muted mb-0">{row.email}</small>
-        </div>
       </div>
     ),
   },
   {
     name: "درصد تکمیل پروفایل",
+    minWidth: "210px",
     selector: (row) => row.profileCompletionPercentage,
     sortable: true,
     cell: (row) => {
+      const getColor = (percentage) => {
+        if (percentage < 30) return "#dc3545";
+        if (percentage < 70) return "#ffc107";
+        return "#28a745";
+      };
+      const getIcon = (percentage) => {
+        if (percentage < 30) return "❌";
+        if (percentage < 70) return "⚠️";
+        return "✅";
+      };
+
       return (
-        <div className="d-flex flex-column w-100">
-          <small className="mb-1">{`${row.profileCompletionPercentage}%`}</small>
+        <div className="d-flex flex-column align-items-start w-100">
+          <div className="d-flex justify-content-between w-100 align-items-center mb-1">
+            <span className="fw-bold">{`${row.profileCompletionPercentage}%`}</span>
+            <span>{getIcon(row.profileCompletionPercentage)}</span>
+          </div>
           <Progress
             value={row.profileCompletionPercentage}
-            style={{ height: "6px" }}
-            className={`w-100 progress-bar-${row.progressColor}`}
+            style={{
+              height: "8px",
+              borderRadius: "4px",
+              backgroundColor: "#e9ecef",
+            }}
+            barStyle={{
+              backgroundColor: getColor(row.profileCompletionPercentage),
+              transition: "width 0.3s ease-in-out",
+            }}
+            className="w-100"
           />
         </div>
       );
@@ -157,7 +206,7 @@ export const columns = [
 
   {
     name: "وضعیت",
-    minWidth: "100px",
+    minWidth: "150px",
     sortable: true,
     sortField: "status",
     selector: (row) => row.active,
@@ -173,11 +222,6 @@ export const columns = [
           </Badge>
         )}
       </span>
-
-      // color={statusObj[row.status]} pill
-      // color='success' pill
-      // color='danger' pill
-      // color='secondary' pill
     ),
   },
 
@@ -190,7 +234,7 @@ export const columns = [
           <DropdownToggle tag="div" className="btn btn-sm">
             <MoreVertical size={14} className="cursor-pointer" />
           </DropdownToggle>
-          <DropdownMenu>
+          <DropdownMenu container="body" className="z-10">
             <DropdownItem
               tag={Link}
               className="w-100"
@@ -198,15 +242,6 @@ export const columns = [
             >
               <FileText size={14} className="me-50" />
               <span className="align-middle">جزئیات</span>
-            </DropdownItem>
-            <DropdownItem
-              tag="a"
-              href="/"
-              className="w-100"
-              onClick={(e) => e.preventDefault()}
-            >
-              <Archive size={14} className="me-50" />
-              <span className="align-middle">ویرایش</span>
             </DropdownItem>
             <DropdownItem
               tag="a"

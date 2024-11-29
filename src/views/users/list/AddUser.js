@@ -15,6 +15,7 @@ import {
 import { useForm, Controller } from "react-hook-form";
 import "@styles/react/libs/react-select/_react-select.scss";
 import { postApi } from "../../../core/api/api";
+import Swal from "sweetalert2";
 
 const AddUserModal = () => {
   const [show, setShow] = useState(false);
@@ -36,8 +37,47 @@ const AddUserModal = () => {
   const onSubmit = async (data) => {
     const path = `/User/CreateUser`;
     const body = data;
-    const response = await postApi({ path, body });
-    console.log("Create User:", response);
+  
+    try {
+      const response = await postApi({ path, body });
+      console.log("Create User:", response);
+  
+      if (response?.data?.success) {
+        Swal.fire({
+          icon: "success",
+          title: "موفقیت",
+          text: "کاربر با موفقیت ایجاد شد.",
+          confirmButtonText: "باشه",
+          customClass: {
+            confirmButton: "btn btn-success",
+          },
+          buttonsStyling: false,
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "خطا",
+          text: response?.data?.message || "خطایی رخ داده است. دوباره تلاش کنید.",
+          confirmButtonText: "باشه",
+          customClass: {
+            confirmButton: "btn btn-danger",
+          },
+          buttonsStyling: false,
+        });
+      }
+    } catch (error) {
+      console.error("Error creating user:", error);
+      Swal.fire({
+        icon: "error",
+        title: "خطا",
+        text: "مشکلی در برقراری ارتباط با سرور رخ داده است.",
+        confirmButtonText: "باشه",
+        customClass: {
+          confirmButton: "btn btn-danger",
+        },
+        buttonsStyling: false,
+      });
+    }
   };
 
   const isStudent = watch("isStudent");
