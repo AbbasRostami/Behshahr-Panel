@@ -79,7 +79,7 @@ const CustomHeader = ({ handlePerPage, rowsPerPage, searchTerm }) => {
 const CoursesYours = () => {
   const [data, setData] = useState([]);
   const GetCouresesYours = async () => {
-    const path = `/Course/CourseList?PageNumber=1&RowsOfPage=10&SortingCol=DESC&SortType=Expire&Query`;
+    const path = `/Course/CourseList?PageNumber=1&RowsOfPage=30&SortingCol=DESC&SortType=Expire&Query`;
     const response = await getApi({ path });
     console.log(response.data.courseDtos);
     setData(response.data.courseDtos);
