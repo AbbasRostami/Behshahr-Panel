@@ -1,20 +1,9 @@
-// ** User List Component
-import Table from "./CoursesYours";
-
-// ** Reactstrap Imports
 import { Row, Col, TabContent, TabPane } from "reactstrap";
-
-// ** Custom Components
 import StatsHorizontal from "@components/widgets/stats/StatsHorizontal";
-
-// ** Icons Imports
 import { User, UserPlus, UserCheck, UserX } from "react-feather";
-
-// ** Styles
 import "@styles/react/apps/app-users.scss";
 import { useState } from "react";
 import CoursesListTabs from "./Tabs";
-import UsersList from "./CoursesYours";
 import CoursesYours from "./CoursesYours";
 import CoursesReserve from "./CoursesReserve";
 import CoursesTeacher from "./CoursesTeacher";

@@ -266,7 +266,7 @@ const CoursesInfo = ({ selectedUser, data, selectedOption }) => {
                 <li className="mb-75">
                   <span className="fw-bolder me-25">وضعیت دوره:</span>
                   <span className="text-capitalize">
-                    {data?.courseStatusNamecourseStatusName}
+                    {data?.courseStatusName}
                   </span>
                 </li>
                 <li className="mb-75">

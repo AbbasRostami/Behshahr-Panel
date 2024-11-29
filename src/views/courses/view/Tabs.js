@@ -2,9 +2,9 @@ import { Fragment } from "react";
 import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
 import { User, Lock, Bookmark} from "react-feather";
 import UserProjectsList from "./UserProjectsList";
-import GroupsList from "./groups";
-import Comments from "./comments";
-import Status from "./status";
+import GroupsList from "./CoursesGroup";
+import Comments from "./CoursesComments";
+import Status from "./CoursesPayment";
 
 const CoursesTab = ({ active, toggleTab, data }) => {
   return (
@@ -43,7 +43,7 @@ const CoursesTab = ({ active, toggleTab, data }) => {
         </TabPane>
 
         <TabPane tabId="2">
-          <GroupsList />
+          <GroupsList data={data} />
         </TabPane>
 
         <TabPane tabId="3">
@@ -51,7 +51,7 @@ const CoursesTab = ({ active, toggleTab, data }) => {
         </TabPane>
 
         <TabPane tabId="4">
-          <Status />
+          <Status  data={data} />
         </TabPane>
       </TabContent>
     </Fragment>

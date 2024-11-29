@@ -90,7 +90,7 @@ export const columns = [
           <DropdownToggle tag="div" className="btn btn-sm">
             <MoreVertical size={14} className="cursor-pointer" />
           </DropdownToggle>
-          <DropdownMenu>
+          <DropdownMenu container="body" className="z-10">
             <DropdownItem
               tag="a"
               href="/"
@@ -129,12 +129,11 @@ const Comments = ({data}) => {
    };
 
    useEffect(() => {
-    GetCouresComments(data?.courseId); // ارسال courseId به متد
+    GetCouresComments(data?.courseId); 
   }, [data?.courseId]);
 
   console.log("Comment:", data);
   
-  //572707a8-c98f-ef11-b6e6-82fc07f68400
   return (
     <Card>
       <div className="react-dataTable user-view-account-projects">
