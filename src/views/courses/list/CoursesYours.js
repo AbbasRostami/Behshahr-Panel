@@ -28,8 +28,11 @@ import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getApi } from "../../../core/api/api";
-
+import { editApi, getApi } from "../../../core/api/api";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import toast from "react-hot-toast";
+const MySwal = withReactContent(Swal);
 const CustomHeader = ({ handlePerPage, rowsPerPage, searchTerm }) => {
   return (
     <div className="invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75">
@@ -77,11 +80,13 @@ const CustomHeader = ({ handlePerPage, rowsPerPage, searchTerm }) => {
 };
 
 const CoursesYours = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([]); // ذخیره لیست دوره‌ها
+
+  // گرفتن لیست دوره‌ها از API
   const GetCouresesYours = async () => {
     const path = `/Course/CourseList?PageNumber=1&RowsOfPage=30&SortingCol=DESC&SortType=Expire&Query`;
     const response = await getApi({ path });
-    console.log(response.data.courseDtos);
+    console.log("Courses Yours:", response.data.courseDtos);
     setData(response.data.courseDtos);
   };
 
@@ -89,7 +94,31 @@ const CoursesYours = () => {
     GetCouresesYours();
   }, []);
 
+  const handleSuspendedClick = async (course) => {
+    const path = `/Course/ActiveAndDeactiveCourse`;
+    const body = {
+      isActive: !course.isActive,
+      id: course.courseId,
+    };
   
+    const response = await editApi({ path, body });
+  
+    if (response.data.success) {
+      toast.success(response.data.message);
+  
+      setData((prevData) =>
+        prevData.map((item) =>
+          item.courseId === course.courseId
+            ? { ...item, isActive: !item.isActive } 
+            : item
+        )
+      );
+    } else {
+      toast.error("عملیات انجام نشد، مشکلی پیش آمد.");
+    }
+  
+    console.log("Response Put Active/Deactive:", response);
+  };
 
   const CustomPagination = () => {
     const count = 10;
@@ -114,11 +143,6 @@ const CoursesYours = () => {
     );
   };
 
-  const statusObj = {
-    pending: "light-warning",
-    active: "light-success",
-    inactive: "light-secondary",
-  };
 
   const columns = [
     {
@@ -225,15 +249,11 @@ const CoursesYours = () => {
                 <span className="align-middle">موجود کردن</span>
               </DropdownItem>
               <DropdownItem
-                tag="a"
-                href="/"
                 className="w-100"
-                onClick={(e) => {
-                  e.preventDefault();
-                }}
+                onClick={() => handleSuspendedClick(row)}
               >
                 <Trash2 size={14} className="me-50" />
-                <span className="align-middle">غیرفعال کردن</span>
+                <span className="align-middle">غیرفعال / غیرفعال</span>
               </DropdownItem>
               <DropdownItem
                 tag={Link}
