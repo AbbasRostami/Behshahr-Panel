@@ -1,29 +1,16 @@
 import { Fragment, useState, useEffect } from "react";
 
-// ** Invoice List Sidebar
 import Sidebar from "./Sidebar";
 
-// ** Table Columns
 import { columns } from "./columns";
 
-// ** Third Party Components
 import Select from "react-select";
 import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
-import {
-  ChevronDown,
-  Share,
-  Printer,
-  FileText,
-  File,
-  Grid,
-  Copy,
-} from "react-feather";
+import { ChevronDown } from "react-feather";
 
-// ** Utils
 import { selectThemeColors } from "@utils";
 
-// ** Reactstrap Imports
 import {
   Row,
   Col,
@@ -34,25 +21,14 @@ import {
   CardBody,
   CardTitle,
   CardHeader,
-  DropdownMenu,
-  DropdownItem,
-  DropdownToggle,
-  UncontrolledDropdown,
 } from "reactstrap";
 
-// ** Styles
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 
-// ** Table Header
-const CustomHeader = ({
-  store,
-  toggleSidebar,
-  handlePerPage,
-  rowsPerPage,
-  handleFilter,
-  searchTerm,
-}) => {
+const CustomHeader = ({ handlePerPage, handlQuery, searchDataParams }) => {
+  console.log(searchDataParams);
+
   return (
     <div className="invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75">
       <Row>
@@ -60,15 +36,16 @@ const CustomHeader = ({
           <div className="d-flex align-items-center w-100">
             <label htmlFor="rows-per-page">نمایش</label>
             <Input
-              className="mx-50 w-25"
+              className="mx-50"
               type="select"
               id="rows-per-page"
-              value={rowsPerPage}
+              // value={rowsPerPage}
               onChange={handlePerPage}
               style={{ width: "5rem" }}
             >
-              <option value="active">فعال</option>
-              <option value="deactive">غیرفعال</option>
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
             </Input>
           </div>
         </Col>
@@ -81,8 +58,7 @@ const CustomHeader = ({
               id="search-invoice"
               className="ms-50 w-100"
               type="text"
-              value={searchTerm}
-              onChange={(e) => handleFilter(e.target.value)}
+              onChange={(e) => handlQuery(e.target.value)}
               placeholder="جستجو..."
             />
           </div>
@@ -98,107 +74,46 @@ const CustomHeader = ({
   );
 };
 
-const Comments = ({ data }) => {
+const Comments = ({ data, searchDataParams, setSearchDataParams }) => {
   // ** States
 
-  const datas = [
-    { name: "a", lastname: "b" },
-    { name: "a", lastname: "b" },
-    { name: "a", lastname: "b" },
-  ];
-  const [sort, setSort] = useState("desc");
-  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortColumn, setSortColumn] = useState("id");
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [currentRole, setCurrentRole] = useState({
-    value: "",
-    label: "انتخاب کنید...",
-  });
-  const [currentPlan, setCurrentPlan] = useState({
-    value: "",
-    label: "انتخاب کنید...",
-  });
-  const [currentStatus, setCurrentStatus] = useState({
-    value: "",
-    label: "انتخاب کنید...",
-    number: 0,
-  });
-
-  const roleOptions = [
-    { value: "", label: "Select Role" },
-    { value: "admin", label: "ادمین" },
-    { value: "author", label: "استاد" },
-    { value: "editor", label: "دانشجو" },
-  ];
-
-  const planOptions = [
-    { value: "", label: "Select Plan" },
-    { value: "basic", label: "Basic" },
-    { value: "company", label: "Company" },
-    { value: "enterprise", label: "Enterprise" },
-    { value: "team", label: "Team" },
-  ];
 
   const statusOptions = [
-    { value: "", label: "Select Status", number: 0 },
-    { value: "active", label: "فعال", number: 1 },
-    { value: "inactive", label: "غیرفعال", number: 2 },
+    { value: "", label: "Select Status" },
+    { value: true, label: "تائیید شده" },
+    { value: false, label: "تائید نشده" },
   ];
 
-  // ** Function in get data on page change
   const handlePagination = (page) => {
-    dispatch(
-      getData({
-        sort,
-        sortColumn,
-        q: searchTerm,
-        perPage: rowsPerPage,
-        page: page.selected + 1,
-        role: currentRole.value,
-        status: currentStatus.value,
-        currentPlan: currentPlan.value,
-      })
-    );
+    console.log(page);
+
+    setSearchDataParams((prev) => {
+      return { ...prev, PageNumber: page.selected };
+    });
+
     setCurrentPage(page.selected + 1);
   };
+  const handlQuery = (e) => {
+    console.log(e);
+    setSearchDataParams((prev) => {
+      return { ...prev, Query: e };
+    });
+  };
+  const handleStatus = (e) => {
+    console.log(e.value);
+    setSearchDataParams((prev) => {
+      return { ...prev, accept: e.value };
+    });
+  };
 
-  // ** Function in get data on rows per page
   const handlePerPage = (e) => {
     const value = parseInt(e.currentTarget.value);
-    dispatch(
-      getData({
-        sort,
-        sortColumn,
-        q: searchTerm,
-        perPage: value,
-        page: currentPage,
-        role: currentRole.value,
-        currentPlan: currentPlan.value,
-        status: currentStatus.value,
-      })
-    );
-    setRowsPerPage(value);
+    setSearchDataParams((prev) => {
+      return { ...prev, RowsOfPage: value };
+    });
   };
 
-  // ** Function in get data on search query change
-  const handleFilter = (val) => {
-    setSearchTerm(val);
-    dispatch(
-      getData({
-        sort,
-        q: val,
-        sortColumn,
-        page: currentPage,
-        perPage: rowsPerPage,
-        role: currentRole.value,
-        status: currentStatus.value,
-        currentPlan: currentPlan.value,
-      })
-    );
-  };
-
-  // ** Custom Pagination
   const CustomPagination = () => {
     const count = 10;
 
@@ -223,23 +138,6 @@ const Comments = ({ data }) => {
     );
   };
 
-  const handleSort = (column, sortDirection) => {
-    setSort(sortDirection);
-    setSortColumn(column.sortField);
-    dispatch(
-      getData({
-        sort,
-        sortColumn,
-        q: searchTerm,
-        page: currentPage,
-        perPage: rowsPerPage,
-        role: currentRole.value,
-        status: currentStatus.value,
-        currentPlan: currentPlan.value,
-      })
-    );
-  };
-
   return (
     <Fragment>
       <Card>
@@ -249,35 +147,6 @@ const Comments = ({ data }) => {
         <CardBody>
           <Row>
             <Col md="4">
-              <Label for="role-select" tag="h4">
-                نقش
-              </Label>
-              <Select
-                isClearable={false}
-                value={currentRole}
-                options={data}
-                className="react-select"
-                classNamePrefix="select"
-                theme={selectThemeColors}
-                onChange={(data) => {
-                  setCurrentRole(data);
-                  // dispatch(
-                  //   getData({
-                  //     sort,
-                  //     sortColumn,
-                  //     q: searchTerm,
-                  //     role: data.value,
-                  //     page: currentPage,
-                  //     perPage: rowsPerPage,
-                  //     status: currentStatus.value,
-                  //     currentPlan: currentPlan.value,
-                  //   })
-                  // );
-                }}
-              />
-            </Col>
-
-            <Col md="4">
               <Label for="status-select"> وضعیت </Label>
               <Select
                 theme={selectThemeColors}
@@ -285,35 +154,9 @@ const Comments = ({ data }) => {
                 className="react-select"
                 classNamePrefix="select"
                 options={statusOptions}
-                value={currentStatus}
                 onChange={(data) => {
-                  setCurrentStatus(data);
-                  // dispatch(
-                  //   getData({
-                  //     sort,
-                  //     sortColumn,
-                  //     q: searchTerm,
-                  //     page: currentPage,
-                  //     status: data.value,
-                  //     perPage: rowsPerPage,
-                  //     role: currentRole.value,
-                  //     currentPlan: currentPlan.value,
-                  //   })
-                  // );
+                  handleStatus(data);
                 }}
-              />
-            </Col>
-
-            <Col className="my-md-0 my-1" md="4">
-              <Label for="plan-select">مرتب سازی</Label>
-              <Select
-                theme={selectThemeColors}
-                isClearable={false}
-                className="react-select"
-                classNamePrefix="select"
-                options={data}
-                value={currentPlan}
-                onChange={() => {}}
               />
             </Col>
           </Row>
@@ -330,16 +173,15 @@ const Comments = ({ data }) => {
             responsive
             paginationServer
             columns={columns}
-            onSort={handleSort}
             sortIcon={<ChevronDown />}
             className="react-dataTable"
             paginationComponent={CustomPagination}
             data={data}
             subHeaderComponent={
               <CustomHeader
-                searchTerm={searchTerm}
-                rowsPerPage={rowsPerPage}
-                handleFilter={handleFilter}
+                handlQuery={handlQuery}
+                handlePagination={handlePagination}
+                searchDataParams={searchDataParams}
                 handlePerPage={handlePerPage}
               />
             }

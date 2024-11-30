@@ -25,24 +25,75 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
+import { deleteApi } from "../../../core/api/api";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
 
-// ** Renders Client Columns
-// const renderClient = row => {
-//   if (row.avatar.length) {
-//     return <Avatar className='me-1' img={row.avatar} width='32' height='32' />
-//   } else {
-//     return (
-//       <Avatar
-//         initials
-//         className='me-1'
-//         color={row.avatarColor || 'light-primary'}
-//         content={row.fullName || 'John Doe'}
-//       />
-//     )
-//   }
-// }
+const MySwal = withReactContent(Swal);
+const deleteComments = async (id) => {
+  return MySwal.fire({
+    title: "آیا مطمئن هستید؟",
+    text: "البته امکان بازگشت نیست وجود دارد",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "بله",
+    cancelButtonText: "انصراف",
+    customClass: {
+      confirmButton: "btn btn-primary ssss",
+      cancelButton: "btn btn-outline-danger ms-1",
+    },
+    buttonsStyling: false,
+  }).then(async function (result) {
+    if (result.isConfirmed) {
+      try {
+        const path = "/Course/DeleteCourseComment";
+        const body = {
+          CourseCommandId: id,
+        };
+        const response = await deleteApi({ path, body });
 
-// ** Renders Role Columns
+        if (response.data) {
+          MySwal.fire({
+            icon: "success",
+            title: "موفقیت",
+            text: "عملیات با موفقیت انجام گردید",
+            customClass: {
+              confirmButton: "btn btn-success",
+            },
+          });
+        } else {
+          MySwal.fire({
+            icon: "error",
+            title: "عدم موفقیت",
+            text: "شما مجوز کافی برای انجام این عملیات را ندارید",
+            customClass: {
+              confirmButton: "btn btn-danger",
+            },
+          });
+        }
+      } catch (error) {
+        MySwal.fire({
+          icon: "error",
+          title: "خطا",
+          text: "مشکلی در ارتباط با سرور به وجود آمد",
+          customClass: {
+            confirmButton: "btn btn-danger",
+          },
+        });
+      }
+    } else if (result.dismiss === MySwal.DismissReason.cancel) {
+      MySwal.fire({
+        title: "لغو",
+        text: "عملیات لغو گردید",
+        icon: "error",
+        customClass: {
+          confirmButton: "btn btn-success",
+        },
+      });
+    }
+  });
+};
+
 const renderRole = (row) => {
   const roleObj = {
     subscriber: {
@@ -154,7 +205,7 @@ export const columns = [
     name: "وضعیت",
     minWidth: "100px",
     sortable: true,
-    sortField: "status",
+    sortField: "accept",
     selector: (row) => row.accept,
     cell: (row) => (
       <span>
@@ -198,18 +249,6 @@ export const columns = [
               <Archive size={14} className="me-50" />
               <span className="align-middle">حذف </span>
             </DropdownItem>
-            <DropdownItem
-              tag="a"
-              href="/"
-              className="w-100"
-              onClick={(e) => {
-                e.preventDefault();
-                store.dispatch(deleteUser(row.id));
-              }}
-            >
-              <Trash2 size={14} className="me-50" />
-              <span className="align-middle">پاسخ</span>
-            </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>
       </div>
@@ -241,7 +280,7 @@ export const columns = [
               className="w-100"
               onClick={(e) => {
                 e.preventDefault();
-                store.dispatch(deleteUser(row.id));
+                deleteComments(row.id);
               }}
             >
               <Trash2 size={14} className="me-50" />

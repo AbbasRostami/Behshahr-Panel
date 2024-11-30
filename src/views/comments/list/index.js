@@ -6,16 +6,20 @@ import Comments from "./Table";
 
 const CommentLists = () => {
   const [data, setData] = useState([]);
+  const [searchDataParams, setSearchDataParams] = useState({
+    PageNumber: 1,
+    RowsOfPage: 10,
+  });
 
   const getCommentsList = async () => {
     const path = `/Course/CommentManagment`;
-    const response = await getApi({ path });
+    const response = await getApi({ path, params: searchDataParams });
     console.log("comment: ", response.data.comments);
     setData(response.data.comments);
   };
   useEffect(() => {
     getCommentsList();
-  }, []);
+  }, [searchDataParams]);
 
   return (
     <div className="app-user-list">
@@ -53,7 +57,11 @@ const CommentLists = () => {
           />
         </Col>
       </Row> */}
-      <Comments data={data} />
+      <Comments
+        data={data}
+        searchDataParams={searchDataParams}
+        setSearchDataParams={setSearchDataParams}
+      />
     </div>
   );
 };
