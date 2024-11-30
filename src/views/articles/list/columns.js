@@ -1,10 +1,5 @@
 import { Link } from "react-router-dom";
 import {
-  Slack,
-  User,
-  Settings,
-  Database,
-  Edit2,
   MoreVertical,
   FileText,
   Trash2,

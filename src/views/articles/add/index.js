@@ -1,8 +1,6 @@
-// ** Reactstrap Imports
 import {
   Card,
   CardHeader,
-  CardTitle,
   CardBody,
   Row,
   Col,
@@ -11,32 +9,15 @@ import {
   Button,
   Label,
 } from "reactstrap";
-// ** Third Party Components
-import Select from "react-select";
-
-// ** Utils
-import { selectThemeColors } from "@utils";
-import { useForm, Controller } from "react-hook-form";
-
 import { postApi } from "../../../core/api/api";
 import toast from "react-hot-toast";
-
-// ** Reactstrap Imports
-
-const colourOptions = [
-  { value: "ocean", label: "اخبار پژوهشگاه" },
-  { value: "blue", label: "Blue" },
-  { value: "purple", label: "Purple" },
-];
+import { Controller } from "react-hook-form";
 
 const ArticlesAdd = () => {
   const {
     control,
     handleSubmit,
     formState: { errors },
-    register,
-    setValue,
-    watch,
   } = useForm();
 
   const onSubmit = async (values) => {

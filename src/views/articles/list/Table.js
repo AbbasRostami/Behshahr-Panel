@@ -1,29 +1,12 @@
-import { Fragment, useState, useEffect } from "react";
-
-// ** Invoice List Sidebar
-import Sidebar from "./Sidebar";
-
-// ** Table Columns
+import { Fragment, useState } from "react";
 import { columns } from "./columns";
-
-// ** Third Party Components
 import Select from "react-select";
 import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
 import {
   ChevronDown,
-  Share,
-  Printer,
-  FileText,
-  File,
-  Grid,
-  Copy,
 } from "react-feather";
-
-// ** Utils
 import { selectThemeColors } from "@utils";
-
-// ** Reactstrap Imports
 import {
   Row,
   Col,
@@ -34,26 +17,14 @@ import {
   CardBody,
   CardTitle,
   CardHeader,
-  DropdownMenu,
-  DropdownItem,
-  DropdownToggle,
-  UncontrolledDropdown,
 } from "reactstrap";
-
-// ** Styles
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 
-// ** Table Header
 const CustomHeader = ({
-  store,
-  handlePagination,
   handlQuery,
-  toggleSidebar,
   handlePerPage,
   rowsPerPage,
-  handleFilter,
-  searchTerm,
   searchDataParams,
 }) => {
   console.log(searchDataParams);
@@ -86,7 +57,6 @@ const CustomHeader = ({
               id="search-invoice"
               className="ms-50 w-100"
               type="text"
-              // value={searchTerm}
               onChange={(e) => handlQuery(e.target.value)}
               placeholder="جستجو..."
             />
@@ -104,21 +74,10 @@ const CustomHeader = ({
 };
 
 const UsersList = ({ data, searchDataParams, setSearchDataParams }) => {
-  // ** States
-
-  const datas = [
-    { name: "a", lastname: "b" },
-    { name: "a", lastname: "b" },
-    { name: "a", lastname: "b" },
-  ];
-  const [sort, setSort] = useState("desc");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortColumn, setSortColumn] = useState("id");
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  // const [currentRole, setCurrentRole] = useState({ value: '', label: 'انتخاب کنید...' })
-  // const [currentPlan, setCurrentPlan] = useState({ value: '', label: 'انتخاب کنید...'  })
-  // const [currentStatus, setCurrentStatus] = useState({ value: '', label: 'انتخاب کنید...' , number: 0 })
+
 
   const roleOptions = [
     { value: "", label: "Select Role" },
@@ -127,21 +86,12 @@ const UsersList = ({ data, searchDataParams, setSearchDataParams }) => {
     { value: "editor", label: "دانشجو" },
   ];
 
-  // const planOptions = [
-  //   { value: '', label: 'Select Plan' },
-  //   { value: 'basic', label: 'Basic' },
-  //   { value: 'company', label: 'Company' },
-  //   { value: 'enterprise', label: 'Enterprise' },
-  //   { value: 'team', label: 'Team' }
-  // ]
-
   const statusOptions = [
     { value: "", label: "انتخاب کنید" },
     { value: true, label: "فعال" },
     { value: false, label: "غیرفعال" },
   ];
 
-  // ** Function in get data on page change
   const handlePagination = (page) => {
     console.log(page);
     setSearchDataParams((prev) => {
@@ -162,42 +112,15 @@ const UsersList = ({ data, searchDataParams, setSearchDataParams }) => {
     });
   };
 
-  // ** Function in get data on rows per page
   const handlePerPage = (e) => {
     const value = parseInt(e.currentTarget.value);
-    // dispatch(
-    //   getData({
-    //     sort,
-    //     sortColumn,
-    //     q: searchTerm,
-    //     perPage: value,
-    //     page: currentPage,
-    //     role: currentRole.value,
-    //     currentPlan: currentPlan.value,
-    //     status: currentStatus.value,
-    //   })
-    // );
     setRowsPerPage(value);
   };
 
-  // ** Function in get data on search query change
   const handleFilter = (val) => {
     setSearchTerm(val);
-    // dispatch(
-    //   getData({
-    //     sort,
-    //     q: val,
-    //     sortColumn,
-    //     page: currentPage,
-    //     perPage: rowsPerPage,
-    //     role: currentRole.value,
-    //     status: currentStatus.value,
-    //     currentPlan: currentPlan.value,
-    //   })
-    // );
   };
 
-  // ** Custom Pagination
   const CustomPagination = () => {
     const count = 10;
 
@@ -225,18 +148,6 @@ const UsersList = ({ data, searchDataParams, setSearchDataParams }) => {
   const handleSort = (column, sortDirection) => {
     setSort(sortDirection);
     setSortColumn(column.sortField);
-    // dispatch(
-    //   getData({
-    //     sort,
-    //     sortColumn,
-    //     q: searchTerm,
-    //     page: currentPage,
-    //     perPage: rowsPerPage,
-    //     role: currentRole.value,
-    //     status: currentStatus.value,
-    //     currentPlan: currentPlan.value,
-    //   })
-    // );
   };
 
   return (
@@ -253,7 +164,6 @@ const UsersList = ({ data, searchDataParams, setSearchDataParams }) => {
               </Label>
               <Select
                 isClearable={false}
-                // value={currentRole}
                 placeholder="انتخب کنید..."
                 options={roleOptions}
                 className="react-select"
@@ -261,18 +171,6 @@ const UsersList = ({ data, searchDataParams, setSearchDataParams }) => {
                 theme={selectThemeColors}
                 onChange={(data) => {
                   setCurrentRole(data);
-                  // dispatch(
-                  //   getData({
-                  //     sort,
-                  //     sortColumn,
-                  //     q: searchTerm,
-                  //     role: data.value,
-                  //     page: currentPage,
-                  //     perPage: rowsPerPage,
-                  //     status: currentStatus.value,
-                  //     currentPlan: currentPlan.value,
-                  //   })
-                  // );
                 }}
               />
             </Col>
@@ -286,21 +184,8 @@ const UsersList = ({ data, searchDataParams, setSearchDataParams }) => {
                 className="react-select"
                 classNamePrefix="select"
                 options={statusOptions}
-                // value={currentStatus}
                 onChange={(data) => {
                   handlStatus(data);
-                  // dispatch(
-                  //   getData({
-                  //     sort,
-                  //     sortColumn,
-                  //     q: searchTerm,
-                  //     page: currentPage,
-                  //     status: data.value,
-                  //     perPage: rowsPerPage,
-                  //     role: currentRole.value,
-                  //     currentPlan: currentPlan.value,
-                  //   })
-                  // );
                 }}
               />
             </Col>
