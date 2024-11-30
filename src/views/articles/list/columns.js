@@ -1,10 +1,4 @@
-// ** React Imports
 import { Link } from "react-router-dom";
-
-// ** Custom Components
-import Avatar from "@components/avatar";
-
-// ** Icons Imports
 import {
   Slack,
   User,
@@ -17,7 +11,6 @@ import {
   Archive,
 } from "react-feather";
 
-// ** Reactstrap Imports
 import {
   Badge,
   UncontrolledDropdown,
@@ -26,71 +19,9 @@ import {
   DropdownItem,
 } from "reactstrap";
 import { deleteApi } from "../../../core/api/api";
-import toast from "react-hot-toast";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
-
 const MySwal = withReactContent(Swal);
-
-// ** Renders Client Columns
-// const renderClient = row => {
-//   if (row.avatar.length) {
-//     return <Avatar className='me-1' img={row.avatar} width='32' height='32' />
-//   } else {
-//     return (
-//       <Avatar
-//         initials
-//         className='me-1'
-//         color={row.avatarColor || 'light-primary'}
-//         content={row.fullName || 'John Doe'}
-//       />
-//     )
-//   }
-// }
-
-// ** Renders Role Columns
-const renderRole = (row) => {
-  const roleObj = {
-    subscriber: {
-      class: "text-primary",
-      icon: User,
-    },
-    maintainer: {
-      class: "text-success",
-      icon: Database,
-    },
-    editor: {
-      class: "text-info",
-      icon: Edit2,
-    },
-    author: {
-      class: "text-warning",
-      icon: Settings,
-    },
-    admin: {
-      class: "text-danger",
-      icon: Slack,
-    },
-  };
-
-  const Icon = roleObj[row.role] ? roleObj[row.role].icon : Edit2;
-
-  return (
-    <span className="text-truncate text-capitalize align-middle">
-      <Icon
-        size={18}
-        className={`${roleObj[row.role] ? roleObj[row.role].class : ""} me-50`}
-      />
-      {row.role}
-    </span>
-  );
-};
-
-// const statusObj = {
-//   pending: "light-warning",
-//   active: "light-success",
-//   inactive: "light-secondary",
-// };
 
 const deleteArticles = async (id) => {
   return MySwal.fire({
@@ -143,15 +74,6 @@ export const columns = [
     cell: (row) => (
       <div className="d-flex justify-content-left align-items-center">
         {row.addUserFullName}
-        <div className="d-flex flex-column">
-          {/* <Link
-            to={`/apps/user/view/${row.id}`}
-            className='user_name text-truncate text-body'
-            onClick={() => store.dispatch(getUser(row.id))}
-          >
-          </Link> */}
-          <small className="text-truncate text-muted mb-0">{row.email}</small>
-        </div>
       </div>
     ),
   },
@@ -165,16 +87,6 @@ export const columns = [
     cell: (row) => (
       <div className="d-flex justify-content-left align-items-center">
         {row.title}
-        <div className="d-flex flex-column">
-          {/* <Link
-            to={`/apps/user/view/${row.id}`}
-            className="user_name text-truncate text-body"
-            onClick={() => store.dispatch(getUser(row.id))}
-          >
-            <span className="fw-bolder">{row.lastnamelastname}</span>
-          </Link> */}
-          <small className="text-truncate text-muted mb-0">{row.email}</small>
-        </div>
       </div>
     ),
   },
@@ -188,16 +100,6 @@ export const columns = [
     cell: (row) => (
       <div className="d-flex justify-content-left align-items-center">
         {row.newsCatregoryName}
-        <div className="d-flex flex-column">
-          {/* <Link
-            to={`/apps/user/view/${row.id}`}
-            className="user_name text-truncate text-body"
-            onClick={() => store.dispatch(getUser(row.id))}
-          >
-            <span className="fw-bolder">{row.lastnamelastname}</span>
-          </Link> */}
-          <small className="text-truncate text-muted mb-0">{row.email}</small>
-        </div>
       </div>
     ),
   },
@@ -209,18 +111,8 @@ export const columns = [
     sortField: "fullName",
     selector: (row) => row.miniDescribe,
     cell: (row) => (
-      <div className="d-flex justify-content-left align-items-center text-truncate">
+      <div className="d-flex fw-bolder justify-content-left align-items-center text-truncate">
         {row.miniDescribe}
-        <div className="d-flex flex-column">
-          {/* <Link
-            to={`/apps/user/view/${row.id}`}
-            className="user_name text-truncate text-body"
-            onClick={() => store.dispatch(getUser(row.id))}
-          >
-            <span className="fw-bolder">{row.lastnamelastname}</span>
-          </Link> */}
-          <small className="text-truncate text-muted mb-0">{row.email}</small>
-        </div>
       </div>
     ),
   },
@@ -259,9 +151,7 @@ export const columns = [
             <DropdownItem
               tag={Link}
               className="w-100"
-              // to={`/apps/user/view/${row.id}`}
               to={`/articles-view/${row.id}`}
-              // onClick={() => store.dispatch(getUser(row.id))}
             >
               <FileText size={14} className="me-50" />
               <span className="align-middle">جزئیات</span>
