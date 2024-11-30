@@ -1,6 +1,6 @@
 // ** React Imports
 import { useSkin } from "@hooks/useSkin";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // ** Icons Imports
 import { Facebook, Twitter, Mail, GitHub } from "react-feather";
@@ -26,9 +26,34 @@ import illustrationsDark from "@src/assets/images/pages/login-v2-dark.svg";
 
 // ** Styles
 import "@styles/react/pages/page-authentication.scss";
+import { postApi } from "../core/api/api";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   const { skin } = useSkin();
+  const navigate = useNavigate();
+  const loginHandler = async (values) => {
+    values.preventDefault();
+
+    const body = {
+      phoneOrGmail: values.target["email"].value,
+      password: values.target["password"].value,
+      rememberMe: true,
+    };
+
+    const path = "/Sign/Login";
+    const response = await postApi({ path, body });
+    console.log(response);
+    if (response?.data?.success) {
+      localStorage.setItem("token", response?.data?.token);
+      toast.success("شما با موفقیت وارد شدید.");
+
+      navigate("/");
+    } else {
+      toast.error(response?.data?.message);
+    }
+  };
 
   const source = skin === "dark" ? illustrationsDark : illustrationsLight;
 
@@ -121,15 +146,13 @@ const Login = () => {
             <CardText className="mb-2">
               Please sign-in to your account and start the adventure
             </CardText>
-            <Form
-              className="auth-login-form mt-2"
-              onSubmit={(e) => e.preventDefault()}
-            >
+            <Form className="auth-login-form mt-2" onSubmit={loginHandler}>
               <div className="mb-1">
                 <Label className="form-label" for="login-email">
                   Email
                 </Label>
                 <Input
+                  name="email"
                   type="email"
                   id="login-email"
                   placeholder="john@example.com"
@@ -146,6 +169,7 @@ const Login = () => {
                   </Link>
                 </div>
                 <InputPasswordToggle
+                  name="password"
                   className="input-group-merge"
                   id="login-password"
                 />
@@ -156,7 +180,13 @@ const Login = () => {
                   Remember Me
                 </Label>
               </div>
-              <Button tag={Link} to="/" color="primary" block>
+              <Button
+                type="submit"
+                // tag={Link}
+                // to="/"
+                color="primary"
+                block
+              >
                 Sign in
               </Button>
             </Form>

@@ -1,17 +1,24 @@
-// ** React Imports
 import { Fragment, lazy } from "react";
 import { Navigate } from "react-router-dom";
-// ** Layouts
+
 import BlankLayout from "@layouts/BlankLayout";
 import VerticalLayout from "@src/layouts/VerticalLayout";
 import HorizontalLayout from "@src/layouts/HorizontalLayout";
 import LayoutWrapper from "@src/@core/layouts/components/layout-wrapper";
 
-// ** Route Components
 import PublicRoute from "@components/routes/PublicRoute";
 
-// ** Utils
 import { isObjEmpty } from "@utils";
+import Wizard from "../../views/courses/add";
+import UserView from "../../views/courses/view";
+import ArticlesAdds from "../../pages/Articles-adds";
+import ArticlesView from "../../views/articles/view";
+import CoursesList from "../../pages/CoursesList";
+import CoursesAdd from "../../views/courses/add";
+import CoursesView from "../../views/courses/view";
+import ArticlesLists from "../../views/articles/list";
+import UserList from "../../pages/UserList";
+import UsersView from "../../views/users/view";
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -19,21 +26,19 @@ const getLayout = {
   horizontal: <HorizontalLayout />,
 };
 
-// ** Document title
 const TemplateTitle = "%s - Vuexy React Admin Template";
 
-// ** Default Route
 const DefaultRoute = "/home";
 
 const Home = lazy(() => import("../../pages/Home"));
-const SecondPage = lazy(() => import("../../pages/SecondPage"));
+const ArticlesList = lazy(() => import("../../pages/ArticlesList"));
+const SecondPage = lazy(() => import("../../pages/CoursesList"));
 const Login = lazy(() => import("../../pages/Login"));
 const Register = lazy(() => import("../../pages/Register"));
 const ForgotPassword = lazy(() => import("../../pages/ForgotPassword"));
 const Error = lazy(() => import("../../pages/Error"));
 const Sample = lazy(() => import("../../pages/Sample"));
 
-// ** Merge Routes
 const Routes = [
   {
     path: "/",
@@ -44,14 +49,78 @@ const Routes = [
     path: "/home",
     element: <Home />,
   },
+  // {
+  //   element: <EmailApp />,
+  //   path: '/apps/email',
+  //   meta: {
+  //     appLayout: true,
+  //     className: 'email-application'
+  //   }
+  // },
+  // {
+  //   element: <EmailApp />,
+  //   path: '/apps/email/:folder',
+  //   meta: {
+  //     appLayout: true,
+  //     className: 'email-application'
+  //   }
+  // },
+  // {
+  //   element: <EmailApp />,
+  //   path: '/apps/email/label/:label',
+  //   meta: {
+  //     appLayout: true,
+  //     className: 'email-application'
+  //   }
+  // },
+  // {
+  //   element: <EmailApp />,
+  //   path: '/apps/email/:filter'
+  // },
   {
     path: "/sample",
     element: <Sample />,
   },
+
+  // Users
   {
-    path: "/second-page",
-    element: <SecondPage />,
+    path: "/users",
+    element: <UserList />,
   },
+  {
+    // path: "/users-view/:CourseId",
+    path: "/users-view/:id",
+    element: <UsersView />,
+  },
+
+  // Courses
+  {
+    path: "/courses-list",
+    element: <CoursesList />,
+  },
+  {
+    path: "/courses-add",
+    element: <CoursesAdd />,
+  },
+  {
+    path: "/courses-view/:id",
+    element: <CoursesView />,
+  },
+
+  //  Articles
+  {
+    path: "/articles-list",
+    element: <ArticlesList />,
+  },
+  {
+    path: "/articles-add",
+    element: <ArticlesAdds />,
+  },
+  {
+    path: "/articles-view",
+    element: <ArticlesView />,
+  },
+
   {
     path: "/login",
     element: <Login />,
@@ -87,6 +156,35 @@ const Routes = [
       layout: "blank",
     },
   },
+
+  // {
+  //   element: <CommentsList />,
+  //   path: '/apps/email',
+  //   meta: {
+  //     appLayout: true,
+  //     className: 'email-application'
+  //   }
+  // },
+  // {
+  //   element: <CommentsList />,
+  //   path: '/apps/email/:folder',
+  //   meta: {
+  //     appLayout: true,
+  //     className: 'email-application'
+  //   }
+  // },
+  // {
+  //   element: <CommentsList />,
+  //   path: '/apps/email/label/:label',
+  //   meta: {
+  //     appLayout: true,
+  //     className: 'email-application'
+  //   }
+  // },
+  // {
+  //   element: <CommentsList />,
+  //   path: '/apps/email/:filter'
+  // },
 ];
 
 const getRouteMeta = (route) => {
