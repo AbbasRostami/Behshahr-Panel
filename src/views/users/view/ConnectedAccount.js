@@ -1,4 +1,4 @@
-import { Card, CardBody, CardTitle } from "reactstrap";
+import { Badge, Card, CardBody, CardTitle } from "reactstrap";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import slackIcon from "./../../../assets/images/icons/social/slack.png";
 import asanaIcon from "./../../../assets/images/icons/social/asana.png";
@@ -27,7 +27,7 @@ const ConnectedAccount = ({data}) => {
           <div className="d-flex align-item-center justify-content-between flex-grow-1">
             <div className="me-1">
               <p className="fw-bolder mb-0">درباره کاربر:</p>
-              <span>{data.userAbout}</span>
+              <span>{data?.userAbout}</span>
             </div>
           </div>
         </div>
@@ -44,7 +44,7 @@ const ConnectedAccount = ({data}) => {
           <div className="d-flex align-item-center justify-content-between flex-grow-1">
             <div className="me-1">
               <p className="fw-bolder mb-0"> آدرس محل سکونت:</p>
-              <span>{data.homeAdderess}</span>
+              <span>{data?.homeAdderess}</span>
             </div>
           </div>
         </div>
@@ -61,7 +61,7 @@ const ConnectedAccount = ({data}) => {
           <div className="d-flex align-item-center justify-content-between flex-grow-1">
             <div className="me-1">
               <p className="fw-bolder mb-0"> ُتاریخ تولد:</p>
-              <span>{data.birthDay}</span>
+              <span>{data?.birthDay}</span>
             </div>
           </div>
         </div>
@@ -78,7 +78,7 @@ const ConnectedAccount = ({data}) => {
           <div className="d-flex align-item-center justify-content-between flex-grow-1">
             <div className="me-1">
               <p className="fw-bolder mb-0"> آیدی کاربر:</p>
-              <span>{data.id}</span>
+              <span>{data?.id}</span>
             </div>
           </div>
         </div>
@@ -87,7 +87,7 @@ const ConnectedAccount = ({data}) => {
             <img
               className="me-1 rounded-4"
               src={asanaIcon}
-              alt={data.title}
+              alt={data?.title}
               height="38"
               width="38"
             />
@@ -112,11 +112,18 @@ const ConnectedAccount = ({data}) => {
           <div className="d-flex align-item-center justify-content-between flex-grow-1">
             <div className="me-1">
               <p className="fw-bolder mb-0"> اغتبار سنجی دو مرحله ای:</p>
-              {data.active ? (
-                <span className="bg-success rounded-3 ">فعال</span>
-              ) : (
-                <span>غیر فعال</span>
-              )}
+              <span className="text-capitalize" color="success">
+                    {data?.twoStepAuth == "True" ? (
+                      
+                      <Badge color="success " pill>
+                      فعال
+                    </Badge>
+                    ) : (
+                      <Badge color="danger" pill>
+                      غیر فعال
+                    </Badge>
+                    )}
+                  </span>
             </div>
           </div>
         </div>
@@ -125,7 +132,7 @@ const ConnectedAccount = ({data}) => {
             <img
               className="me-1 rounded-4"
               src={googleIcon}
-              alt={data.title}
+              alt={data?.title}
               height="38"
               width="38"
             />
@@ -133,7 +140,7 @@ const ConnectedAccount = ({data}) => {
           <div className="d-flex align-item-center justify-content-between flex-grow-1">
             <div className="me-1">
               <p className="fw-bolder mb-0"> ایمیل بازیابی:</p>
-              <span>{data.recoveryEmail}</span>
+              <span>{data?.gmail}</span>
             </div>
           </div>
         </div>

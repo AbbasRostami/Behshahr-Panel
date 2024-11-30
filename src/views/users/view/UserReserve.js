@@ -9,6 +9,7 @@ import {
 import { Archive, ChevronDown, MoreVertical, Trash2 } from "react-feather";
 import DataTable from "react-data-table-component";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
+import toast from "react-hot-toast";
 
 export const columns = [
   {

@@ -258,7 +258,7 @@ const UsersList = ({ data, setSearchDataParams, searchDataParams }) => {
     classNamePrefix="select"
     options={planOptions}
     value={currentPlan}
-    onChange={handlePlanChange} // اتصال تابع تغییر
+    onChange={handlePlanChange}
   />
 </Col>
           </Row>
@@ -279,7 +279,7 @@ const UsersList = ({ data, setSearchDataParams, searchDataParams }) => {
   sortIcon={<ChevronDown />}
   className="react-dataTable"
   paginationComponent={CustomPagination}
-  data={filteredData} // ارسال داده‌های فیلترشده
+  data={filteredData}
   subHeaderComponent={
     <CustomHeader
       handlePagination={handlePagination}

@@ -59,7 +59,7 @@ const UserInfoCard = ({ selectedUser, data }) => {
         longitude: data.longitude,
         insertDate: data.insertDate,
         currentPictureAddress: data.currentPictureAddress,
-        birthDay: data.birthDay?.slice(0,10) || "", 
+        birthDay: data.birthDay?.slice(0, 10) || "",
       });
     }
   }, [data, reset]);
@@ -73,41 +73,6 @@ const UserInfoCard = ({ selectedUser, data }) => {
       toast.success(response.data.message);
     }
   };
-
-  // const handleSuspendedClick = () => {
-  //   return MySwal.fire({
-  //     title: "آیا مطمئن هستید؟",
-  //     text: "البته امکان بازگشت نیست وجود دارد",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonText: "بله",
-  //     customClass: {
-  //       confirmButton: "btn btn-primary ssss",
-  //       cancelButton: "btn btn-outline-danger ms-1",
-  //     },
-  //     buttonsStyling: false,
-  //   }).then(function (result) {
-  //     if (result.value) {
-  //       MySwal.fire({
-  //         icon: "success",
-  //         title: "موفقیت",
-  //         text: "عملیات با موفقیت انجام گردید",
-  //         customClass: {
-  //           confirmButton: "btn btn-success",
-  //         },
-  //       });
-  //     } else if (result.dismiss === MySwal.DismissReason.cancel) {
-  //       MySwal.fire({
-  //         title: "لغو",
-  //         text: "عملیات لغو گردید",
-  //         icon: "error",
-  //         customClass: {
-  //           confirmButton: "btn btn-success",
-  //         },
-  //       });
-  //     }
-  //   });
-  // };
 
   return (
     <Fragment>
@@ -125,12 +90,11 @@ const UserInfoCard = ({ selectedUser, data }) => {
                 />
                 {data?.roles?.map((data) => (
                   <div className="user-info flex">
-                  <Badge className="text-capitalize" color="success" pill>
-                    {data?.roleName}
-                  </Badge>
-                </div>
+                    <Badge className="text-capitalize" color="success" pill>
+                      {data?.roleName}
+                    </Badge>
+                  </div>
                 ))}
-                
               </div>
             </div>
           </div>
@@ -140,7 +104,7 @@ const UserInfoCard = ({ selectedUser, data }) => {
                 <Check className="font-medium-2" />
               </Badge>
               <div className="ms-75">
-                <h4 className="mb-0">96</h4>
+                <h4 className="mb-0">{data?.courses?.length}</h4>
                 <small className="fs-4"> دوره ها </small>
               </div>
             </div>
@@ -149,7 +113,7 @@ const UserInfoCard = ({ selectedUser, data }) => {
                 <Briefcase className="font-medium-2" />
               </Badge>
               <div className="ms-75">
-                <h4 className="mb-0">24</h4>
+              <h4 className="mb-0" >{data?.coursesReseves?.length}</h4>
                 <small className="fs-4">دوره های رزرو </small>
               </div>
             </div>
@@ -168,7 +132,7 @@ const UserInfoCard = ({ selectedUser, data }) => {
                 </li>
                 <li className="mb-75">
                   <span className="fw-bolder me-25"> ایمیل کاربر:</span>
-                  <span>{data?.recoveryEmail}</span>
+                  <span>{data?.gmail}</span>
                 </li>
                 <li className="mb-75">
                   <span className="fw-bolder me-25">کد ملی:</span>
@@ -177,8 +141,18 @@ const UserInfoCard = ({ selectedUser, data }) => {
                   </Badge>
                 </li>
                 <li className="mb-75">
-                  <span className="fw-bolder me-25">وضعیت دوره:</span>
-                  <span className="text-capitalize ">فعال {data?.active}</span>
+                  <span className="fw-bolder me-25">وضعیت کاربر:</span>
+                  <span className="text-capitalize" color="success">
+                    {data?.active == "True" ? (
+                      <Badge color="danger" pill>
+                        غیر فعال
+                      </Badge>
+                    ) : (
+                      <Badge color="success " pill>
+                        فعال
+                      </Badge>
+                    )}
+                  </span>
                 </li>
                 <li className="mb-75">
                   <span className="fw-bolder me-25">درصد تکمیل پروفایل :</span>
@@ -203,14 +177,6 @@ const UserInfoCard = ({ selectedUser, data }) => {
             <Button color="primary" onClick={() => setShow(true)}>
               ویرایش
             </Button>
-            {/* <Button
-              className="ms-1"
-              color="danger"
-              outline
-              onClick={handleSuspendedClick}
-            >
-              غیرفعال کردن
-            </Button> */}
           </div>
         </CardBody>
       </Card>
