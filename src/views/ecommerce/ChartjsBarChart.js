@@ -1,13 +1,9 @@
-// ** Third Party Components
 import { Bar } from 'react-chartjs-2'
 import Flatpickr from 'react-flatpickr'
 import { Calendar } from 'react-feather'
-
-// ** Reactstrap Imports
 import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
 
-const ChartjsBarChart = ({ success, gridLineColor, labelColor }) => {
-  // ** Chart Options
+const ChartjsBarChart = ({ success, gridLineColor, labelColor, data }) => {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -16,70 +12,78 @@ const ChartjsBarChart = ({ success, gridLineColor, labelColor }) => {
       x: {
         grid: {
           color: gridLineColor,
-          borderColor: gridLineColor
+          borderColor: gridLineColor,
         },
-        ticks: { color: labelColor }
+        ticks: { color: labelColor },
       },
       y: {
         min: 0,
-        max: 400,
+        max: Math.max(
+          parseInt(data?.allReserve || 0),
+          parseInt(data?.allReserveAccept || 0),
+          parseInt(data?.allReserveNotAccept || 0)
+        ) + 50, 
         grid: {
           color: gridLineColor,
-          borderColor: gridLineColor
+          borderColor: gridLineColor,
         },
         ticks: {
-          stepSize: 100,
-          color: labelColor
-        }
-      }
+          stepSize: 50,
+          color: labelColor,
+        },
+      },
     },
     plugins: {
-      legend: { display: false }
-    }
-  }
+      legend: { display: false },
+    },
+  };
 
-  // ** Chart data
-  const data = {
+  const chartData = {
     labels: [
-      'شروع ثبت نام',
-      'در حال برگزاری',
-      'منقضی شده',
-
+      "مجموع رزروها",
+      "مجموع رزروهای تایید شده",
+      "مجموع رزروهای تایید نشده",
     ],
     datasets: [
       {
         maxBarThickness: 50,
-        backgroundColor: success,
-        borderColor: 'transparent',
+        backgroundColor: ["#51e5a8", "#ffa800","#f64e60"], //
+        borderColor: "transparent",
         borderRadius: { topRight: 8, topLeft: 8 },
-        data: [275, 90, 190, 205, 125, 85, 55, 87, 127, 150, 230, 280, 190]
-      }
-    ]
-  }
+        data: [
+          parseInt(data?.allReserve || 0), //
+          parseInt(data?.allReserveAccept || 0), 
+          parseInt(data?.allReserveNotAccept || 0), 
+        ],
+      },
+    ],
+  };
 
   return (
     <Card>
-      <CardHeader className='d-flex justify-content-between align-items-sm-center align-items-start flex-sm-row flex-column'>
-        <CardTitle tag='h4'>دوره ها براساس وضعیت</CardTitle>
-        <div className='d-flex align-items-center'>
+      <CardHeader className="d-flex justify-content-between align-items-sm-center align-items-start flex-sm-row flex-column">
+        <CardTitle tag="h4">دوره‌ها براساس رزرو</CardTitle>
+        <div className="d-flex align-items-center">
           <Calendar size={14} />
           <Flatpickr
-            className='form-control flat-picker bg-transparent border-0 shadow-none'
+            className="form-control flat-picker bg-transparent border-0 shadow-none"
             options={{
-              mode: 'range',
-              // eslint-disable-next-line no-mixed-operators
-              defaultDate: [new Date(), new Date(new Date().getTime() + 5 * 24 * 60 * 60 * 1000)]
+              mode: "range",
+              defaultDate: [
+                new Date(),
+                new Date(new Date().getTime() + 5 * 24 * 60 * 60 * 1000),
+              ],
             }}
           />
         </div>
       </CardHeader>
       <CardBody>
-        <div style={{ height: '400px' }}>
-          <Bar data={data} options={options} height={400} />
+        <div style={{ height: "400px" }}>
+          <Bar data={chartData} options={options} height={400} />
         </div>
       </CardBody>
     </Card>
-  )
-}
+  );
+};
 
-export default ChartjsBarChart
+export default ChartjsBarChart;

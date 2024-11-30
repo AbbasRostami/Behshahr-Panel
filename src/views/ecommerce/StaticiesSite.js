@@ -1,76 +1,84 @@
-// ** Third Party Components
-import classnames from 'classnames'
-import { TrendingUp, User, Box, DollarSign } from 'react-feather'
+import { TrendingUp, User, Box, DollarSign } from "react-feather";
+import Avatar from "@components/avatar";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardBody,
+  CardText,
+  Row,
+  Col,
+} from "reactstrap";
 
-// ** Custom Components
-import Avatar from '@components/avatar'
-
-// ** Reactstrap Imports
-import { Card, CardHeader, CardTitle, CardBody, CardText, Row, Col } from 'reactstrap'
-
-const StatsCard = ({ cols }) => {
-  const data = [
-    {
-      title: '179',
-      subtitle: 'کاربران',
-      color: 'light-primary',
-      icon: <TrendingUp size={24} />
-    },
-    {
-      title: '243',
-      subtitle: 'دوره ها',
-      color: 'light-info',
-      icon: <User size={24} />
-    },
-    {
-      title: '31',
-      subtitle: 'اساتید',
-      color: 'light-danger',
-      icon: <Box size={24} />
-    },
-    {
-      title: '286',
-      subtitle: 'کامنت ها',
-      color: 'light-success',
-      icon: <DollarSign size={24} />
-    }
-  ]
-
+const StatsCard = ({ cols, data }) => {
+  const icons = {
+    icon1: <TrendingUp size={24} />,
+    icon2: <User size={24} />,
+    icon3: <Box size={24} />,
+    icon4: <DollarSign size={24} />,
+    color1: "light-primary",
+    color2: "light-info",
+    color3: "light-danger",
+    color4: "light-success",
+  };
   const renderData = () => {
-    return data.map((item, index) => {
-      const colMargin = Object.keys(cols)
-      const margin = index === 2 ? 'sm' : colMargin[0]
-      return (
-        <Col
-          key={index}
-          {...cols}
-          className={classnames({
-            [`mb-2 mb-${margin}-0`]: index !== data.length - 1
-          })}
-        >
-          <div className='d-flex align-items-center'>
-            <Avatar color={item.color} icon={item.icon} className='me-2' />
-            <div className='my-auto'>
-              <h4 className='fw-bolder mb-0'>{item.title}</h4>
-              <CardText className='font-small-3 mb-0'>{item.subtitle}</CardText>
+    return (
+      <>
+        <Col {...cols} className="mb-2">
+          <div className="d-flex align-items-center">
+            <Avatar color={icons.color1} icon={icons.icon1} className="me-2" />
+            <div className="my-auto">
+              <h4 className="fw-bolder mb-0">{data?.allUser}</h4>
+              <CardText className="font-small-3 mb-0">کاربران</CardText>
             </div>
           </div>
         </Col>
-      )
-    })
-  }
+        <Col {...cols} className="mb-2">
+          <div className="d-flex align-items-center">
+            <Avatar color={icons.color2} icon={icons.icon2} className="me-2" />
+            <div className="my-auto">
+              <h4 className="fw-bolder mb-0">{data?.allReserve}</h4>
+              <CardText className="font-small-3 mb-0">دوره ها'</CardText>
+            </div>
+          </div>
+        </Col>
+        <Col {...cols} className="mb-2">
+          <div className="d-flex align-items-center">
+            <Avatar color={icons.color3} icon={icons.icon3} className="me-2" />
+            <div className="my-auto">
+              <h4 className="fw-bolder mb-0">{data?.deactiveUsers}</h4>
+              <CardText className="font-small-3 mb-0">اساتید</CardText>
+            </div>
+          </div>
+        </Col>
+        <Col {...cols} className="mb-2">
+          <div className="d-flex align-items-center">
+            <Avatar color={icons.color4} icon={icons.icon4} className="me-2" />
+            <div className="my-auto">
+              <h4 className="fw-bolder mb-0">{data?.allPaymentCost}</h4>
+              <CardText className="font-small-3 mb-0">پرداختی ها'</CardText>
+            </div>
+          </div>
+        </Col>
+      </>
+    );
+  };
 
   return (
-    <Card className='card-statistics'>
+    <Card className="card-statistics">
       <CardHeader>
-        <CardTitle tag='h4' className='fs-3'>آمار سایت</CardTitle>
-        <CardText className='card-text font-small-2 me-25 mb-0'>Updated 1 month ago</CardText>
+        <CardTitle tag="h4" className="fs-3">
+          آمار سایت
+        </CardTitle>
+        <CardText className="card-text font-small-2 me-25 mb-0">
+          Updated 1 month ago
+        </CardText>
       </CardHeader>
-      <CardBody className='statistics-body'>
+      <CardBody className="statistics-body">
         <Row>{renderData()}</Row>
       </CardBody>
     </Card>
-  )
-}
+  );
+};
 
-export default StatsCard
+export default StatsCard;
