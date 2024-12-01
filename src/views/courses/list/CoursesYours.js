@@ -1,10 +1,7 @@
 import { Fragment } from "react";
-// import { columns } from "./columns";
-
 import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
 import {
-  Archive,
   ChevronDown,
   FileText,
   MoreVertical,
@@ -80,9 +77,9 @@ const CustomHeader = ({ handlePerPage, rowsPerPage, searchTerm }) => {
 };
 
 const CoursesYours = () => {
-  const [data, setData] = useState([]); // ذخیره لیست دوره‌ها
+  const [data, setData] = useState([]); 
 
-  // گرفتن لیست دوره‌ها از API
+  
   const GetCouresesYours = async () => {
     const path = `/Course/CourseList?PageNumber=1&RowsOfPage=30&SortingCol=DESC&SortType=Expire&Query`;
     const response = await getApi({ path });
