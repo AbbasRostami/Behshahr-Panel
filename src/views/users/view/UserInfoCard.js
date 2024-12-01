@@ -70,7 +70,22 @@ const UserInfoCard = ({ selectedUser, data }) => {
     const response = await editApi({ path, body });
     console.log("Response: ", response);
     if (response.data.success) {
-      toast.success(response.data.message);
+      Swal.fire({
+        icon: "success",
+        title: "عملیات با موفقیت انجام شد!",
+        text: response.data.message,
+        confirmButtonText: "باشه",
+        confirmButtonColor: "#4CAF50",
+        background: "white",
+        iconColor: "#388E3C",
+        showConfirmButton: true,
+        timer: 3000,
+        toast: false,
+        position: "center",
+        customClass: {
+          popup: "animated zoomIn",
+        },
+      });
     }
   };
 
@@ -88,13 +103,26 @@ const UserInfoCard = ({ selectedUser, data }) => {
                   src={data?.currentPictureAddress}
                   className="img-fluid rounded mt-3 mb-2"
                 />
-                {data?.roles?.map((data) => (
-                  <div className="user-info flex">
-                    <Badge className="text-capitalize" color="success" pill>
-                      {data?.roleName}
-                    </Badge>
-                  </div>
-                ))}
+                <div
+                  className="user-info d-flex justify-content-between flex-wrap"
+                  style={{ gap: "7px" }}
+                >
+                  {data?.roles?.map(
+                    (data, index) =>
+                      (data?.roleName === "Student" ||
+                        data?.roleName === "Teacher" ||
+                        data?.roleName === "Administrator") && (
+                        <Badge
+                          key={index}
+                          className="text-capitalize mr-3"
+                          color="success"
+                          pill
+                        >
+                          {data?.roleName}
+                        </Badge>
+                      )
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -113,7 +141,7 @@ const UserInfoCard = ({ selectedUser, data }) => {
                 <Briefcase className="font-medium-2" />
               </Badge>
               <div className="ms-75">
-              <h4 className="mb-0" >{data?.coursesReseves?.length}</h4>
+                <h4 className="mb-0">{data?.coursesReseves?.length}</h4>
                 <small className="fs-4">دوره های رزرو </small>
               </div>
             </div>

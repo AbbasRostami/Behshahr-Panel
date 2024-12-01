@@ -100,7 +100,7 @@ export const columns = [
     selector: (row) => row.describe,
     cell: (row) => {
       return(
-        <div>
+        <div className=" text-truncate ...">
           <span className=" fw-bolder">{row.describe}</span>
         </div>
       )
