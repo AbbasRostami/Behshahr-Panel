@@ -16,7 +16,7 @@ import { useForm, Controller } from "react-hook-form";
 import "@styles/react/libs/react-select/_react-select.scss";
 import { postApi } from "../../../core/api/api";
 
-const AddUserModal = () => {
+const AssistanceAdd = () => {
   const [show, setShow] = useState(false);
 
   const {
@@ -58,7 +58,7 @@ const AddUserModal = () => {
     <Fragment>
       <Card className="mb-0 r-2">
         <Button color="primary" onClick={() => setShow(true)}>
-          افزدون کاربر جدید
+         افزدون تسک جدید
         </Button>
       </Card>
       <Modal
@@ -73,14 +73,14 @@ const AddUserModal = () => {
 
         <ModalBody className="px-sm-5 mx-50 pb-5">
           <div className="text-center mb-2">
-            <h1 className="mb-1">اطلاعات کاربر را وارد کنید</h1>
+            <h1 className="mb-1">اطلاعات تسک را وارد کنید</h1>
           </div>
           <Row
             tag="form"
             className="gy-1 pt-75"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <Col md={12} xs={12}>
+            <Col md={6} xs={12}>
               <Label className="form-label" for="firstName">
                 نام
               </Label>
@@ -233,4 +233,4 @@ const AddUserModal = () => {
   );
 };
 
-export default AddUserModal;
+export default AssistanceAdd;
