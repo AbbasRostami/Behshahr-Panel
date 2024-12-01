@@ -1,4 +1,4 @@
-import { Mail, Home, Airplay, Circle, User } from "react-feather";
+import { Mail, Home, Airplay, Circle, User, Calendar } from "react-feather";
 
 export default [
   {
@@ -51,6 +51,12 @@ export default [
         navLink: "/articles-add",
       },
     ],
+  },
+  {
+    id: "AssWork",
+    title: "مدیریت تسک",
+    icon: <Calendar size={20} />,
+    navLink: "/AssWork",
   },
   {
     id: "comment",

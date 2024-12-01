@@ -19,6 +19,7 @@ import CoursesView from "../../views/courses/view";
 import ArticlesLists from "../../views/articles/list";
 import UserList from "../../pages/UserList";
 import UsersView from "../../views/users/view";
+import AssisranceWork from "../../views/Level 3/AssistanceWork/AssistanceWorkList";
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -119,6 +120,10 @@ const Routes = [
   {
     path: "/articles-view",
     element: <ArticlesView />,
+  },
+  {
+    path: "/AssWork",
+    element: <AssisranceWork />,
   },
 
   {
