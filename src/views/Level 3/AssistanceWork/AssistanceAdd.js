@@ -16,9 +16,12 @@ import {
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { usePostSth } from "../../../core/apiPost";
+import { useQueryClient } from "@tanstack/react-query";
 
 const MySwal = withReactContent(Swal);
 const AddUserModal = ({ data }) => {
+  const queryClient = useQueryClient();
+
   const [show, setShow] = useState(false);
 
   const {
@@ -52,10 +55,6 @@ const AddUserModal = ({ data }) => {
           </div>
           <form
             onSubmit={handleSubmit(async (vals) => {
-              // const data = await AssistanceWork({
-              //   ...vals,
-              //   assistanceId: "af32dcc5-279d-ef11-b6e7-9ae1b6d917d9",
-              // });
               mutate(
                 {
                   ...vals,
@@ -63,6 +62,10 @@ const AddUserModal = ({ data }) => {
                 },
                 {
                   onSuccess: (data) => {
+                    queryClient.invalidateQueries({
+                      queryKey: ["AssistanceWork"],
+                    });
+                    setShow(false);
                     console.log(data);
                   },
                   onError: (data) => {
