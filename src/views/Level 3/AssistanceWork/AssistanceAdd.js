@@ -17,6 +17,7 @@ import { postApi } from "../../../core/api/api";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { useMutation } from "@tanstack/react-query";
+import { AssistanceWork, usePostSth } from "../../../core/apiPost";
 
 const MySwal = withReactContent(Swal);
 const AddUserModal = ({ data }) => {
@@ -28,42 +29,42 @@ const AddUserModal = ({ data }) => {
     formState: { errors },
   } = useForm();
 
-  const mutation = useMutation({
-    mutationFn: async (values) => {
-      const path = `/AssistanceWork`;
-      const body = values;
-      const response = await postApi({ path, body });
-      return response;
-    },
-    onSuccess: (response) => {
-      if (response.data.success) {
-        MySwal.fire({
-          icon: "success",
-          title: "موفقیت",
-          text: "عملیات با موفقیت انجام گردید",
-          customClass: {
-            confirmButton: "btn btn-success",
-          },
-        });
-      }
-    },
-    onError: (error) => {
-      console.error("خطا در ارسال درخواست:", error);
-      MySwal.fire({
-        icon: "error",
-        title: "خطا",
-        text: "ارسال درخواست با خطا مواجه شد",
-        customClass: {
-          confirmButton: "btn btn-danger",
-        },
-      });
-    },
-  });
-  const onSubmit = (values) => {
-    mutation.mutate(values);
-  };
+  // const mutation = useMutation({
+  //   mutationFn: async (values) => {
+  //     const path = `/AssistanceWork`;
+  //     const body = values;
+  //     const response = await postApi({ path, body });
+  //     return response;
+  //   },
+  //   onSuccess: (response) => {
+  //     if (response.data.success) {
+  //       MySwal.fire({
+  //         icon: "success",
+  //         title: "موفقیت",
+  //         text: "عملیات با موفقیت انجام گردید",
+  //         customClass: {
+  //           confirmButton: "btn btn-success",
+  //         },
+  //       });
+  //     }
+  //   },
+  //   onError: (error) => {
+  //     console.error("خطا در ارسال درخواست:", error);
+  //     MySwal.fire({
+  //       icon: "error",
+  //       title: "خطا",
+  //       text: "ارسال درخواست با خطا مواجه شد",
+  //       customClass: {
+  //         confirmButton: "btn btn-danger",
+  //       },
+  //     });
+  //   },
+  // });
+  // const onSubmit = (values) => {
+  //   mutation.mutate(values);
+  // };
+  const { mutate } = usePostSth();
 
-  
   return (
     <Fragment>
       <Card className="mb-0 r-2">
@@ -85,101 +86,120 @@ const AddUserModal = ({ data }) => {
           <div className="text-center mb-2">
             <h1 className="mb-1">اطلاعات تسک را وارد کنید</h1>
           </div>
-          <Row
-            tag="form"
-            className="gy-1 pt-75"
-            onSubmit={handleSubmit(onSubmit)}
+          <form
+            onSubmit={handleSubmit(async (vals) => {
+              // const data = await AssistanceWork({
+              //   ...vals,
+              //   assistanceId: "af32dcc5-279d-ef11-b6e7-9ae1b6d917d9",
+              // });
+              mutate(
+                {
+                  ...vals,
+                  assistanceId: "af32dcc5-279d-ef11-b6e7-9ae1b6d917d9",
+                },
+                {
+                  onSuccess: (data) => {
+                    console.log(data);
+                  },
+                  onError: (data) => {
+                    console.log(data);
+                  },
+                }
+              );
+            })}
           >
-            <Col md={6} xs={12}>
-              <Label className="form-label" for="firstName">
-                عنوان تسک
-              </Label>
-              <Controller
-                control={control}
-                name="worktitle"
-                render={({ field }) => {
-                  return (
+            <Row className="gy-1 pt-75">
+              <Col md={6} xs={12}>
+                <Label className="form-label" for="firstName">
+                  عنوان تسک
+                </Label>
+                <Controller
+                  control={control}
+                  name="worktitle"
+                  render={({ field }) => {
+                    return (
+                      <Input
+                        {...field}
+                        id="worktitle"
+                        placeholder="عنوان تسک"
+                        value={field.value}
+                        invalid={errors.firstName && true}
+                      />
+                    );
+                  }}
+                />
+              </Col>
+              <Col md={6} xs={12}>
+                <Label className="form-label" for="workDescribe">
+                  توضیحات تسک
+                </Label>
+                <Controller
+                  name="workDescribe"
+                  control={control}
+                  render={({ field }) => (
                     <Input
                       {...field}
-                      id="worktitle"
-                      placeholder="عنوان تسک"
-                      value={field.value}
-                      invalid={errors.firstName && true}
+                      id="workDescribe"
+                      placeholder="توضیحات تسک"
+                      invalid={errors.lastName && true}
                     />
-                  );
-                }}
-              />
-            </Col>
-            <Col md={6} xs={12}>
-              <Label className="form-label" for="workDescribe">
-                توضیحات تسک
-              </Label>
-              <Controller
-                name="workDescribe"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    id="workDescribe"
-                    placeholder="توضیحات تسک"
-                    invalid={errors.lastName && true}
-                  />
-                )}
-              />
-            </Col>
+                  )}
+                />
+              </Col>
 
-            <Col xs={6}>
-              <Label className="form-label" for="workDate">
-                ساعت کاری
-              </Label>
-              <Controller
-                name="workDate"
-                control={control}
-                render={({ field }) => (
-                  <Input type="date" {...field} id="workDate" />
+              <Col xs={6}>
+                <Label className="form-label" for="workDate">
+                  ساعت کاری
+                </Label>
+                <Controller
+                  name="workDate"
+                  control={control}
+                  render={({ field }) => (
+                    <Input type="date" {...field} id="workDate" />
+                  )}
+                />
+                {errors.username && (
+                  <FormFeedback>لطفا ایمیل را وارد کنید</FormFeedback>
                 )}
-              />
-              {errors.username && (
-                <FormFeedback>لطفا ایمیل را وارد کنید</FormFeedback>
-              )}
-            </Col>
-            <Col xs={6}>
-              <Label className="form-label" for="assistanceId">
-                انتخاب دوره
-              </Label>
-              <Controller
-                name="assistanceId"
-                control={control}
-                rules={{ required: "لطفاً یک گزینه انتخاب کنید" }}
-                render={({ field }) => (
-                  <Input type="select" id="assistanceId" {...field}>
-                    {data?.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {option.courseName}
-                      </option>
-                    ))}
-                  </Input>
+              </Col>
+              {/* <Col xs={6}>
+                <Label className="form-label" for="assistanceId">
+                  انتخاب دوره
+                </Label>
+                <Controller
+                  name="assistanceId"
+                  control={control}
+                  rules={{ required: "لطفاً یک گزینه انتخاب کنید" }}
+                  render={({ field }) => (
+                    <Input type="select" id="assistanceId" {...field}>
+                      {data?.map((option) => (
+                        <option key={option.id} value={option.id}>
+                          {option.courseName}
+                        </option>
+                      ))}
+                    </Input>
+                  )}
+                />
+                {errors.assistanceId && (
+                  <FormFeedback>{errors.assistanceId.message}</FormFeedback>
                 )}
-              />
-              {errors.assistanceId && (
-                <FormFeedback>{errors.assistanceId.message}</FormFeedback>
-              )}
-            </Col>
+              </Col> */}
 
-            <Col xs={12} className="text-center mt-2 pt-50">
-              <Button type="submit" className="me-1" color="primary">
-                ثبت
-              </Button>
-              <Button
-                type="reset"
-                color="secondary"
-                outline
-                onClick={() => setShow(false)}
-              >
-                انصراف
-              </Button>
-            </Col>
-          </Row>
+              <Col xs={12} className="text-center mt-2 pt-50">
+                <Button type="submit" className="me-1" color="primary">
+                  ثبت
+                </Button>
+                <Button
+                  type="reset"
+                  color="secondary"
+                  outline
+                  onClick={() => setShow(false)}
+                >
+                  انصراف
+                </Button>
+              </Col>
+            </Row>
+          </form>
         </ModalBody>
       </Modal>
     </Fragment>
