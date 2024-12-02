@@ -30,7 +30,28 @@ const AddUserModal = ({ data }) => {
     formState: { errors },
   } = useForm();
 
-  const { mutate } = usePostSth();
+  const { mutate: addNewTask } = usePostSth();
+
+  const addNewTaskHandler = handleSubmit(async (vals) => {
+    addNewTask(
+      {
+        ...vals,
+        assistanceId: "af32dcc5-279d-ef11-b6e7-9ae1b6d917d9",
+      },
+      {
+        onSuccess: (data) => {
+          queryClient.invalidateQueries({
+            queryKey: ["AssistanceWork"],
+          });
+          setShow(false);
+          console.log(data);
+        },
+        onError: (data) => {
+          console.log(data);
+        },
+      }
+    );
+  });
 
   return (
     <Fragment>
@@ -53,28 +74,7 @@ const AddUserModal = ({ data }) => {
           <div className="text-center mb-2">
             <h1 className="mb-1">اطلاعات تسک را وارد کنید</h1>
           </div>
-          <form
-            onSubmit={handleSubmit(async (vals) => {
-              mutate(
-                {
-                  ...vals,
-                  assistanceId: "af32dcc5-279d-ef11-b6e7-9ae1b6d917d9",
-                },
-                {
-                  onSuccess: (data) => {
-                    queryClient.invalidateQueries({
-                      queryKey: ["AssistanceWork"],
-                    });
-                    setShow(false);
-                    console.log(data);
-                  },
-                  onError: (data) => {
-                    console.log(data);
-                  },
-                }
-              );
-            })}
-          >
+          <form onSubmit={addNewTaskHandler}>
             <Row className="gy-1 pt-75">
               <Col md={6} xs={12}>
                 <Label className="form-label" for="firstName">
