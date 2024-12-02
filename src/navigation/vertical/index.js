@@ -1,4 +1,4 @@
-import { Mail, Home, Airplay, Circle, User, Calendar } from "react-feather";
+import { Mail, Home, Airplay, Circle, User, Calendar, Book, Twitter, Trello, Codesandbox } from "react-feather";
 
 export default [
   {
@@ -53,10 +53,46 @@ export default [
     ],
   },
   {
-    id: "AssWork",
+    id: "asswork",
     title: "مدیریت تسک",
     icon: <Calendar size={20} />,
-    navLink: "/AssWork",
+    navLink: "/asswork",
+  },
+  {
+    id: "Building",
+    title: "سیستم پژوهشگاه",
+    icon: <Home size={20} />,
+    navLink: "/building",
+  },
+  {
+    id: "class-room",
+    title: "کلاس ها",
+    icon: <Book size={20} />,
+    navLink: "/class-room",
+  },
+  {
+    id: "course-assistance",
+    title: "منتور ها",
+    icon: <User size={20} />,
+    navLink: "/course-assistance",
+  },
+  {
+    id: "/course-socialgroup",
+    title: "شبکه اجتماعی",
+    icon: <Twitter size={20} />,
+    navLink: "/course-socialgroup",
+  },
+  {
+    id: "/department",
+    title: "واحد های پژوهشگاه",
+    icon: <Trello size={20} />,
+    navLink: "/department",
+  },
+  {
+    id: "/term",
+    title: "ترم ها",
+    icon: <Codesandbox size={20} />,
+    navLink: "/term",
   },
   {
     id: "comment",

@@ -16,7 +16,7 @@ import { useForm, Controller } from "react-hook-form";
 import "@styles/react/libs/react-select/_react-select.scss";
 import { postApi } from "../../../core/api/api";
 
-const AssistanceAdd = () => {
+const AssistanceEdit = () => {
   const [show, setShow] = useState(false);
 
   const {
@@ -26,33 +26,16 @@ const AssistanceAdd = () => {
     register,
     setValue,
     watch,
-  } = useForm({
-    defaultValues: {
-      isStudent: false,
-      isTeacher: false
-    },
-  });
+  } = useForm();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (values) => {
         
-    const path = `/User/CreateUser`;
-    const body = data;
-    const response = await postApi({ path, body });
-    console.log("Create User:", response);
+    // const path = `/User/CreateUser`;
+    // const body = data;
+    // const response = await postApi({ path, body });
+    // console.log("Create User:", response);
   };
 
-  const isStudent = watch("isStudent");
-  const isTeacher = watch("isTeacher");
-
-  const handleCheckboxChange = (name) => {
-    if (name === "isStudent") {
-      setValue("isStudent", true);
-      setValue("isTeacher", false);
-    } else if (name === "isTeacher") {
-      setValue("isStudent", false);
-      setValue("isTeacher", true);
-    }
-  };
 
   return (
     <Fragment>
@@ -160,59 +143,6 @@ const AssistanceAdd = () => {
                 <FormFeedback>شماره موبایل را وارد کنید</FormFeedback>
               )}
             </Col>
-
-            <Col xs={6}>
-              <Label className="form-label" for="password">
-                رمز عبور
-              </Label>
-              <Controller
-                name="password"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    id="password"
-                    placeholder="******"
-                    invalid={errors.username && true}
-                  />
-                )}
-              />
-              {errors.username && (
-                <FormFeedback>شماره موبایل را وارد کنید</FormFeedback>
-              )}
-            </Col>
-
-            <Col md={6} xs={12} className=" d-flex mt-4">
-              <Label className="form-label text-xl-center" for="status">
-                تعیین نقش کاربر
-              </Label>
-
-              <div className="form-check form-check-warning ms-1">
-                <Input
-                  type="checkbox"
-                  name="isStudent"
-                  {...register("isStudent")}
-                  checked={isStudent}
-                  onChange={() => handleCheckboxChange("isStudent")}
-                />
-                <Label className="form-check-label" for="warning-checkbox">
-                  دانشجو
-                </Label>
-              </div>
-              <div className="form-check form-check-info ms-1">
-                <Input
-                  type="checkbox"
-                  name="isTeacher"
-                  {...register("isTeacher")}
-                  checked={isTeacher}
-                  onChange={() => handleCheckboxChange("isTeacher")}
-                />
-                <Label className="form-check-label" for="info-checkbox">
-                  استاد
-                </Label>
-              </div>
-            </Col>
-
             <Col xs={12} className="text-center mt-2 pt-50">
               <Button type="submit" className="me-1" color="primary">
                 ثبت
@@ -233,4 +163,4 @@ const AssistanceAdd = () => {
   );
 };
 
-export default AssistanceAdd;
+export default AssistanceEdit;

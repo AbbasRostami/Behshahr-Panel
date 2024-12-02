@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
-import { ChevronDown, Eye, FileText } from "react-feather";
+import { ChevronDown, Eye, FileText, Trash2 } from "react-feather";
 
 import {
   Row,
@@ -13,21 +13,49 @@ import {
   DropdownToggle,
   DropdownItem,
   DropdownMenu,
+  Badge,
 } from "reactstrap";
 
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { Link } from "react-router-dom";
 import moment from "moment-jalaali";
-import AssistanceAdd from "./AssistanceAdd";
-import { GetAssistance } from "../../../core/query/assistance/assistanceGet";
+import AssistanceAdd from "./BuildingAdd";
 import { useQuery } from "@tanstack/react-query";
+import { GetBuilding } from "../../../core/query/building/BuildingGet";
 
-const AssisranceWork = () => {
+const BuildingList = () => {
   const { data } = useQuery({
-    queryKey: ["assistanceWork"],
-    queryFn: GetAssistance,
+    queryKey: ["Building"],
+    queryFn: GetBuilding,
   });
+
+  // const handleSuspendedClick = async (course) => {
+  //   const path = `/Building/Active`;
+  //   const body = {
+  //     isActive: !course.isActive,
+  //     id: course.courseId,
+  //   };
+  
+  //   const response = await editApi({ path, body });
+  
+  //   if (response.data.success) {
+  //     toast.success(response.data.message);
+  
+  //     setData((prevData) =>
+  //       prevData.map((item) =>
+  //         item.courseId === course.courseId
+  //           ? { ...item, isActive: !item.isActive } 
+  //           : item
+  //       )
+  //     );
+  //   } else {
+  //     toast.error("عملیات انجام نشد، مشکلی پیش آمد.");
+  //   }
+  
+  //   console.log("Response Put Active/Deactive:", response);
+  // };
+
 
   const CustomPagination = () => {
     const count = 10;
@@ -54,61 +82,34 @@ const AssisranceWork = () => {
 
   const columns = [
     {
-      name: "نام دوره",
+      name: "نام ساختمان",
       sortable: true,
       minWidth: "200px",
       sortField: "fullName",
-      selector: (row) => row.courseName,
+      selector: (row) => row.buildingName,
       cell: (row) => (
         <div className="d-flex fw-bolder justify-content-left align-items-center">
           {/* <Avatar className='me-1' img={row.avatar} width='32' height='32' /> */}
-          {row.courseName}
+          {row.buildingName}
         </div>
       ),
     },
 
     {
-      name: "عنوان تسک",
+      name: "طبقه",
       sortable: true,
       minWidth: "200px",
       sortField: "fullName",
-      selector: (row) => row.worktitle,
+      selector: (row) => row.floor,
       cell: (row) => (
         <div className="d-flex fw-bolder justify-content-left align-items-center">
-          {row.worktitle}
+          {row.floor}
         </div>
       ),
     },
 
     {
-      name: "توضیحات تسک",
-      sortable: true,
-      minWidth: "200px",
-      sortField: "fullName",
-      selector: (row) => row.workDescribe,
-      cell: (row) => (
-        <div className="d-flex fw-bolder justify-content-left align-items-center">
-          {row.workDescribe}
-        </div>
-      ),
-    },
-
-    {
-      name: "تاریخ انتشار",
-      sortable: true,
-      minWidth: "200px",
-      sortField: "inserDate",
-      selector: (row) => row.inserDate,
-      cell: (row) => (
-        <div className="d-flex fw-bolder justify-content-left align-items-center">
-          {row.inserDate
-            ? moment(row.inserDate, "YYYY/MM/DD").format("jYYYY/jMM/jDD")
-            : "تاریخ نامشخص"}
-        </div>
-      ),
-    },
-    {
-      name: "تاریخ انتشار",
+      name: "زمان کاری",
       sortable: true,
       minWidth: "200px",
       sortField: "inserDate",
@@ -121,6 +122,27 @@ const AssisranceWork = () => {
         </div>
       ),
     },
+    {
+      name: "وضعیت",
+      minWidth: "138px",
+      sortable: true,
+      sortField: "status",
+      selector: (row) => row.active,
+      cell: (row) => (
+        <span>
+          {row.active ? (
+            <Badge className=" fw-bolder text-capitalize" color="success" pill>
+              فعال
+            </Badge>
+          ) : (
+            <Badge className="fw-bolder text-capitalize" color="danger">
+              غیرفعال
+            </Badge>
+          )}
+        </span>
+      ),
+    },
+    
     {
       name: "اقدام",
       minWidth: "100px",
@@ -135,6 +157,13 @@ const AssisranceWork = () => {
               <DropdownItem tag={Link} className="w-100">
                 <FileText size={14} className="me-50" />
                 <span className="align-middle">ویرایش</span>
+              </DropdownItem>
+              <DropdownItem
+                className="w-100"
+                onClick={() => handleSuspendedClick(row)}
+              >
+                <Trash2 size={14} className="me-50" />
+                <span className="align-middle">غیرفعال / غیرفعال</span>
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
@@ -205,4 +234,4 @@ const AssisranceWork = () => {
   );
 };
 
-export default AssisranceWork;
+export default BuildingList;

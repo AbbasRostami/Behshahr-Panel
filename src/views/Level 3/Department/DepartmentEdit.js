@@ -11,14 +11,12 @@ import {
   FormFeedback,
   ModalBody,
 } from "reactstrap";
+
 import { useForm, Controller } from "react-hook-form";
 import "@styles/react/libs/react-select/_react-select.scss";
 import { postApi } from "../../../core/api/api";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
 
-const MySwal = withReactContent(Swal);
-const AddUserModal = ({ data }) => {
+const DepartmentEdit = () => {
   const [show, setShow] = useState(false);
 
   const {
@@ -31,29 +29,19 @@ const AddUserModal = ({ data }) => {
   } = useForm();
 
   const onSubmit = async (values) => {
-    console.log("Values", values);
-
-    const path = `/AssistanceWork`;
-    const body = values;
-    const response = await postApi({ path, body });
-    console.log("AssistanceWork Create:", response);
-    if (response.data.success) {
-      MySwal.fire({
-        icon: "success",
-        title: "موفقیت",
-        text: "عملیات با موفقیت انجام گردید",
-        customClass: {
-          confirmButton: "btn btn-success",
-        },
-      });
-    }
+        
+    // const path = `/User/CreateUser`;
+    // const body = data;
+    // const response = await postApi({ path, body });
+    // console.log("Create User:", response);
   };
+
 
   return (
     <Fragment>
       <Card className="mb-0 r-2">
         <Button color="primary" onClick={() => setShow(true)}>
-          افزدون تسک جدید
+         افزدون تسک جدید
         </Button>
       </Card>
       <Modal
@@ -77,80 +65,84 @@ const AddUserModal = ({ data }) => {
           >
             <Col md={6} xs={12}>
               <Label className="form-label" for="firstName">
-                عنوان تسک
+                نام
               </Label>
               <Controller
                 control={control}
-                name="worktitle"
+                name="firstName"
                 render={({ field }) => {
                   return (
                     <Input
                       {...field}
-                      id="worktitle"
-                      placeholder="عنوان تسک"
+                      id="firstName"
+                      placeholder="نام..."
                       value={field.value}
                       invalid={errors.firstName && true}
                     />
                   );
                 }}
               />
+              {errors.firstName && (
+                <FormFeedback>لطفا نام را وارد کنید</FormFeedback>
+              )}
             </Col>
             <Col md={6} xs={12}>
-              <Label className="form-label" for="workDescribe">
-                توضیحات تسک
+              <Label className="form-label" for="lastName">
+                نام خانوادگی
               </Label>
               <Controller
-                name="workDescribe"
+                name="lastName"
                 control={control}
                 render={({ field }) => (
                   <Input
                     {...field}
-                    id="workDescribe"
-                    placeholder="توضیحات تسک"
+                    id="lastName"
+                    placeholder="نام خانوادگی..."
                     invalid={errors.lastName && true}
                   />
                 )}
               />
+              {errors.lastName && (
+                <FormFeedback>لطفا نام خانوادگی را وارد کنید</FormFeedback>
+              )}
             </Col>
 
             <Col xs={6}>
-              <Label className="form-label" for="workDate">
-                ساعت کاری
+              <Label className="form-label" for="username">
+                شماره موبایل
               </Label>
               <Controller
-                name="workDate"
+                name="gmail"
                 control={control}
                 render={({ field }) => (
-                  <Input type="date" {...field} id="workDate" />
+                  <Input {...field} id="gmail" placeholder="Johe@gmail.com" />
                 )}
               />
               {errors.username && (
                 <FormFeedback>لطفا ایمیل را وارد کنید</FormFeedback>
               )}
             </Col>
+
             <Col xs={6}>
-              <Label className="form-label" for="assistanceId">
-                انتخاب دوره
+              <Label className="form-label" for="username">
+                شماره موبایل
               </Label>
               <Controller
-                name="assistanceId"
+                name="phoneNumber"
                 control={control}
-                rules={{ required: "لطفاً یک گزینه انتخاب کنید" }}
                 render={({ field }) => (
-                  <Input type="select" id="assistanceId" {...field}>
-                    {data?.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {option.courseName}
-                      </option>
-                    ))}
-                  </Input>
+                  <Input
+                    {...field}
+                    id="phoneNumber"
+                    placeholder="09111111111"
+                    invalid={errors.username && true}
+                  />
                 )}
               />
-              {errors.assistanceId && (
-                <FormFeedback>{errors.assistanceId.message}</FormFeedback>
+              {errors.username && (
+                <FormFeedback>شماره موبایل را وارد کنید</FormFeedback>
               )}
             </Col>
-
             <Col xs={12} className="text-center mt-2 pt-50">
               <Button type="submit" className="me-1" color="primary">
                 ثبت
@@ -171,4 +163,4 @@ const AddUserModal = ({ data }) => {
   );
 };
 
-export default AddUserModal;
+export default DepartmentEdit;

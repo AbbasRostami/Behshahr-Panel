@@ -16,6 +16,7 @@
     "@hookform/resolvers": "^2.8.10",
     "@popperjs/core": "^2.11.3",
     "@reduxjs/toolkit": "^1.2.5",
+    "@tanstack/react-query": "^5.62.0",
     "animate.css": "4.1.1",
     "apexcharts": "^3.35.2",
     "apexcharts-clevision": "^3.28.5",

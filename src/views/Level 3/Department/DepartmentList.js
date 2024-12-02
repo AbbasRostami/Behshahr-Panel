@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
-import { ChevronDown, Eye, FileText } from "react-feather";
+import { ChevronDown, Eye, FileText, Trash2 } from "react-feather";
 
 import {
   Row,
@@ -18,16 +18,43 @@ import {
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { Link } from "react-router-dom";
-import moment from "moment-jalaali";
-import AssistanceAdd from "./AssistanceAdd";
-import { GetAssistance } from "../../../core/query/assistance/assistanceGet";
+import AssistanceAdd from "./DepartmentAdd";
 import { useQuery } from "@tanstack/react-query";
+import { GetDepartment } from "../../../core/query/department/DepartmentGet";
+import moment from "moment";
 
-const AssisranceWork = () => {
+const DepartmentList = () => {
   const { data } = useQuery({
-    queryKey: ["assistanceWork"],
-    queryFn: GetAssistance,
+    queryKey: ["Department"],
+    queryFn: GetDepartment,
   });
+
+  // const handleSuspendedClick = async (course) => {
+  //   const path = `/Building/Active`;
+  //   const body = {
+  //     isActive: !course.isActive,
+  //     id: course.courseId,
+  //   };
+  
+  //   const response = await editApi({ path, body });
+  
+  //   if (response.data.success) {
+  //     toast.success(response.data.message);
+  
+  //     setData((prevData) =>
+  //       prevData.map((item) =>
+  //         item.courseId === course.courseId
+  //           ? { ...item, isActive: !item.isActive } 
+  //           : item
+  //       )
+  //     );
+  //   } else {
+  //     toast.error("عملیات انجام نشد، مشکلی پیش آمد.");
+  //   }
+  
+  //   console.log("Response Put Active/Deactive:", response);
+  // };
+
 
   const CustomPagination = () => {
     const count = 10;
@@ -54,73 +81,59 @@ const AssisranceWork = () => {
 
   const columns = [
     {
-      name: "نام دوره",
+      name: "نام ساختمان",
       sortable: true,
-      minWidth: "200px",
+      minWidth: "250px",
       sortField: "fullName",
-      selector: (row) => row.courseName,
+      selector: (row) => row.depName,
       cell: (row) => (
         <div className="d-flex fw-bolder justify-content-left align-items-center">
           {/* <Avatar className='me-1' img={row.avatar} width='32' height='32' /> */}
-          {row.courseName}
+          {row.depName}
         </div>
       ),
     },
-
     {
-      name: "عنوان تسک",
+      name: "نام واحد",
       sortable: true,
-      minWidth: "200px",
+      minWidth: "250px",
       sortField: "fullName",
-      selector: (row) => row.worktitle,
+      selector: (row) => row.buildingName,
       cell: (row) => (
         <div className="d-flex fw-bolder justify-content-left align-items-center">
-          {row.worktitle}
+          {/* <Avatar className='me-1' img={row.avatar} width='32' height='32' /> */}
+          {row.buildingName}
         </div>
       ),
     },
 
     {
-      name: "توضیحات تسک",
-      sortable: true,
-      minWidth: "200px",
-      sortField: "fullName",
-      selector: (row) => row.workDescribe,
-      cell: (row) => (
-        <div className="d-flex fw-bolder justify-content-left align-items-center">
-          {row.workDescribe}
-        </div>
-      ),
-    },
-
-    {
-      name: "تاریخ انتشار",
+      name: "تاریخ ساخت",
       sortable: true,
       minWidth: "200px",
       sortField: "inserDate",
-      selector: (row) => row.inserDate,
+      selector: (row) => row.insertDate,
       cell: (row) => (
         <div className="d-flex fw-bolder justify-content-left align-items-center">
-          {row.inserDate
-            ? moment(row.inserDate, "YYYY/MM/DD").format("jYYYY/jMM/jDD")
+          {row.insertDate
+            ? moment(row.insertDate, "YYYY/MM/DD").format("jYYYY/jMM/jDD")
             : "تاریخ نامشخص"}
         </div>
       ),
     },
     {
-      name: "تاریخ انتشار",
+      name: "شناسه واحد",
       sortable: true,
-      minWidth: "200px",
-      sortField: "inserDate",
-      selector: (row) => row.workDate,
+      minWidth: "250px",
+      sortField: "fullName",
+      selector: (row) => row.buildingId,
       cell: (row) => (
         <div className="d-flex fw-bolder justify-content-left align-items-center">
-          {row.workDate
-            ? moment(row.workDate, "YYYY/MM/DD").format("jYYYY/jMM/jDD")
-            : "تاریخ نامشخص"}
+          {row.buildingId}
         </div>
       ),
     },
+    
     {
       name: "اقدام",
       minWidth: "100px",
@@ -135,6 +148,13 @@ const AssisranceWork = () => {
               <DropdownItem tag={Link} className="w-100">
                 <FileText size={14} className="me-50" />
                 <span className="align-middle">ویرایش</span>
+              </DropdownItem>
+              <DropdownItem
+                className="w-100"
+                onClick={() => handleSuspendedClick(row)}
+              >
+                <Trash2 size={14} className="me-50" />
+                <span className="align-middle">غیرفعال / غیرفعال</span>
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
@@ -205,4 +225,4 @@ const AssisranceWork = () => {
   );
 };
 
-export default AssisranceWork;
+export default DepartmentList;

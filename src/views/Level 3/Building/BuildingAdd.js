@@ -18,7 +18,7 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
 const MySwal = withReactContent(Swal);
-const AddUserModal = ({ data }) => {
+const BuildingAdd = ({ data }) => {
   const [show, setShow] = useState(false);
 
   const {
@@ -171,4 +171,4 @@ const AddUserModal = ({ data }) => {
   );
 };
 
-export default AddUserModal;
+export default BuildingAdd;
