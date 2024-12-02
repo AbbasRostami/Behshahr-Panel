@@ -1,23 +1,21 @@
+import "@styles/react/libs/react-select/_react-select.scss";
 import { Fragment, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import {
+  Button,
   Card,
-  Row,
   Col,
-  Modal,
+  FormFeedback,
   Input,
   Label,
-  Button,
-  ModalHeader,
-  FormFeedback,
+  Modal,
   ModalBody,
+  ModalHeader,
+  Row,
 } from "reactstrap";
-import { useForm, Controller } from "react-hook-form";
-import "@styles/react/libs/react-select/_react-select.scss";
-import { postApi } from "../../../core/api/api";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import { useMutation } from "@tanstack/react-query";
-import { AssistanceWork, usePostSth } from "../../../core/apiPost";
+import { usePostSth } from "../../../core/apiPost";
 
 const MySwal = withReactContent(Swal);
 const AddUserModal = ({ data }) => {
@@ -29,40 +27,6 @@ const AddUserModal = ({ data }) => {
     formState: { errors },
   } = useForm();
 
-  // const mutation = useMutation({
-  //   mutationFn: async (values) => {
-  //     const path = `/AssistanceWork`;
-  //     const body = values;
-  //     const response = await postApi({ path, body });
-  //     return response;
-  //   },
-  //   onSuccess: (response) => {
-  //     if (response.data.success) {
-  //       MySwal.fire({
-  //         icon: "success",
-  //         title: "موفقیت",
-  //         text: "عملیات با موفقیت انجام گردید",
-  //         customClass: {
-  //           confirmButton: "btn btn-success",
-  //         },
-  //       });
-  //     }
-  //   },
-  //   onError: (error) => {
-  //     console.error("خطا در ارسال درخواست:", error);
-  //     MySwal.fire({
-  //       icon: "error",
-  //       title: "خطا",
-  //       text: "ارسال درخواست با خطا مواجه شد",
-  //       customClass: {
-  //         confirmButton: "btn btn-danger",
-  //       },
-  //     });
-  //   },
-  // });
-  // const onSubmit = (values) => {
-  //   mutation.mutate(values);
-  // };
   const { mutate } = usePostSth();
 
   return (
