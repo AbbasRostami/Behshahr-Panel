@@ -41,7 +41,7 @@ const AssistanceEdit = () => {
     <Fragment>
       <Card className="mb-0 r-2">
         <Button color="primary" onClick={() => setShow(true)}>
-         افزدون تسک جدید
+         ویرایش تسک جدید
         </Button>
       </Card>
       <Modal
@@ -56,7 +56,7 @@ const AssistanceEdit = () => {
 
         <ModalBody className="px-sm-5 mx-50 pb-5">
           <div className="text-center mb-2">
-            <h1 className="mb-1">اطلاعات تسک را وارد کنید</h1>
+            <h1 className="mb-1">اطلاعات جدید تسک را وارد کنید</h1>
           </div>
           <Row
             tag="form"

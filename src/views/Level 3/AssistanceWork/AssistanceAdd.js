@@ -16,6 +16,7 @@ import "@styles/react/libs/react-select/_react-select.scss";
 import { postApi } from "../../../core/api/api";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { useMutation } from "@tanstack/react-query";
 
 const MySwal = withReactContent(Swal);
 const AddUserModal = ({ data }) => {
@@ -25,30 +26,44 @@ const AddUserModal = ({ data }) => {
     control,
     handleSubmit,
     formState: { errors },
-    register,
-    setValue,
-    watch,
   } = useForm();
 
-  const onSubmit = async (values) => {
-    console.log("Values", values);
-
-    const path = `/AssistanceWork`;
-    const body = values;
-    const response = await postApi({ path, body });
-    console.log("AssistanceWork Create:", response);
-    if (response.data.success) {
+  const mutation = useMutation({
+    mutationFn: async (values) => {
+      const path = `/AssistanceWork`;
+      const body = values;
+      const response = await postApi({ path, body });
+      return response;
+    },
+    onSuccess: (response) => {
+      if (response.data.success) {
+        MySwal.fire({
+          icon: "success",
+          title: "موفقیت",
+          text: "عملیات با موفقیت انجام گردید",
+          customClass: {
+            confirmButton: "btn btn-success",
+          },
+        });
+      }
+    },
+    onError: (error) => {
+      console.error("خطا در ارسال درخواست:", error);
       MySwal.fire({
-        icon: "success",
-        title: "موفقیت",
-        text: "عملیات با موفقیت انجام گردید",
+        icon: "error",
+        title: "خطا",
+        text: "ارسال درخواست با خطا مواجه شد",
         customClass: {
-          confirmButton: "btn btn-success",
+          confirmButton: "btn btn-danger",
         },
       });
-    }
+    },
+  });
+  const onSubmit = (values) => {
+    mutation.mutate(values);
   };
 
+  
   return (
     <Fragment>
       <Card className="mb-0 r-2">

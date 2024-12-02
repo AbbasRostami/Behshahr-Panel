@@ -20,14 +20,16 @@ import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { Link } from "react-router-dom";
 import moment from "moment-jalaali";
 import AssistanceAdd from "./AssistanceAdd";
-import { GetAssistance } from "../../../core/query/assistance/assistanceGet";
-import { useQuery } from "@tanstack/react-query";
-
+import { allApi, useGetRequest } from "../../../core/apiPost";
 const AssisranceWork = () => {
-  const { data } = useQuery({
-    queryKey: ["assistanceWork"],
-    queryFn: GetAssistance,
+  
+  const { data, isPending } = useGetRequest({
+    url: allApi.GetAssistance,
+    key: ["AssistanceWork"],
+    enabled: true,
+    staleTime: 10 * 60 * 1000,
   });
+
 
   const CustomPagination = () => {
     const count = 10;

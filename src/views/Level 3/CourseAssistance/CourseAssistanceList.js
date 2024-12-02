@@ -21,14 +21,9 @@ import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { Link } from "react-router-dom";
 import moment from "moment-jalaali";
 import AssistanceAdd from "./CourseAssistanceAdd";
-import { useQuery } from "@tanstack/react-query";
-import { GetAssistance } from "../../../core/query/assistance/assistanceGet";
 
 const CourseAssistanceList = () => {
-  const { data } = useQuery({
-    queryKey: ["CourseAssistance"],
-    queryFn: GetAssistance,
-  });
+
 
   // const handleSuspendedClick = async (course) => {
   //   const path = `/Building/Active`;

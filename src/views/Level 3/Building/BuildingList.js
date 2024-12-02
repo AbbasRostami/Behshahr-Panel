@@ -21,14 +21,16 @@ import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { Link } from "react-router-dom";
 import moment from "moment-jalaali";
 import AssistanceAdd from "./BuildingAdd";
-import { useQuery } from "@tanstack/react-query";
-import { GetBuilding } from "../../../core/query/building/BuildingGet";
+import { allApi, useGetRequest } from "../../../core/apiPost";
 
 const BuildingList = () => {
-  const { data } = useQuery({
-    queryKey: ["Building"],
-    queryFn: GetBuilding,
+  const { data, isPending } = useGetRequest({
+    url: allApi.GetBuilding,
+    key: ["/Building"],
+    enabled: true,
+    staleTime: 10 * 60 * 1000,
   });
+
 
   // const handleSuspendedClick = async (course) => {
   //   const path = `/Building/Active`;
