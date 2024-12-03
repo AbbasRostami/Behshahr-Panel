@@ -8,52 +8,69 @@ import {
   Label,
   Button,
   ModalHeader,
-  FormFeedback,
   ModalBody,
 } from "reactstrap";
 import { useForm, Controller } from "react-hook-form";
 import "@styles/react/libs/react-select/_react-select.scss";
-import { postApi } from "../../../core/api/api";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { usePostSth } from "../../../core/apiPost";
+import { useQueryClient } from "@tanstack/react-query";
 
 const MySwal = withReactContent(Swal);
-const TechnologyAdd = ({ data }) => {
+const TechnologyAdd = () => {
   const [show, setShow] = useState(false);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-    register,
-    setValue,
-    watch,
   } = useForm();
+  const { mutate } = usePostSth("/Technology");
+  const queryClient = useQueryClient();
 
-  const onSubmit = async (values) => {
-    console.log("Values", values);
+  const addTech = (data) => {
+    console.log("tech put :", data);
 
-    const path = `/AssistanceWork`;
-    const body = values;
-    const response = await postApi({ path, body });
-    console.log("AssistanceWork Create:", response);
-    if (response.data.success) {
-      MySwal.fire({
-        icon: "success",
-        title: "موفقیت",
-        text: "عملیات با موفقیت انجام گردید",
-        customClass: {
-          confirmButton: "btn btn-success",
-        },
-      });
-    }
+    mutate(data, {
+      onSuccess: (response) => {
+        console.log("response: ", response);
+
+        queryClient.invalidateQueries(["/Technology"]);
+        setShow(false);
+
+        MySwal.fire({
+          title: "عملیات موفقیت‌آمیز بود",
+          text: "تکنولوژِی جدید با موفقیت ثبت شد",
+          icon: "success",
+          confirmButtonText: "باشه",
+          customClass: {
+            confirmButton: "btn btn-success",
+          },
+          buttonsStyling: false,
+        });
+      },
+      onError: (error) => {
+        console.error("خطا در ثبت تکنولوژِی:", error);
+        MySwal.fire({
+          title: "خطا در عملیات",
+          text: "مشکلی در ثبت تکنولوژِی جدید رخ داد. لطفاً دوباره تلاش کنید.",
+          icon: "error",
+          confirmButtonText: "تلاش مجدد",
+          customClass: {
+            confirmButton: "btn btn-danger",
+          },
+          buttonsStyling: false,
+        });
+      },
+    });
   };
 
   return (
     <Fragment>
       <Card className="mb-0 r-2">
         <Button color="primary" onClick={() => setShow(true)}>
-          افزدون تسک جدید
+          افزدون تکنولوژِی جدید
         </Button>
       </Card>
       <Modal
@@ -68,26 +85,26 @@ const TechnologyAdd = ({ data }) => {
 
         <ModalBody className="px-sm-5 mx-50 pb-5">
           <div className="text-center mb-2">
-            <h1 className="mb-1">اطلاعات تسک را وارد کنید</h1>
+            <h1 className="mb-1">اطلاعات تکنولوژِی را وارد کنید</h1>
           </div>
           <Row
             tag="form"
             className="gy-1 pt-75"
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(addTech)}
           >
             <Col md={6} xs={12}>
-              <Label className="form-label" for="firstName">
-                عنوان تسک
+              <Label className="form-label" for="techName">
+                نام تکنولوژِی
               </Label>
               <Controller
                 control={control}
-                name="worktitle"
+                name="techName"
                 render={({ field }) => {
                   return (
                     <Input
                       {...field}
-                      id="worktitle"
-                      placeholder="عنوان تسک"
+                      id="techName"
+                      placeholder="عنوان تکنولوژی"
                       value={field.value}
                       invalid={errors.firstName && true}
                     />
@@ -96,61 +113,39 @@ const TechnologyAdd = ({ data }) => {
               />
             </Col>
             <Col md={6} xs={12}>
-              <Label className="form-label" for="workDescribe">
-                توضیحات تسک
+              <Label className="form-label" for="iconAddress">
+                آدرس آیکون
               </Label>
               <Controller
-                name="workDescribe"
+                name="iconAddress"
                 control={control}
                 render={({ field }) => (
                   <Input
                     {...field}
-                    id="workDescribe"
-                    placeholder="توضیحات تسک"
+                    id="iconAddress"
+                    placeholder="آدرس آیکون"
                     invalid={errors.lastName && true}
                   />
                 )}
               />
             </Col>
-
-            <Col xs={6}>
-              <Label className="form-label" for="workDate">
-                ساعت کاری
+            <Col md={12} xs={12}>
+              <Label className="form-label" for="describe">
+                توضیحات تکنولوژِی
               </Label>
               <Controller
-                name="workDate"
+                name="describe"
                 control={control}
                 render={({ field }) => (
-                  <Input type="date" {...field} id="workDate" />
+                  <Input
+                    {...field}
+                    id="describe"
+                    placeholder="توضیحات تکنولوژِی"
+                    invalid={errors.lastName && true}
+                  />
                 )}
               />
-              {errors.username && (
-                <FormFeedback>لطفا ایمیل را وارد کنید</FormFeedback>
-              )}
             </Col>
-            <Col xs={6}>
-              <Label className="form-label" for="assistanceId">
-                انتخاب دوره
-              </Label>
-              <Controller
-                name="assistanceId"
-                control={control}
-                rules={{ required: "لطفاً یک گزینه انتخاب کنید" }}
-                render={({ field }) => (
-                  <Input type="select" id="assistanceId" {...field}>
-                    {data?.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {option.courseName}
-                      </option>
-                    ))}
-                  </Input>
-                )}
-              />
-              {errors.assistanceId && (
-                <FormFeedback>{errors.assistanceId.message}</FormFeedback>
-              )}
-            </Col>
-
             <Col xs={12} className="text-center mt-2 pt-50">
               <Button type="submit" className="me-1" color="primary">
                 ثبت
