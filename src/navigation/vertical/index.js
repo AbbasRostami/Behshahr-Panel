@@ -1,4 +1,4 @@
-import { Mail, Home, Airplay, Circle, User, Calendar, Book, Twitter, Trello, Codesandbox } from "react-feather";
+import { Mail, Home, Airplay, Circle, User, Calendar, Book, Twitter, Trello, Codesandbox, BookOpen, Slack } from "react-feather";
 
 export default [
   {
@@ -60,7 +60,7 @@ export default [
   },
   {
     id: "Building",
-    title: "سیستم پژوهشگاه",
+    title: "ساختمان پژوهشگاه",
     icon: <Home size={20} />,
     navLink: "/building",
   },
@@ -93,6 +93,18 @@ export default [
     title: "ترم ها",
     icon: <Codesandbox size={20} />,
     navLink: "/term",
+  },
+  {
+    id: "/status-courses",
+    title: "وضعیت دوره ها",
+    icon: <BookOpen size={20} />,
+    navLink: "/status-courses",
+  },
+  {
+    id: "/technology",
+    title: "وضعیت تکنورلوژِی",
+    icon: <Slack size={20} />,
+    navLink: "/technology",
   },
   {
     id: "comment",

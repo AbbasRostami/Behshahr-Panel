@@ -26,6 +26,8 @@ import CourseAssistanceList from "../../views/Level 3/CourseAssistance/CourseAss
 import CourseSocialGroupList from "../../views/Level 3/CourseSocialGroup/CourseSocialGroupList";
 import DepartmentList from "../../views/Level 3/Department/DepartmentList";
 import TermList from "../../views/Level 3/Term/TermList";
+import StatusCoursesList from "../../views/Level 3/CourseStatus/StatusCoursesList";
+import TechnologyList from "../../views/Level 3/Technology/TechnologyList";
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -154,6 +156,14 @@ const Routes = [
   {
     path: "/term",
     element: <TermList />,
+  },
+  {
+    path: "/status-courses",
+    element: <StatusCoursesList />,
+  },
+  {
+    path: "/technology",
+    element: <TechnologyList />,
   },
 
   {
