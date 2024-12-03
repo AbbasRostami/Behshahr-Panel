@@ -21,16 +21,14 @@ import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { Link } from "react-router-dom";
 import moment from "moment-jalaali";
 import AssistanceAdd from "./BuildingAdd";
-import { allApi, useGetRequest } from "../../../core/apiPost";
+import { useGetSth } from "../../../core/apiPost";
+import BuildingAdd from "./BuildingAdd";
 
 const BuildingList = () => {
-  const { data, isPending } = useGetRequest({
-    url: allApi.GetBuilding,
-    key: ["/Building"],
+  const { data } = useGetSth("/Building", {
+    staleTime: 5 * 60 * 1000,
     enabled: true,
-    staleTime: 10 * 60 * 1000,
   });
-
 
   // const handleSuspendedClick = async (course) => {
   //   const path = `/Building/Active`;
@@ -38,26 +36,25 @@ const BuildingList = () => {
   //     isActive: !course.isActive,
   //     id: course.courseId,
   //   };
-  
+
   //   const response = await editApi({ path, body });
-  
+
   //   if (response.data.success) {
   //     toast.success(response.data.message);
-  
+
   //     setData((prevData) =>
   //       prevData.map((item) =>
   //         item.courseId === course.courseId
-  //           ? { ...item, isActive: !item.isActive } 
+  //           ? { ...item, isActive: !item.isActive }
   //           : item
   //       )
   //     );
   //   } else {
   //     toast.error("عملیات انجام نشد، مشکلی پیش آمد.");
   //   }
-  
+
   //   console.log("Response Put Active/Deactive:", response);
   // };
-
 
   const CustomPagination = () => {
     const count = 10;
@@ -144,7 +141,7 @@ const BuildingList = () => {
         </span>
       ),
     },
-    
+
     {
       name: "اقدام",
       minWidth: "100px",
@@ -214,7 +211,7 @@ const BuildingList = () => {
                 </div>
 
                 <div className=" mx-2">
-                  <AssistanceAdd data={data} />
+                  <BuildingAdd data={data} />
                 </div>
               </Col>
             </Row>
