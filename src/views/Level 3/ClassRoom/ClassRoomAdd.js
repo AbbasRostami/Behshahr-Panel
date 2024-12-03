@@ -13,9 +13,10 @@ import {
 } from "reactstrap";
 import { useForm, Controller } from "react-hook-form";
 import "@styles/react/libs/react-select/_react-select.scss";
-import { postApi } from "../../../core/api/api";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { useQueryClient } from "@tanstack/react-query";
+import { usePostSth } from "../../../core/apiPost";
 
 const MySwal = withReactContent(Swal);
 const ClassRoomAdd = ({ data }) => {
@@ -25,35 +26,53 @@ const ClassRoomAdd = ({ data }) => {
     control,
     handleSubmit,
     formState: { errors },
-    register,
-    setValue,
-    watch,
   } = useForm();
 
-  const onSubmit = async (values) => {
-    console.log("Values", values);
+  const { mutate } = usePostSth("/ClassRoom");
+  const queryClient = useQueryClient();
 
-    const path = `/AssistanceWork`;
-    const body = values;
-    const response = await postApi({ path, body });
-    console.log("AssistanceWork Create:", response);
-    if (response.data.success) {
-      MySwal.fire({
-        icon: "success",
-        title: "موفقیت",
-        text: "عملیات با موفقیت انجام گردید",
-        customClass: {
-          confirmButton: "btn btn-success",
-        },
-      });
-    }
+  const addClassRoom = (data) => {
+    console.log("class room:", data);
+
+    mutate(data, {
+      onSuccess: (response) => {
+        console.log("ثبت ساختمان موفقیت‌آمیز بود:", response);
+
+        queryClient.invalidateQueries(["/ClassRoom"]);
+        setShow(false);
+
+        MySwal.fire({
+          title: "عملیات موفقیت‌آمیز بود",
+          text: "کلاس جدید با موفقیت ثبت شد",
+          icon: "success",
+          confirmButtonText: "باشه",
+          customClass: {
+            confirmButton: "btn btn-success",
+          },
+          buttonsStyling: false,
+        });
+      },
+      onError: (error) => {
+        console.error("خطا در ثبت کلاس:", error);
+        MySwal.fire({
+          title: "خطا در عملیات",
+          text: "مشکلی در ثبت کلاس جدید رخ داد. لطفاً دوباره تلاش کنید.",
+          icon: "error",
+          confirmButtonText: "تلاش مجدد",
+          customClass: {
+            confirmButton: "btn btn-danger",
+          },
+          buttonsStyling: false,
+        });
+      },
+    });
   };
 
   return (
     <Fragment>
       <Card className="mb-0 r-2">
         <Button color="primary" onClick={() => setShow(true)}>
-          افزدون تسک جدید
+          افزدون کلاس جدید
         </Button>
       </Card>
       <Modal
@@ -68,86 +87,86 @@ const ClassRoomAdd = ({ data }) => {
 
         <ModalBody className="px-sm-5 mx-50 pb-5">
           <div className="text-center mb-2">
-            <h1 className="mb-1">اطلاعات تسک را وارد کنید</h1>
+            <h1 className="mb-1">اطلاعات کلاس جدید را وارد کنید</h1>
           </div>
           <Row
             tag="form"
             className="gy-1 pt-75"
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(addClassRoom)}
           >
             <Col md={6} xs={12}>
-              <Label className="form-label" for="firstName">
-                عنوان تسک
+              <Label className="form-label" for="classRoomName">
+                نام کلاس
               </Label>
               <Controller
                 control={control}
-                name="worktitle"
-                render={({ field }) => {
-                  return (
+                name="classRoomName"
+                rules={{
+                  required: "وارد کردن نام کلاس الزامی است.",
+                  minLength: {
+                    value: 5,
+                    message: "تعداد کاراکتر های نام کلاس باید حداقل 5 باشد.",
+                  },
+                  maxLength: {
+                    value: 50,
+                    message: "تعداد کاراکتر های نام کلاس باید حداکثر 50 باشد.",
+                  },
+                }}
+                render={({ field }) => (
+                  <>
                     <Input
                       {...field}
-                      id="worktitle"
-                      placeholder="عنوان تسک"
-                      value={field.value}
-                      invalid={errors.firstName && true}
+                      id="classRoomName"
+                      placeholder="نام کلاس"
+                      invalid={errors.classRoomName && true} 
                     />
-                  );
-                }}
+                    {errors.classRoomName && (
+                      <FormFeedback>
+                        {errors.classRoomName.message}
+                      </FormFeedback> 
+                    )}
+                  </>
+                )}
               />
             </Col>
             <Col md={6} xs={12}>
-              <Label className="form-label" for="workDescribe">
-                توضیحات تسک
+              <Label className="form-label" for="capacity">
+                ظرفیت کلاس
               </Label>
               <Controller
-                name="workDescribe"
+                name="capacity"
                 control={control}
                 render={({ field }) => (
                   <Input
                     {...field}
-                    id="workDescribe"
-                    placeholder="توضیحات تسک"
+                    id="capacity"
+                    placeholder="ظرفیت کلاس"
                     invalid={errors.lastName && true}
                   />
                 )}
               />
             </Col>
 
-            <Col xs={6}>
-              <Label className="form-label" for="workDate">
-                ساعت کاری
-              </Label>
-              <Controller
-                name="workDate"
-                control={control}
-                render={({ field }) => (
-                  <Input type="date" {...field} id="workDate" />
-                )}
-              />
-              {errors.username && (
-                <FormFeedback>لطفا ایمیل را وارد کنید</FormFeedback>
-              )}
-            </Col>
-            <Col xs={6}>
-              <Label className="form-label" for="assistanceId">
+            <Col xs={12}>
+              <Label className="form-label" for="buildingId">
                 انتخاب دوره
               </Label>
               <Controller
-                name="assistanceId"
+                name="buildingId"
                 control={control}
                 rules={{ required: "لطفاً یک گزینه انتخاب کنید" }}
                 render={({ field }) => (
-                  <Input type="select" id="assistanceId" {...field}>
+                  <Input type="select" id="buildingId" {...field}>
                     {data?.map((option) => (
                       <option key={option.id} value={option.id}>
-                        {option.courseName}
+                        {option.buildingName}
                       </option>
                     ))}
                   </Input>
                 )}
               />
-              {errors.assistanceId && (
-                <FormFeedback>{errors.assistanceId.message}</FormFeedback>
+              {errors.buildingId && (
+                <FormFeedback>{errors.buildingId.message}</FormFeedback>
               )}
             </Col>
 
