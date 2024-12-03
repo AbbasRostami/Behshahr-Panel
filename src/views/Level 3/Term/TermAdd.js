@@ -13,47 +13,70 @@ import {
 } from "reactstrap";
 import { useForm, Controller } from "react-hook-form";
 import "@styles/react/libs/react-select/_react-select.scss";
-import { postApi } from "../../../core/api/api";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { useGetSth, usePostSth } from "../../../core/apiPost";
+import { useQueryClient } from "@tanstack/react-query";
 
 const MySwal = withReactContent(Swal);
-const TermAdd = ({ data }) => {
+const TermAdd = () => {
   const [show, setShow] = useState(false);
+
+  const { data: Departmentlist } = useGetSth("/Department", {
+    staleTime: 5 * 60 * 1000,
+    enabled: true,
+  });
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-    register,
-    setValue,
-    watch,
   } = useForm();
+  const { mutate } = usePostSth("/Term");
+  const queryClient = useQueryClient();
 
-  const onSubmit = async (values) => {
-    console.log("Values", values);
+  const addTerm = (data) => {
+    console.log("term put :", data);
 
-    const path = `/AssistanceWork`;
-    const body = values;
-    const response = await postApi({ path, body });
-    console.log("AssistanceWork Create:", response);
-    if (response.data.success) {
-      MySwal.fire({
-        icon: "success",
-        title: "موفقیت",
-        text: "عملیات با موفقیت انجام گردید",
-        customClass: {
-          confirmButton: "btn btn-success",
-        },
-      });
-    }
+    mutate(data, {
+      onSuccess: (response) => {
+        console.log("response: ", response);
+
+        queryClient.invalidateQueries(["/Term"]);
+        setShow(false);
+
+        MySwal.fire({
+          title: "عملیات موفقیت‌آمیز بود",
+          text: "ترم جدید با موفقیت ثبت شد",
+          icon: "success",
+          confirmButtonText: "باشه",
+          customClass: {
+            confirmButton: "btn btn-success",
+          },
+          buttonsStyling: false,
+        });
+      },
+      onError: (error) => {
+        console.error("خطا در ثبت ترم:", error);
+        MySwal.fire({
+          title: "خطا در عملیات",
+          text: "مشکلی در ثبت ترم جدید رخ داد. لطفاً دوباره تلاش کنید.",
+          icon: "error",
+          confirmButtonText: "تلاش مجدد",
+          customClass: {
+            confirmButton: "btn btn-danger",
+          },
+          buttonsStyling: false,
+        });
+      },
+    });
   };
 
   return (
     <Fragment>
       <Card className="mb-0 r-2">
         <Button color="primary" onClick={() => setShow(true)}>
-          افزدون تسک جدید
+          افزدون ترم جدید
         </Button>
       </Card>
       <Modal
@@ -68,79 +91,60 @@ const TermAdd = ({ data }) => {
 
         <ModalBody className="px-sm-5 mx-50 pb-5">
           <div className="text-center mb-2">
-            <h1 className="mb-1">اطلاعات تسک را وارد کنید</h1>
+            <h1 className="mb-1">اطلاعات ترم جدید را وارد کنید</h1>
           </div>
           <Row
             tag="form"
             className="gy-1 pt-75"
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(addTerm)}
           >
             <Col md={6} xs={12}>
-              <Label className="form-label" for="firstName">
-                عنوان تسک
+              <Label className="form-label" for="termName">
+                عنوان ترم
               </Label>
               <Controller
                 control={control}
-                name="worktitle"
-                render={({ field }) => {
-                  return (
+                name="termName"
+                rules={{
+                  required: "لطفاً عنوان ترم را وارد کنید.",
+                  minLength: {
+                    value: 5,
+                    message: "تعداد کاراکتر های عنوان ترم باید حداقل 5 باشد.",
+                  },
+                  maxLength: {
+                    value: 50,
+                    message:
+                      "تعداد کاراکتر های عنوان ترم نمی‌تواند بیشتر از 50 باشد.",
+                  },
+                }}
+                render={({ field }) => (
+                  <div>
                     <Input
                       {...field}
-                      id="worktitle"
-                      placeholder="عنوان تسک"
-                      value={field.value}
-                      invalid={errors.firstName && true}
+                      id="termName"
+                      placeholder="عنوان ترم"
+                      invalid={!!errors.termName}
                     />
-                  );
-                }}
-              />
-            </Col>
-            <Col md={6} xs={12}>
-              <Label className="form-label" for="workDescribe">
-                توضیحات تسک
-              </Label>
-              <Controller
-                name="workDescribe"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    id="workDescribe"
-                    placeholder="توضیحات تسک"
-                    invalid={errors.lastName && true}
-                  />
+                    {errors.termName && (
+                      <FormFeedback>{errors.termName.message}</FormFeedback>
+                    )}
+                  </div>
                 )}
               />
             </Col>
-
             <Col xs={6}>
-              <Label className="form-label" for="workDate">
-                ساعت کاری
+              <Label className="form-label" for="departmentId">
+                نام واحد
               </Label>
               <Controller
-                name="workDate"
-                control={control}
-                render={({ field }) => (
-                  <Input type="date" {...field} id="workDate" />
-                )}
-              />
-              {errors.username && (
-                <FormFeedback>لطفا ایمیل را وارد کنید</FormFeedback>
-              )}
-            </Col>
-            <Col xs={6}>
-              <Label className="form-label" for="assistanceId">
-                انتخاب دوره
-              </Label>
-              <Controller
-                name="assistanceId"
+                name="departmentId"
                 control={control}
                 rules={{ required: "لطفاً یک گزینه انتخاب کنید" }}
                 render={({ field }) => (
-                  <Input type="select" id="assistanceId" {...field}>
-                    {data?.map((option) => (
+                  <Input type="select" id="departmentId" {...field}>
+                    {Departmentlist?.map((option) => (
                       <option key={option.id} value={option.id}>
-                        {option.courseName}
+                        {option.depName}
                       </option>
                     ))}
                   </Input>
@@ -149,6 +153,65 @@ const TermAdd = ({ data }) => {
               {errors.assistanceId && (
                 <FormFeedback>{errors.assistanceId.message}</FormFeedback>
               )}
+            </Col>
+            <Col xs={6}>
+              <Label className="form-label" for="startDate">
+                تاریخ شروع
+              </Label>
+              <Controller
+                name="startDate"
+                control={control}
+                render={({ field }) => (
+                  <Input type="date" {...field} id="startDate" />
+                )}
+              />
+              {errors.username && (
+                <FormFeedback>لطفا ایمیل را وارد کنید</FormFeedback>
+              )}
+            </Col>
+
+            <Col xs={6}>
+              <Label className="form-label" for="endDate">
+                تاریخ پایان
+              </Label>
+              <Controller
+                name="endDate"
+                control={control}
+                render={({ field }) => (
+                  <Input type="date" {...field} id="endDate" />
+                )}
+              />
+              {errors.username && (
+                <FormFeedback>لطفا ایمیل را وارد کنید</FormFeedback>
+              )}
+            </Col>
+
+            <Col xs={12}>
+              <Label className="form-label" for="expire">
+                وضعیت ترم
+              </Label>
+              <Controller
+                name="expire"
+                control={control}
+                rules={{ required: "لطفاً یک گزینه انتخاب کنید" }}
+                render={({ field }) => (
+                  <div>
+                    <Input
+                      type="select"
+                      id="expire"
+                      {...field}
+                      invalid={!!errors.expire}
+                    >
+                      <option value="">لطفاً انتخاب کنید</option>
+                      <option value="false">منقضی شده</option>
+                      <option value="true">فعال</option>
+                    </Input>
+                    {errors.expire && (
+                      <FormFeedback>{errors.expire.message}</FormFeedback>
+                    )}
+                  </div>
+                )}
+              />
             </Col>
 
             <Col xs={12} className="text-center mt-2 pt-50">

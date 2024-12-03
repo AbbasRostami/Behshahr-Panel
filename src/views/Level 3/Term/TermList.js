@@ -30,33 +30,6 @@ const TermList = () => {
     enabled: true, 
   });
 
-  // const handleSuspendedClick = async (course) => {
-  //   const path = `/Building/Active`;
-  //   const body = {
-  //     isActive: !course.isActive,
-  //     id: course.courseId,
-  //   };
-  
-  //   const response = await editApi({ path, body });
-  
-  //   if (response.data.success) {
-  //     toast.success(response.data.message);
-  
-  //     setData((prevData) =>
-  //       prevData.map((item) =>
-  //         item.courseId === course.courseId
-  //           ? { ...item, isActive: !item.isActive } 
-  //           : item
-  //       )
-  //     );
-  //   } else {
-  //     toast.error("عملیات انجام نشد، مشکلی پیش آمد.");
-  //   }
-  
-  //   console.log("Response Put Active/Deactive:", response);
-  // };
-
-
   const CustomPagination = () => {
     const count = 10;
 
@@ -239,7 +212,7 @@ const TermList = () => {
                 </div>
 
                 <div className=" mx-2">
-                  <AssistanceAdd data={data} />
+                  <AssistanceAdd />
                 </div>
               </Col>
             </Row>
