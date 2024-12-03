@@ -22,6 +22,8 @@ import { Link } from "react-router-dom";
 import AssistanceAdd from "./TermAdd";
 import moment from "moment-jalaali";
 import { useGetSth } from "../../../core/apiPost";
+import TermAdd from "./TermAdd";
+import AddTermCloseDate from "./AddTermCloseDate";
 
 const TermList = () => {
 
@@ -205,15 +207,20 @@ const TermList = () => {
                   />
                 </div>
 
-                <div className="d-flex  table-header-actions">
-                  <Button className="add-new-user" color="primary">
+                <div className="d-flex   table-header-actions">
+                  <Button className="add-new-user me-2" color="primary">
                     جستجو
                   </Button>
                 </div>
-
-                <div className=" mx-2">
-                  <AssistanceAdd />
+                <div className=" mx-1">
+                  <AddTermCloseDate data={data}/>
                 </div>
+
+                <div className=" me-2">
+                  <TermAdd />
+                </div>
+
+
               </Col>
             </Row>
           </div>
