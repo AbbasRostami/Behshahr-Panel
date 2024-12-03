@@ -13,47 +13,79 @@ import {
 } from "reactstrap";
 import { useForm, Controller } from "react-hook-form";
 import "@styles/react/libs/react-select/_react-select.scss";
-import { postApi } from "../../../core/api/api";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { useGetSth, usePostSth } from "../../../core/apiPost";
+import { useQueryClient } from "@tanstack/react-query";
 
 const MySwal = withReactContent(Swal);
-const CourseSocialGroupAdd = ({ data }) => {
+const CourseSocialGroupAdd = () => {
   const [show, setShow] = useState(false);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-    register,
-    setValue,
-    watch,
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      groupName: "Bahr",
+      groupLink: "https://t.me/Bahr_AC",
+    },
+  });
 
-  const onSubmit = async (values) => {
-    console.log("Values", values);
-
-    const path = `/AssistanceWork`;
-    const body = values;
-    const response = await postApi({ path, body });
-    console.log("AssistanceWork Create:", response);
-    if (response.data.success) {
-      MySwal.fire({
-        icon: "success",
-        title: "موفقیت",
-        text: "عملیات با موفقیت انجام گردید",
-        customClass: {
-          confirmButton: "btn btn-success",
-        },
-      });
+  const { data } = useGetSth(
+    "/Course/CourseList?PageNumber=1&RowsOfPage=400&SortingCol=DESC&SortType=Expire&Query",
+    {
+      staleTime: 5 * 60 * 1000,
+      enabled: true,
     }
+  );
+
+  const { mutate } = usePostSth("/CourseSocialGroup");
+  const queryClient = useQueryClient();
+
+  const addSocials = (data) => {
+    console.log("socials:", data);
+
+    mutate(data, {
+      onSuccess: (response) => {
+        console.log("res: ", response);
+
+        queryClient.invalidateQueries(["/CourseSocialGroup"]);
+        setShow(false);
+
+        MySwal.fire({
+          title: "عملیات موفقیت‌آمیز بود",
+          text: "گروه جدید با موفقیت ثبت شد",
+          icon: "success",
+          confirmButtonText: "باشه",
+          customClass: {
+            confirmButton: "btn btn-success",
+          },
+          buttonsStyling: false,
+        });
+      },
+      onError: (error) => {
+        console.error("خطا در ثبت گروه:", error);
+        MySwal.fire({
+          title: "خطا در عملیات",
+          text: "مشکلی در ثبت گروه جدید رخ داد. لطفاً دوباره تلاش کنید.",
+          icon: "error",
+          confirmButtonText: "تلاش مجدد",
+          customClass: {
+            confirmButton: "btn btn-danger",
+          },
+          buttonsStyling: false,
+        });
+      },
+    });
   };
 
   return (
     <Fragment>
       <Card className="mb-0 r-2">
         <Button color="primary" onClick={() => setShow(true)}>
-          افزدون تسک جدید
+          افزدون گروه جدید
         </Button>
       </Card>
       <Modal
@@ -68,26 +100,25 @@ const CourseSocialGroupAdd = ({ data }) => {
 
         <ModalBody className="px-sm-5 mx-50 pb-5">
           <div className="text-center mb-2">
-            <h1 className="mb-1">اطلاعات تسک را وارد کنید</h1>
+            <h1 className="mb-1">لطفا اطلاعات گروه را وارد کنید</h1>
           </div>
           <Row
             tag="form"
             className="gy-1 pt-75"
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(addSocials)}
           >
             <Col md={6} xs={12}>
-              <Label className="form-label" for="firstName">
-                عنوان تسک
+              <Label className="form-label" for="groupLink">
+                لینک شبکه اجتماعی
               </Label>
               <Controller
                 control={control}
-                name="worktitle"
+                name="groupLink"
                 render={({ field }) => {
                   return (
                     <Input
                       {...field}
-                      id="worktitle"
-                      placeholder="عنوان تسک"
+                      id="groupLink"
                       value={field.value}
                       invalid={errors.firstName && true}
                     />
@@ -96,58 +127,43 @@ const CourseSocialGroupAdd = ({ data }) => {
               />
             </Col>
             <Col md={6} xs={12}>
-              <Label className="form-label" for="workDescribe">
-                توضیحات تسک
+              <Label className="form-label" for="groupName">
+                نام گروه
               </Label>
               <Controller
-                name="workDescribe"
+                name="groupName"
                 control={control}
                 render={({ field }) => (
                   <Input
                     {...field}
-                    id="workDescribe"
-                    placeholder="توضیحات تسک"
+                    id="groupName"
+                    defaultValue={"Bahr"}
                     invalid={errors.lastName && true}
                   />
                 )}
               />
             </Col>
 
-            <Col xs={6}>
-              <Label className="form-label" for="workDate">
-                ساعت کاری
-              </Label>
-              <Controller
-                name="workDate"
-                control={control}
-                render={({ field }) => (
-                  <Input type="date" {...field} id="workDate" />
-                )}
-              />
-              {errors.username && (
-                <FormFeedback>لطفا ایمیل را وارد کنید</FormFeedback>
-              )}
-            </Col>
-            <Col xs={6}>
-              <Label className="form-label" for="assistanceId">
+            <Col xs={12}>
+              <Label className="form-label" for="courseId">
                 انتخاب دوره
               </Label>
               <Controller
-                name="assistanceId"
+                name="courseId"
                 control={control}
                 rules={{ required: "لطفاً یک گزینه انتخاب کنید" }}
                 render={({ field }) => (
-                  <Input type="select" id="assistanceId" {...field}>
-                    {data?.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {option.courseName}
+                  <Input type="select" id="courseId" {...field}>
+                    {data?.courseDtos?.map((option) => (
+                      <option key={option.courseId} value={option.courseId}>
+                        {option.classRoomName}
                       </option>
                     ))}
                   </Input>
                 )}
               />
-              {errors.assistanceId && (
-                <FormFeedback>{errors.assistanceId.message}</FormFeedback>
+              {errors.courseId && (
+                <FormFeedback>{errors.courseId.message}</FormFeedback>
               )}
             </Col>
 

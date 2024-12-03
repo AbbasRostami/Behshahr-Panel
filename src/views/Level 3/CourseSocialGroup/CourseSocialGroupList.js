@@ -18,42 +18,14 @@ import {
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { Link } from "react-router-dom";
-import AssistanceAdd from "./CourseSocialGroupAdd";
-import { useQuery } from "@tanstack/react-query";
-import { GetCoursesSocial } from "../../../core/query/course-social-group/CourseSocialGroupGet";
+import { useGetSth } from "../../../core/apiPost";
+import CourseSocialGroupAdd from "./CourseSocialGroupAdd";
 
 const CourseSocialGroupList = () => {
-  const { data } = useQuery({
-    queryKey: ["CourseSocialGroup"],
-    queryFn: GetCoursesSocial,
+  const { data } = useGetSth('/CourseSocialGroup', {
+    staleTime: 5 * 60 * 1000,
+    enabled: true, 
   });
-
-  // const handleSuspendedClick = async (course) => {
-  //   const path = `/Building/Active`;
-  //   const body = {
-  //     isActive: !course.isActive,
-  //     id: course.courseId,
-  //   };
-  
-  //   const response = await editApi({ path, body });
-  
-  //   if (response.data.success) {
-  //     toast.success(response.data.message);
-  
-  //     setData((prevData) =>
-  //       prevData.map((item) =>
-  //         item.courseId === course.courseId
-  //           ? { ...item, isActive: !item.isActive } 
-  //           : item
-  //       )
-  //     );
-  //   } else {
-  //     toast.error("عملیات انجام نشد، مشکلی پیش آمد.");
-  //   }
-  
-  //   console.log("Response Put Active/Deactive:", response);
-  // };
-
 
   const CustomPagination = () => {
     const count = 10;
@@ -175,7 +147,7 @@ const CourseSocialGroupList = () => {
                 </div>
 
                 <div className=" mx-2">
-                  <AssistanceAdd data={data} />
+                  <CourseSocialGroupAdd data={data} />
                 </div>
               </Col>
             </Row>
