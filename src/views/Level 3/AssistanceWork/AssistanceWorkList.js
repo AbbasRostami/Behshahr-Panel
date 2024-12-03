@@ -20,14 +20,12 @@ import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { Link } from "react-router-dom";
 import moment from "moment-jalaali";
 import AssistanceAdd from "./AssistanceAdd";
-import { allApi, useGetRequest } from "../../../core/apiPost";
+import { useGetSth } from "../../../core/apiPost";
 const AssisranceWork = () => {
   
-  const { data, isPending } = useGetRequest({
-    url: allApi.GetAssistance,
-    key: ["AssistanceWork"],
-    enabled: true,
-    staleTime: 10 * 60 * 1000,
+  const { data, error } = useGetSth('/AssistanceWork', {
+    staleTime: 5 * 60 * 1000,
+    enabled: true, 
   });
 
 
