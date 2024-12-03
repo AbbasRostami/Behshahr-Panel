@@ -58,17 +58,35 @@ export const useGetRequest = ({ url, key, headers, enabled, staleTime }) => {
   /* END GetRequest */
 }
 
-export const AssistanceWork = async (data) => {
+export const postRequest = async (url, data) => {
   try {
-    const res = await instance.post("/AssistanceWork", data);
+    const res = await instance.post(url, data);
     return res.data;
   } catch (error) {
     throw error;
   }
 };
 
-export const usePostSth = () => {
+export const usePostSth = (url) => {
   return useMutation({
-    mutationFn: async (data) => await AssistanceWork(data),
+    mutationFn: async (data) => await postRequest(url, data),
   });
 };
+
+
+export const getRequest = async (url, params = {}) => {
+    try {
+      const res = await instance.get(url, { params });
+      return res.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+  
+  export const useGetSth = (url, options = {}) => {
+    return useQuery({
+      queryKey: [url, options.params],
+      queryFn: async () => await getRequest(url, options.params),
+      ...options,
+    });
+  };
