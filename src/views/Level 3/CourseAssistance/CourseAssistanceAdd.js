@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import {
   Card,
   Row,
@@ -13,47 +13,99 @@ import {
 } from "reactstrap";
 import { useForm, Controller } from "react-hook-form";
 import "@styles/react/libs/react-select/_react-select.scss";
-import { postApi } from "../../../core/api/api";
+import { getApi } from "../../../core/api/api";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import { useGetSth, usePostSth } from "../../../core/apiPost";
+import { useQueryClient } from "@tanstack/react-query";
 
 const MySwal = withReactContent(Swal);
-const CourseAssistanceAdd = ({ data }) => {
+const CourseAssistanceAdd = () => {
   const [show, setShow] = useState(false);
+
+  const {
+    data: dataCo,
+    isLoading: isLoadingCo,
+    isError: isErrorCo,
+  } = useGetSth(
+    "/Course/CourseList?PageNumber=1&RowsOfPage=400&SortingCol=DESC&SortType=Expire&Query"
+  );
+
+  if (isLoadingCo) {
+    console.log("در حال بارگذاری داده‌های دوره‌ها...");
+  }
+
+  if (isErrorCo) {
+    console.error("خطایی در دریافت داده‌های دوره‌ها رخ داد.");
+  }
+
+  const {
+    data: dataUser,
+    isLoading: isLoadingUser,
+    isError: isErrorUser,
+  } = useGetSth(
+    "/User/UserMannage?PageNumber=1&RowsOfPage=600&SortingCol=DESC&SortType=InsertDate&IsActiveUser=true&IsDeletedUser=true&roleId=1"
+  );
+
+  if (isLoadingUser) {
+    console.log("در حال بارگذاری داده‌های کاربران...");
+  }
+
+  if (isErrorUser) {
+    console.error("خطایی در دریافت داده‌های کاربران رخ داد.");
+  }
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-    register,
-    setValue,
-    watch,
   } = useForm();
 
-  const onSubmit = async (values) => {
-    console.log("Values", values);
+  const { mutate } = usePostSth("/CourseAssistance");
+  const queryClient = useQueryClient();
 
-    const path = `/AssistanceWork`;
-    const body = values;
-    const response = await postApi({ path, body });
-    console.log("AssistanceWork Create:", response);
-    if (response.data.success) {
-      MySwal.fire({
-        icon: "success",
-        title: "موفقیت",
-        text: "عملیات با موفقیت انجام گردید",
-        customClass: {
-          confirmButton: "btn btn-success",
-        },
-      });
-    }
+  const addMentor = (data) => {
+    console.log("menter data:", data);
+
+    mutate(data, {
+      onSuccess: (response) => {
+        console.log("res: ", response);
+
+        queryClient.invalidateQueries(["/ClassRoom"]);
+        setShow(false);
+
+        MySwal.fire({
+          title: "عملیات موفقیت‌آمیز بود",
+          text: "منتور جدید با موفقیت ثبت شد",
+          icon: "success",
+          confirmButtonText: "باشه",
+          customClass: {
+            confirmButton: "btn btn-success",
+          },
+          buttonsStyling: false,
+        });
+      },
+      onError: (error) => {
+        console.error("خطا در ثبت منتور:", error);
+        MySwal.fire({
+          title: "خطا در عملیات",
+          text: "مشکلی در ثبت منتور جدید رخ داد. لطفاً دوباره تلاش کنید.",
+          icon: "error",
+          confirmButtonText: "تلاش مجدد",
+          customClass: {
+            confirmButton: "btn btn-danger",
+          },
+          buttonsStyling: false,
+        });
+      },
+    });
   };
 
   return (
     <Fragment>
       <Card className="mb-0 r-2">
         <Button color="primary" onClick={() => setShow(true)}>
-          افزدون تسک جدید
+          افزدون منتور جدید
         </Button>
       </Card>
       <Modal
@@ -68,86 +120,66 @@ const CourseAssistanceAdd = ({ data }) => {
 
         <ModalBody className="px-sm-5 mx-50 pb-5">
           <div className="text-center mb-2">
-            <h1 className="mb-1">اطلاعات تسک را وارد کنید</h1>
+            <h1 className="mb-1">
+              منتور مد نظر و دوره مد نظر منتور را انتخاب کنید
+            </h1>
           </div>
           <Row
             tag="form"
             className="gy-1 pt-75"
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(addMentor)}
           >
-            <Col md={6} xs={12}>
-              <Label className="form-label" for="firstName">
-                عنوان تسک
-              </Label>
-              <Controller
-                control={control}
-                name="worktitle"
-                render={({ field }) => {
-                  return (
-                    <Input
-                      {...field}
-                      id="worktitle"
-                      placeholder="عنوان تسک"
-                      value={field.value}
-                      invalid={errors.firstName && true}
-                    />
-                  );
-                }}
-              />
-            </Col>
-            <Col md={6} xs={12}>
-              <Label className="form-label" for="workDescribe">
-                توضیحات تسک
-              </Label>
-              <Controller
-                name="workDescribe"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    id="workDescribe"
-                    placeholder="توضیحات تسک"
-                    invalid={errors.lastName && true}
-                  />
-                )}
-              />
-            </Col>
-
             <Col xs={6}>
-              <Label className="form-label" for="workDate">
-                ساعت کاری
-              </Label>
-              <Controller
-                name="workDate"
-                control={control}
-                render={({ field }) => (
-                  <Input type="date" {...field} id="workDate" />
-                )}
-              />
-              {errors.username && (
-                <FormFeedback>لطفا ایمیل را وارد کنید</FormFeedback>
-              )}
-            </Col>
-            <Col xs={6}>
-              <Label className="form-label" for="assistanceId">
+              <Label className="form-label" for="courseId">
                 انتخاب دوره
               </Label>
               <Controller
-                name="assistanceId"
+                name="courseId"
                 control={control}
                 rules={{ required: "لطفاً یک گزینه انتخاب کنید" }}
                 render={({ field }) => (
-                  <Input type="select" id="assistanceId" {...field}>
-                    {data?.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {option.courseName}
+                  <Input type="select" id="courseId" {...field}>
+                    {dataCo?.courseDtos?.map((option) => (
+                      <option key={option.courseId} value={option.courseId}>
+                        {option.title}
                       </option>
                     ))}
                   </Input>
                 )}
               />
-              {errors.assistanceId && (
-                <FormFeedback>{errors.assistanceId.message}</FormFeedback>
+              {errors.courseId && (
+                <FormFeedback>{errors.courseId.message}</FormFeedback>
+              )}
+            </Col>
+
+            <Col xs={6}>
+              <Label className="form-label" for="userId">
+                انتخاب کاربر
+              </Label>
+              <Controller
+                name="userId"
+                control={control}
+                defaultValue=""
+                rules={{ required: "لطفاً یک گزینه انتخاب کنید" }}
+                render={({ field }) => (
+                  <Input
+                    type="select"
+                    id="userId"
+                    {...field} 
+                    value={field.value || ""} 
+                    onChange={(e) => field.onChange(e.target.value)} 
+                  >
+                    <option value="">لطفاً انتخاب کنید</option>
+                    {dataUser?.listUser?.map((user) => (
+                      <option key={user.id} value={user.id}>
+                        {user.fname} {user.lname}
+                      </option>
+                    ))}
+                  </Input>
+                )}
+              />
+              {errors.userId && (
+                <FormFeedback>{errors.userId.message}</FormFeedback>
               )}
             </Col>
 
