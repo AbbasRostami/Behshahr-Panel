@@ -13,20 +13,20 @@ import {
   DropdownToggle,
   DropdownItem,
   DropdownMenu,
+  Badge,
 } from "reactstrap";
 
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { Link } from "react-router-dom";
-import AssistanceAdd from "./DepartmentAdd";
-import { useQuery } from "@tanstack/react-query";
-import { GetDepartment } from "../../../core/query/department/DepartmentGet";
-import moment from "moment";
+import moment from "moment-jalaali";
 import { useGetSth } from "../../../core/apiPost";
-import DepartmentAdd from "./DepartmentAdd";
+import TermAdd from "../Term/TermAdd";
+import TechnologyAdd from "./TechnologyAdd";
 
-const DepartmentList = () => {
-  const { data } = useGetSth('/Department', {
+const TechnologyList = () => {
+
+  const { data } = useGetSth('/technology', {
     staleTime: 5 * 60 * 1000,
     enabled: true, 
   });
@@ -83,59 +83,46 @@ const DepartmentList = () => {
 
   const columns = [
     {
-      name: "نام ساختمان",
-      sortable: true,
-      minWidth: "250px",
-      sortField: "fullName",
-      selector: (row) => row.depName,
-      cell: (row) => (
-        <div className="d-flex fw-bolder justify-content-left align-items-center">
-          {/* <Avatar className='me-1' img={row.avatar} width='32' height='32' /> */}
-          {row.depName}
-        </div>
-      ),
-    },
-    {
-      name: "نام واحد",
-      sortable: true,
-      minWidth: "250px",
-      sortField: "fullName",
-      selector: (row) => row.buildingName,
-      cell: (row) => (
-        <div className="d-flex fw-bolder justify-content-left align-items-center">
-          {/* <Avatar className='me-1' img={row.avatar} width='32' height='32' /> */}
-          {row.buildingName}
-        </div>
-      ),
-    },
-
-    {
-      name: "تاریخ ساخت",
+      name: "نام تکنولوژِی",
       sortable: true,
       minWidth: "200px",
-      sortField: "inserDate",
-      selector: (row) => row.insertDate,
+      sortField: "fullName",
+      selector: (row) => row.techName,
       cell: (row) => (
         <div className="d-flex fw-bolder justify-content-left align-items-center">
-          {row.insertDate
-            ? moment(row.insertDate, "YYYY/MM/DD").format("jYYYY/jMM/jDD")
-            : "تاریخ نامشخص"}
+          {/* <Avatar className='me-1' img={row.avatar} width='32' height='32' /> */}
+          {row.techName}
         </div>
       ),
     },
     {
-      name: "شناسه واحد",
+      name: "توضیحات",
       sortable: true,
-      minWidth: "250px",
+      minWidth: "150px",
       sortField: "fullName",
-      selector: (row) => row.buildingId,
+      selector: (row) => row.describe,
       cell: (row) => (
         <div className="d-flex fw-bolder justify-content-left align-items-center">
-          {row.buildingId}
+          {/* <Avatar className='me-1' img={row.avatar} width='32' height='32' /> */}
+          {row.describe}
         </div>
       ),
     },
-    
+    {
+      name: "ایکون آدرس",
+      sortable: true,
+      minWidth: "150px",
+      sortField: "fullName",
+      selector: (row) => row.iconAddress,
+      cell: (row) => (
+        <div className="d-flex fw-bolder justify-content-left align-items-center">
+          {/* <Avatar className='me-1' img={row.avatar} width='32' height='32' /> */}
+          {row.iconAddress}
+        </div>
+      ),
+    },
+ 
+
     {
       name: "اقدام",
       minWidth: "100px",
@@ -205,7 +192,7 @@ const DepartmentList = () => {
                 </div>
 
                 <div className=" mx-2">
-                  <DepartmentAdd data={data} />
+                  <TechnologyAdd data={data} />
                 </div>
               </Col>
             </Row>
@@ -227,4 +214,4 @@ const DepartmentList = () => {
   );
 };
 
-export default DepartmentList;
+export default TechnologyList;

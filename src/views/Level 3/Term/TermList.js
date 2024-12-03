@@ -20,14 +20,14 @@ import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { Link } from "react-router-dom";
 import AssistanceAdd from "./TermAdd";
-import { useQuery } from "@tanstack/react-query";
 import moment from "moment-jalaali";
-import { GetTerm } from "../../../core/query/term/TermGet";
+import { useGetSth } from "../../../core/apiPost";
 
 const TermList = () => {
-  const { data } = useQuery({
-    queryKey: ["Term"],
-    queryFn: GetTerm,
+
+  const { data } = useGetSth('/Term', {
+    staleTime: 5 * 60 * 1000,
+    enabled: true, 
   });
 
   // const handleSuspendedClick = async (course) => {
