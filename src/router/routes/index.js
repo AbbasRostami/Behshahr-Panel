@@ -28,6 +28,7 @@ import DepartmentList from "../../views/Level 3/Department/DepartmentList";
 import TermList from "../../views/Level 3/Term/TermList";
 import StatusCoursesList from "../../views/Level 3/CourseStatus/StatusCoursesList";
 import TechnologyList from "../../views/Level 3/Technology/TechnologyList";
+import CalendarComponent from "../../views/calendar";
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -164,6 +165,10 @@ const Routes = [
   {
     path: "/technology",
     element: <TechnologyList />,
+  },
+  {
+    path: "/calendar",
+    element: <CalendarComponent />,
   },
 
   {

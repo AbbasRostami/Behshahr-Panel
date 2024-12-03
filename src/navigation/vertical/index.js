@@ -1,4 +1,4 @@
-import { Mail, Home, Airplay, Circle, User, Calendar, Book, Twitter, Trello, Codesandbox, BookOpen, Slack } from "react-feather";
+import { Mail, Home, Airplay, Circle, User, Calendar, Book, Twitter, Trello, Codesandbox, BookOpen, Slack, Watch } from "react-feather";
 
 export default [
   {
@@ -105,6 +105,12 @@ export default [
     title: "وضعیت تکنورلوژِی",
     icon: <Slack size={20} />,
     navLink: "/technology",
+  },
+  {
+    id: "/calendar",
+    title: "تقویم آموزشی پژوهشگاه",
+    icon: <Watch size={20} />,
+    navLink: "/calendar",
   },
   {
     id: "comment",
