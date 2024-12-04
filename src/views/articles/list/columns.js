@@ -13,9 +13,10 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
-import { deleteApi } from "../../../core/api/api";
+import { deleteApi, editApi } from "../../../core/api/api";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 const MySwal = withReactContent(Swal);
 
 const deleteArticles = async (id) => {
@@ -36,17 +37,43 @@ const deleteArticles = async (id) => {
     const body = {
       fileId: id,
     };
-    const response = await deleteApi({ path, body });
-    if (response) {
+
+    try {
+      const response = await deleteApi({ path, body });
+
+      console.log("Response from API:", response);
+      if (response && response.data && response.data.StatusCode === 403) {
+        MySwal.fire({
+          icon: "error",
+          title: "عدم دسترسی",
+          text: response.data.ErrorMessage[0],  
+          customClass: {
+            confirmButton: "btn btn-danger",
+          },
+        });
+      } else if (response) {
+        MySwal.fire({
+          icon: "success",
+          title: "موفقیت",
+          text: "عملیات با موفقیت انجام گردید",
+          customClass: {
+            confirmButton: "btn btn-success",
+          },
+        });
+      }
+    } catch (error) {
+      console.error("Error during delete operation:", error);
       MySwal.fire({
-        icon: "success",
-        title: "موفقیت",
-        text: "عملیات با موفقیت انجام گردید",
+        icon: "error",
+        title: "خطا",
+        text: "درخواست با شکست مواجه شد. لطفا دوباره تلاش کنید.",
         customClass: {
-          confirmButton: "btn btn-success",
+          confirmButton: "btn btn-danger",
         },
       });
-    } else if (result.dismiss === MySwal.DismissReason.cancel) {
+    }
+
+    if (result.dismiss === MySwal.DismissReason.cancel) {
       MySwal.fire({
         title: "لغو",
         text: "عملیات لغو گردید",
@@ -58,6 +85,40 @@ const deleteArticles = async (id) => {
     }
   });
 };
+
+const handleSuspendedClick = async (id) => {
+  console.log("id", id); 
+
+  const newIsActive = !id.isActive;
+
+  const formData = new FormData();
+  formData.append('Active', newIsActive);
+  formData.append('Id', id.id);
+  formData.forEach((value, key) => {
+    console.log(`${key}: ${value}`);
+  });
+
+  const path = `/News/ActiveDeactiveNews`;
+
+ 
+    const response = await editApi({ path, body: formData });
+    if (response.data.success) {
+      toast.success(response.data.message);
+  
+      setData((prevData) =>
+        prevData.map((item) =>
+          item.courseId === course.courseId
+            ? { ...item, isActive: !item.isActive } 
+            : item
+        )
+      );
+    } else {
+      toast.error("عملیات انجام نشد، مشکلی پیش آمد.");
+    }
+    console.log("Response Put Active/Deactive:", response);
+  
+};
+
 
 export const columns = [
   {
@@ -153,12 +214,11 @@ export const columns = [
             </DropdownItem>
             <DropdownItem
               tag="a"
-              href="/"
               className="w-100"
-              onClick={(e) => e.preventDefault()}
+              onClick={() => handleSuspendedClick(row)}
             >
               <Archive size={14} className="me-50" />
-              <span className="align-middle">ویرایش</span>
+              <span className="align-middle">فعال / غیرفعال</span>
             </DropdownItem>
             <DropdownItem
               tag="a"

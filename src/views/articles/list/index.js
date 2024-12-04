@@ -25,6 +25,7 @@ const ArticlesLists = () => {
     <div className="app-user-list">
       <UsersList
         data={data}
+        setData={setData}
         setSearchDataParams={setSearchDataParams}
         searchDataParams={searchDataParams}
       />

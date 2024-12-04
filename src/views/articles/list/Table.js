@@ -73,7 +73,7 @@ const CustomHeader = ({
   );
 };
 
-const UsersList = ({ data, searchDataParams, setSearchDataParams }) => {
+const UsersList = ({ data, setData,searchDataParams, setSearchDataParams }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -189,19 +189,6 @@ const UsersList = ({ data, searchDataParams, setSearchDataParams }) => {
                 }}
               />
             </Col>
-
-            <Col className="my-md-0 my-1" md="4">
-              <Label for="plan-select">مرتب سازی</Label>
-              <Select
-                theme={selectThemeColors}
-                isClearable={false}
-                className="react-select"
-                classNamePrefix="select"
-                // options={planOptions}
-                // value={currentPlan}
-                onChange={() => {}}
-              />
-            </Col>
           </Row>
         </CardBody>
       </Card>
@@ -221,6 +208,7 @@ const UsersList = ({ data, searchDataParams, setSearchDataParams }) => {
             className="react-dataTable"
             paginationComponent={CustomPagination}
             data={data}
+            setData={setData}
             subHeaderComponent={
               <CustomHeader
                 handlePagination={handlePagination}
