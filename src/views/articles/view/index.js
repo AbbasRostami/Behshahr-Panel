@@ -9,6 +9,12 @@ import {
   Linkedin,
   CornerUpLeft,
   MessageSquare,
+  Calendar,
+  Hash,
+  Feather,
+  BookOpen,
+  Eye,
+  Sun,
 } from "react-feather";
 import Avatar from "@components/avatar";
 import googleIcon from "./../../../assets/images/icons/social/google.png";
@@ -35,7 +41,7 @@ import {
 
 import "@styles/base/pages/page-blog.scss";
 
-import avatar from "./../../../assets/images/portrait/small/avatar-s-11.jpg";
+import avatar from "./../../../assets/images/portrait/small/download.png";
 import articlesPic from "./../../../../src/assets/images/pages/noimage-760x460.png";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
@@ -50,7 +56,7 @@ const ArticlesView = () => {
   const GetArticlesView = async () => {
     const path = `/News/${params.id}`;
     const response = await getApi({ path });
-    console.log("Get Details News:", response.data.detailsNewsDto);
+    console.log("Get Details News:", response.data);
     setData(response.data.detailsNewsDto);
   };
 
@@ -154,7 +160,7 @@ const ArticlesView = () => {
                 <Card className="mb-3">
                   <img
                     className="mx-auto"
-                    style={{ width: "100%", maxHeight: "450px" }}
+                    style={{ width: "100%", maxHeight: "350px" }}
                     // src={data.currentImageAddressTumb}
                     src={
                       data?.currentImageAddressTumb &&
@@ -167,29 +173,30 @@ const ArticlesView = () => {
                     top
                   />
                   <CardBody>
-                    <CardTitle tag="h4">
+                    <CardTitle tag="h4" className=" g-3 ms-2 fw-bolder">
+                      <Avatar
+                        className=""
+                        img={avatar}
+                        imgHeight="45"
+                        imgWidth="45"
+                      />
                       نام نویسنده: {data.addUserFullName}
                     </CardTitle>
-                    <div className="d-flex">
-                      <Avatar
-                        className="me-50"
-                        img={avatar}
-                        imgHeight="9"
-                        imgWidth="24"
-                      />
+                    <div className="d-flex align-items-center">
+                      <Calendar size={28} />
                       <div>
                         <small>
                           <a
-                            className="text-muted ms-50 "
+                            className="text-muted  fw-bold ms-50 "
                             href="/"
                             onClick={(e) => e.preventDefault()}
                           >
-                            تاریخ استارت:{" "}
+                            تاریخ شروع:{" "}
                           </a>
                         </small>
                         <span className="text-muted ms-50 me-25"></span>
 
-                        <small className="text-muted">
+                        <small className=" fw-bold text-black">
                           {" "}
                           {moment(data?.insertDate)
                             .locale("fa")
@@ -198,7 +205,7 @@ const ArticlesView = () => {
 
                         <small>
                           <a
-                            className="text-muted ms-50 "
+                            className="text-muted fw-bold text-black ms-50 "
                             href="/"
                             onClick={(e) => e.preventDefault()}
                           >
@@ -207,7 +214,7 @@ const ArticlesView = () => {
                         </small>
                         <span className="text-muted ms-50 me-25"></span>
 
-                        <small className="text-muted">
+                        <small className=" fw-bold text-black">
                           {" "}
                           {moment(data?.updateDate)
                             .locale("fa")
@@ -215,28 +222,27 @@ const ArticlesView = () => {
                         </small>
                       </div>
                     </div>
-                    <h6 className="rtl mt-2">
-                      دسته بندی: {data.newsCatregoryName}
+                    <h4 className="d-flex  rtl mt-2">
+                      <Hash size={25} />
+                      <p className="ms-50">
+                        {" "}
+                        دسته بندی: {data.newsCatregoryName}{" "}
+                      </p>
                       <br />
                       <br />
-                    </h6>
+                    </h4>
 
-                    <h6 className="rtl mt-2 ">
+                    <h4 className="rtl mt-2 ">
                       <div>
-                        <Avatar
-                          img={avatar}
-                          className="me-10"
-                          imgHeight="20"
-                          imgWidth="20"
-                        />
-                        {"                          "}
-                        توضیحات کوتاه: {data.describe}
+                        <Feather size={25} />
+                       <span className="ms-50"> توضیحات کوتاه:</span>
                       </div>
+                      <p className="m-1">{data.describe}</p>
+                    </h4>
 
-                      <br />
-                      <br />
-                    </h6>
-                    <h6 className="rtl mt-2 ">
+
+
+                    <h4 className="rtl mt-3 ">
                       <img
                         className="me-1 rounded-6 "
                         src={googleIcon}
@@ -256,19 +262,13 @@ const ArticlesView = () => {
                       />
                       توضیحات گوگل: {data.googleDescribe}
                       <br />
-                    </h6>
+                    </h4>
+
                     <div className="d-flex mt-5">
-                      <div>
-                        <Avatar
-                          img={avatar}
-                          className="me-10"
-                          imgHeight="60"
-                          imgWidth="60"
-                        />
-                      </div>
+                     <BookOpen size={45}/>
                       <div>
                         <h6 className="fw-bolder mx-2"> توضیحات دوره:</h6>
-                        <CardText className="mb-0 mx-2 ">
+                        <CardText className="mb-0 fw-bolder mx-2 ">
                           {data.describe}
                         </CardText>
                       </div>
@@ -282,13 +282,13 @@ const ArticlesView = () => {
                             href="/"
                             onClick={(e) => e.preventDefault()}
                           >
-                            <MessageSquare
+                            <Sun
                               size={21}
                               className="text-body align-middle"
                             />
                           </a>
                           <a href="/" onClick={(e) => e.preventDefault()}>
-                            <div className="text-body align-middle">19.1k</div>
+                            <div className="text-body align-middle">{data?.currentRate}</div>
                           </a>
                         </div>
                         <div className="d-flex align-items-cente">
@@ -297,13 +297,13 @@ const ArticlesView = () => {
                             href="/"
                             onClick={(e) => e.preventDefault()}
                           >
-                            <Bookmark
+                            <Eye
                               size={21}
                               className="text-body align-middle"
                             />
                           </a>
                           <a href="/" onClick={(e) => e.preventDefault()}>
-                            <div className="text-body align-middle">139</div>
+                            <div className="text-body align-middle">{data?.currentView}</div>
                           </a>
                         </div>
                       </div>
