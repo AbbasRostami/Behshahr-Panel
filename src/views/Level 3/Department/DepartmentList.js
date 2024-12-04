@@ -21,6 +21,7 @@ import { Link } from "react-router-dom";
 import moment from "moment-jalaali";
 import { useGetSth } from "../../../core/apiPost";
 import DepartmentAdd from "./DepartmentAdd";
+import DepartmentEdit from "./DepartmentEdit";
 
 const DepartmentList = () => {
   const { data } = useGetSth('/Department', {
@@ -116,18 +117,14 @@ const DepartmentList = () => {
               <Eye size={14} className="cursor-pointer" />
             </DropdownToggle>
 
-            <DropdownMenu>
-              <DropdownItem tag={Link} className="w-100">
-                <FileText size={14} className="me-50" />
-                <span className="align-middle">ویرایش</span>
-              </DropdownItem>
-              <DropdownItem
-                className="w-100"
-                onClick={() => handleSuspendedClick(row)}
-              >
-                <Trash2 size={14} className="me-50" />
-                <span className="align-middle">غیرفعال / غیرفعال</span>
-              </DropdownItem>
+            <DropdownMenu persist>
+              <div key={row.id} className="column-action">
+                <UncontrolledDropdown>
+                  <DropdownToggle tag="div" className="btn btn-sm">
+                    <DepartmentEdit data={row} className="font-medium-2" />
+                  </DropdownToggle>
+                </UncontrolledDropdown>
+              </div>
             </DropdownMenu>
           </UncontrolledDropdown>
         </div>
