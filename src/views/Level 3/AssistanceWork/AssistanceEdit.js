@@ -56,7 +56,7 @@ const AssistanceEdit = React.memo(({ data }) => {
       onSuccess: (data) => {
         console.log("موفقیت:", data);
         queryClient.invalidateQueries(["/AssistanceWork"]);
-        setShow(false); // مطمئن شوید که وضعیت فقط یکبار تغییر می‌کند
+        setShow(false); 
         MySwal.fire({
           title: "عملیات موفقیت‌آمیز بود",
           text: "اطلاعات جدید با موفقیت اضافه شد",
