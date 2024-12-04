@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
 import { ChevronDown, Eye, FileText, Trash2 } from "react-feather";
@@ -18,43 +18,21 @@ import {
 
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
-import { Link } from "react-router-dom";
 import moment from "moment-jalaali";
-import AssistanceAdd from "./BuildingAdd";
-import { useGetSth } from "../../../core/apiPost";
+import { useGetSth, usePutSth } from "../../../core/apiPost";
 import BuildingAdd from "./BuildingAdd";
+import BuildingEdit from "./BuildingEdit";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+import { useQueryClient } from "@tanstack/react-query";
+const MySwal = withReactContent(Swal);
 
 const BuildingList = () => {
-  const { data } = useGetSth("/Building", {
+  const { data = [] } = useGetSth("/Building", {
     staleTime: 5 * 60 * 1000,
     enabled: true,
   });
-
-  // const handleSuspendedClick = async (course) => {
-  //   const path = `/Building/Active`;
-  //   const body = {
-  //     isActive: !course.isActive,
-  //     id: course.courseId,
-  //   };
-
-  //   const response = await editApi({ path, body });
-
-  //   if (response.data.success) {
-  //     toast.success(response.data.message);
-
-  //     setData((prevData) =>
-  //       prevData.map((item) =>
-  //         item.courseId === course.courseId
-  //           ? { ...item, isActive: !item.isActive }
-  //           : item
-  //       )
-  //     );
-  //   } else {
-  //     toast.error("عملیات انجام نشد، مشکلی پیش آمد.");
-  //   }
-
-  //   console.log("Response Put Active/Deactive:", response);
-  // };
+  const [show, setShow] = useState(false);
 
   const CustomPagination = () => {
     const count = 10;
@@ -77,6 +55,71 @@ const BuildingList = () => {
         }
       />
     );
+  };
+
+  const queryClient = useQueryClient();
+  const { mutate } = usePutSth("/Building/Active");
+
+  const handleSuspendedClick = async (row) => {
+    return MySwal.fire({
+      title: "آیا مطمئن هستید؟",
+      text: "البته امکان بازگشت وجود ندارد",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "بله",
+      cancelButtonText: "انصراف",
+      customClass: {
+        confirmButton: "btn btn-primary",
+        cancelButton: "btn btn-outline-danger ms-1",
+      },
+      buttonsStyling: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        mutate(
+          {
+            active: !row.active,
+            id: row.id,
+          },
+          {
+            onSuccess: (response) => {
+              console.log("Response:", response);
+              queryClient.invalidateQueries(["/Building"]);
+              setShow(false);
+
+              MySwal.fire({
+                title: "عملیات موفقیت‌آمیز بود",
+                text: "اطلاعات جدید با موفقیت ثبت شد",
+                icon: "success",
+                confirmButtonText: "باشه",
+                customClass: { confirmButton: "btn btn-success" },
+                buttonsStyling: false,
+              });
+            },
+            onError: (error) => {
+              console.error("خطا در ویرایش ساختمان:", error);
+              MySwal.fire({
+                title: "خطا در عملیات",
+                text: "مشکلی در ویرایش ساختمان رخ داد. لطفاً دوباره تلاش کنید.",
+                icon: "error",
+                confirmButtonText: "تلاش مجدد",
+                customClass: { confirmButton: "btn btn-danger" },
+                buttonsStyling: false,
+              });
+            },
+          }
+        );
+      } else if (result.dismiss === MySwal.DismissReason.cancel) {
+        MySwal.fire({
+          title: "لغو عملیات",
+          text: "عملیات لغو شد.",
+          icon: "info",
+          confirmButtonText: "باشه",
+          customClass: {
+            confirmButton: "btn btn-secondary",
+          },
+        });
+      }
+    });
   };
 
   const columns = [
@@ -152,14 +195,17 @@ const BuildingList = () => {
               <Eye size={14} className="cursor-pointer" />
             </DropdownToggle>
 
-            <DropdownMenu>
-              <DropdownItem tag={Link} className="w-100">
-                <FileText size={14} className="me-50" />
-                <span className="align-middle">ویرایش</span>
-              </DropdownItem>
+            <DropdownMenu persist>
+              <div key={row.id} className="column-action">
+                <UncontrolledDropdown>
+                  <DropdownToggle tag="div" className="btn btn-sm">
+                    <BuildingEdit data={row} className="font-medium-2" />
+                  </DropdownToggle>
+                </UncontrolledDropdown>
+              </div>
               <DropdownItem
                 className="w-100"
-                onClick={() => handleSuspendedClick(row)}
+                onClick={() => handleSuspendedClick(row)} 
               >
                 <Trash2 size={14} className="me-50" />
                 <span className="align-middle">غیرفعال / غیرفعال</span>
