@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
-import { ChevronDown, Eye, FileText, Trash2 } from "react-feather";
+import { ChevronDown, Eye } from "react-feather";
 
 import {
   Row,
@@ -11,7 +11,6 @@ import {
   Button,
   UncontrolledDropdown,
   DropdownToggle,
-  DropdownItem,
   DropdownMenu,
 } from "reactstrap";
 
@@ -21,6 +20,7 @@ import { Link } from "react-router-dom";
 import moment from "moment-jalaali";
 import { useGetSth } from "../../../core/apiPost";
 import ClassRoomAdd from "./ClassRoomAdd";
+import ClassRoomEdit from "./ClassRoomEdit";
 
 const ClassRoomList = () => {
 
@@ -120,18 +120,14 @@ const ClassRoomList = () => {
               <Eye size={14} className="cursor-pointer" />
             </DropdownToggle>
 
-            <DropdownMenu>
-              <DropdownItem tag={Link} className="w-100">
-                <FileText size={14} className="me-50" />
-                <span className="align-middle">ویرایش</span>
-              </DropdownItem>
-              <DropdownItem
-                className="w-100"
-                onClick={() => handleSuspendedClick(row)}
-              >
-                <Trash2 size={14} className="me-50" />
-                <span className="align-middle">غیرفعال / غیرفعال</span>
-              </DropdownItem>
+            <DropdownMenu persist>
+              <div key={row.id} className="column-action">
+                <UncontrolledDropdown>
+                  <DropdownToggle tag="div" className="btn btn-sm">
+                    <ClassRoomEdit data={row} className="font-medium-2" />
+                  </DropdownToggle>
+                </UncontrolledDropdown>
+              </div>
             </DropdownMenu>
           </UncontrolledDropdown>
         </div>
