@@ -86,7 +86,6 @@ const CourseAssistanceAdd = () => {
         });
       },
       onError: (error) => {
-        console.error("خطا در ثبت منتور:", error);
         MySwal.fire({
           title: "خطا در عملیات",
           text: "مشکلی در ثبت منتور جدید رخ داد. لطفاً دوباره تلاش کنید.",
