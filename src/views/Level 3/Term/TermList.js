@@ -24,6 +24,8 @@ import moment from "moment-jalaali";
 import { useGetSth } from "../../../core/apiPost";
 import TermAdd from "./TermAdd";
 import AddTermCloseDate from "./AddTermCloseDate";
+import TermEdit from "./TermEdit";
+import TermDateEdit from "./TermDateEdit";
 
 const TermList = () => {
 
@@ -72,7 +74,7 @@ const TermList = () => {
     {
       name: "تاریخ انتشار",
       sortable: true,
-      minWidth: "200px",
+      minWidth: "160px",
       sortField: "inserDate",
       selector: (row) => row.insertDate,
       cell: (row) => (
@@ -86,7 +88,7 @@ const TermList = () => {
     {
       name: "تاریخ شروع",
       sortable: true,
-      minWidth: "200px",
+      minWidth: "180px",
       sortField: "inserDate",
       selector: (row) => row.startDate,
       cell: (row) => (
@@ -100,7 +102,7 @@ const TermList = () => {
     {
       name: "تاریخ پایان",
       sortable: true,
-      minWidth: "200px",
+      minWidth: "180px",
       sortField: "inserDate",
       selector: (row) => row.endDate,
       cell: (row) => (
@@ -114,7 +116,7 @@ const TermList = () => {
     {
       name: "نام واحد",
       sortable: true,
-      minWidth: "150px",
+      minWidth: "130px",
       sortField: "fullName",
       selector: (row) => row.departmentName,
       cell: (row) => (
@@ -155,19 +157,23 @@ const TermList = () => {
               <Eye size={14} className="cursor-pointer" />
             </DropdownToggle>
 
-            <DropdownMenu>
-              <DropdownItem tag={Link} className="w-100">
-                <FileText size={14} className="me-50" />
-                <span className="align-middle">ویرایش</span>
-              </DropdownItem>
-              <DropdownItem
-                className="w-100"
-                onClick={() => handleSuspendedClick(row)}
-              >
-                <Trash2 size={14} className="me-50" />
-                <span className="align-middle">غیرفعال / غیرفعال</span>
-              </DropdownItem>
+            <DropdownMenu persist>
+              <div key={row.id} className="column-action">
+                <UncontrolledDropdown>
+                  <DropdownToggle tag="div" className="btn btn-sm">
+                    <TermEdit data={row} className="font-medium-2" />
+                  </DropdownToggle>
+                </UncontrolledDropdown>
+              </div>
+              <div key={row.id} className="column-action">
+                <UncontrolledDropdown>
+                  <DropdownToggle tag="div" className="btn btn-sm">
+                    <TermDateEdit data={row} className="font-medium-2" />
+                  </DropdownToggle>
+                </UncontrolledDropdown>
+              </div>
             </DropdownMenu>
+            
           </UncontrolledDropdown>
         </div>
       ),

@@ -14,37 +14,40 @@ import {
 
 import { useForm, Controller } from "react-hook-form";
 import "@styles/react/libs/react-select/_react-select.scss";
-import { Code } from "react-feather";
+import { postApi } from "../../../core/api/api";
+import { Code, Crosshair } from "react-feather";
+import { usePutSth } from "../../../core/apiPost";
+import { useQueryClient } from "@tanstack/react-query";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
-import { useQueryClient } from "@tanstack/react-query";
-import { usePutSth } from "../../../core/apiPost";
 const MySwal = withReactContent(Swal);
-
-const TermEdit = ({ data }) => {
+const TermDateEdit = ({data}) => {
   const [show, setShow] = useState(false);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-    reset,
+    reset
   } = useForm();
 
-  const { mutate } = usePutSth("/Term");
-  const queryClient = useQueryClient();
-
+  
   useEffect(() => {
     if (data) {
       reset({
         id: data.id,
+        termId: data.id,
         termName: data.termName || "",
-        departmentId: data.departmentId || "",
+        closeReason: data.departmentName || "",
+        endCloseDate: data.endCloseDate || "",
+        startCloseDate: data.startCloseDate || "",
       });
     }
   }, [data, reset]);
-
-  const editTerm = (data) => {
+  
+  const { mutate } = usePutSth("/Term/UpdateTermCloseDate");
+  const queryClient = useQueryClient();
+  const EditDateTerm = (data) => {
     console.log("put data:", data);
 
     mutate(data, {
@@ -68,7 +71,7 @@ const TermEdit = ({ data }) => {
       onError: (error) => {
         MySwal.fire({
           title: "خطا در عملیات",
-          text: "مشکلی در ثبت اطلاعات جدید رخ داد. لطفاً دوباره تلاش کنید.",
+          text: response.data.ErrorMessage,
           icon: "error",
           confirmButtonText: "تلاش مجدد",
           customClass: {
@@ -80,6 +83,7 @@ const TermEdit = ({ data }) => {
     });
   };
 
+
   return (
     <Fragment>
       <Card className="mb-0 r-2">
@@ -87,8 +91,8 @@ const TermEdit = ({ data }) => {
           className="flex items-center cursor-pointer"
           onClick={() => setShow(true)}
         >
-          <Code size={14} />
-          <span className="align-middle font-medium-2 ms-1">ویرایش</span>
+          <Crosshair size={14} />
+          <span className="align-middle font-medium-2 ms-1">ویرایش زمان</span>
         </div>
       </Card>
       <Modal
@@ -103,14 +107,15 @@ const TermEdit = ({ data }) => {
 
         <ModalBody className="px-sm-5 mx-50 pb-5">
           <div className="text-center mb-2">
-            <h1 className="mb-1">اطلاعات ترم جدید را وارد کنید</h1>
+            <h1 className="mb-1">به روز رسانی زمان بندی ترم</h1>
+            <h3 className="mb-1">اطلاعات ترم جدید را وارد کنید</h3>
           </div>
           <Row
             tag="form"
             className="gy-1 pt-75"
-            onSubmit={handleSubmit(editTerm)}
+            onSubmit={handleSubmit(EditDateTerm)}
           >
-            <Col md={6} xs={12}>
+            <Col md={12} xs={12}>
               <Label className="form-label" for="termName">
                 عنوان ترم
               </Label>
@@ -144,45 +149,16 @@ const TermEdit = ({ data }) => {
                 )}
               />
             </Col>
+         
             <Col xs={6}>
-              <Label className="form-label" for="expire">
-                وضعیت ترم
-              </Label>
-              <Controller
-                name="expire"
-                control={control}
-                rules={{ required: "لطفاً یک گزینه انتخاب کنید" }}
-                render={({ field }) => (
-                  <div>
-                    <Input
-                      type="select"
-                      id="expire"
-                      {...field}
-                      onChange={(e) =>
-                        field.onChange(e.target.value === "true")
-                      } 
-                      invalid={!!errors.expire}
-                    >
-                      <option value="">لطفاً انتخاب کنید</option>
-                      <option value={false}>منقضی شده</option>
-                      <option value={true}>فعال</option>
-                    </Input>
-                    {errors.expire && (
-                      <FormFeedback>{errors.expire.message}</FormFeedback>
-                    )}
-                  </div>
-                )}
-              />
-            </Col>
-            <Col xs={6}>
-              <Label className="form-label" for="startDate">
+              <Label className="form-label" for="startCloseDate">
                 تاریخ شروع
               </Label>
               <Controller
-                name="startDate"
+                name="startCloseDate"
                 control={control}
                 render={({ field }) => (
-                  <Input type="date" {...field} id="startDate" />
+                  <Input type="date" {...field} id="startCloseDate" />
                 )}
               />
               {errors.username && (
@@ -191,14 +167,14 @@ const TermEdit = ({ data }) => {
             </Col>
 
             <Col xs={6}>
-              <Label className="form-label" for="endDate">
+              <Label className="form-label" for="endCloseDate">
                 تاریخ پایان
               </Label>
               <Controller
-                name="endDate"
+                name="endCloseDate"
                 control={control}
                 render={({ field }) => (
-                  <Input type="date" {...field} id="endDate" />
+                  <Input type="date" {...field} id="endCloseDate" />
                 )}
               />
               {errors.username && (
@@ -226,4 +202,4 @@ const TermEdit = ({ data }) => {
   );
 };
 
-export default TermEdit;
+export default TermDateEdit;
