@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import {
   Card,
   Row,
@@ -8,41 +8,87 @@ import {
   Label,
   Button,
   ModalHeader,
-  FormFeedback,
   ModalBody,
 } from "reactstrap";
 
 import { useForm, Controller } from "react-hook-form";
 import "@styles/react/libs/react-select/_react-select.scss";
-import { postApi } from "../../../core/api/api";
+import { Code } from "react-feather";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+import { usePutSth } from "../../../core/apiPost";
+import { useQueryClient } from "@tanstack/react-query";
+const MySwal = withReactContent(Swal);
 
-const TechnologyEdit = () => {
+const TechnologyEdit = ({data}) => {
   const [show, setShow] = useState(false);
 
   const {
     control,
     handleSubmit,
     formState: { errors },
-    register,
-    setValue,
-    watch,
+    reset,
   } = useForm();
 
-  const onSubmit = async (values) => {
-        
-    // const path = `/User/CreateUser`;
-    // const body = data;
-    // const response = await postApi({ path, body });
-    // console.log("Create User:", response);
-  };
-
+const { mutate } = usePutSth("/Technology");
+     const queryClient = useQueryClient();
+     
+     useEffect(() => {
+       if (data) {
+         reset({
+          id: data.id,
+          techName: data.techName || "",
+          describe: data.describe || "",
+          iconAddress: data.iconAddress || "",
+         });
+       }
+     }, [data, reset]);
+     
+     const editTech = (data) => {
+   
+       mutate(data, {
+         onSuccess: (response) => {
+           console.log("res: ", response);
+   
+           queryClient.invalidateQueries(["/Technology"]);
+           setShow(false);
+   
+           MySwal.fire({
+             title: "عملیات موفقیت‌آمیز بود",
+             text: "اطلاعات جدید با موفقیت ثبت شد",
+             icon: "success",
+             confirmButtonText: "باشه",
+             customClass: {
+               confirmButton: "btn btn-success",
+             },
+             buttonsStyling: false,
+           });
+         },
+         onError: (error) => {
+           MySwal.fire({
+             title: "خطا در عملیات",
+             text: "مشکلی در ثبت اطلاعات جدید رخ داد. لطفاً دوباره تلاش کنید.",
+             icon: "error",
+             confirmButtonText: "تلاش مجدد",
+             customClass: {
+               confirmButton: "btn btn-danger",
+             },
+             buttonsStyling: false,
+           });
+         },
+       });
+     };
 
   return (
     <Fragment>
       <Card className="mb-0 r-2">
-        <Button color="primary" onClick={() => setShow(true)}>
-         افزدون تسک جدید
-        </Button>
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={() => setShow(true)}
+        >
+          <Code size={14} />
+          <span className="align-middle font-medium-2 ms-1">ویرایش</span>
+        </div>
       </Card>
       <Modal
         isOpen={show}
@@ -56,92 +102,66 @@ const TechnologyEdit = () => {
 
         <ModalBody className="px-sm-5 mx-50 pb-5">
           <div className="text-center mb-2">
-            <h1 className="mb-1">اطلاعات تسک را وارد کنید</h1>
+            <h1 className="mb-1">بروزرسانی اطلاعات تکنولوژِی را وارد کنید</h1>
           </div>
           <Row
             tag="form"
             className="gy-1 pt-75"
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(editTech)}
           >
             <Col md={6} xs={12}>
-              <Label className="form-label" for="firstName">
-                نام
+              <Label className="form-label" for="techName">
+                نام تکنولوژِی
               </Label>
               <Controller
                 control={control}
-                name="firstName"
+                name="techName"
                 render={({ field }) => {
                   return (
                     <Input
                       {...field}
-                      id="firstName"
-                      placeholder="نام..."
+                      id="techName"
+                      placeholder="عنوان تکنولوژی"
                       value={field.value}
                       invalid={errors.firstName && true}
                     />
                   );
                 }}
               />
-              {errors.firstName && (
-                <FormFeedback>لطفا نام را وارد کنید</FormFeedback>
-              )}
             </Col>
             <Col md={6} xs={12}>
-              <Label className="form-label" for="lastName">
-                نام خانوادگی
+              <Label className="form-label" for="iconAddress">
+                آدرس آیکون
               </Label>
               <Controller
-                name="lastName"
+                name="iconAddress"
                 control={control}
                 render={({ field }) => (
                   <Input
                     {...field}
-                    id="lastName"
-                    placeholder="نام خانوادگی..."
+                    id="iconAddress"
+                    placeholder="آدرس آیکون"
                     invalid={errors.lastName && true}
                   />
                 )}
               />
-              {errors.lastName && (
-                <FormFeedback>لطفا نام خانوادگی را وارد کنید</FormFeedback>
-              )}
             </Col>
-
-            <Col xs={6}>
-              <Label className="form-label" for="username">
-                شماره موبایل
+            <Col md={12} xs={12}>
+              <Label className="form-label" for="describe">
+                توضیحات تکنولوژِی
               </Label>
               <Controller
-                name="gmail"
-                control={control}
-                render={({ field }) => (
-                  <Input {...field} id="gmail" placeholder="Johe@gmail.com" />
-                )}
-              />
-              {errors.username && (
-                <FormFeedback>لطفا ایمیل را وارد کنید</FormFeedback>
-              )}
-            </Col>
-
-            <Col xs={6}>
-              <Label className="form-label" for="username">
-                شماره موبایل
-              </Label>
-              <Controller
-                name="phoneNumber"
+                name="describe"
                 control={control}
                 render={({ field }) => (
                   <Input
                     {...field}
-                    id="phoneNumber"
-                    placeholder="09111111111"
-                    invalid={errors.username && true}
+                    id="describe"
+                    placeholder="توضیحات تکنولوژِی"
+                    invalid={errors.lastName && true}
                   />
                 )}
               />
-              {errors.username && (
-                <FormFeedback>شماره موبایل را وارد کنید</FormFeedback>
-              )}
             </Col>
             <Col xs={12} className="text-center mt-2 pt-50">
               <Button type="submit" className="me-1" color="primary">
