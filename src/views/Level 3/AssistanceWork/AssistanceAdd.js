@@ -150,27 +150,27 @@ const AddUserModal = ({ data }) => {
               )}
             </Col>
             <Col xs={6}>
-                <Label className="form-label" for="assistanceId">
-                  انتخاب دوره
-                </Label>
-                <Controller
-                  name="assistanceId"
-                  control={control}
-                  rules={{ required: "لطفاً یک گزینه انتخاب کنید" }}
-                  render={({ field }) => (
-                    <Input type="select" id="assistanceId" {...field}>
-                      {data?.map((option) => (
-                        <option key={option.id} value={option.id}>
-                          {option.courseName}
-                        </option>
-                      ))}
-                    </Input>
-                  )}
-                />
-                {errors.assistanceId && (
-                  <FormFeedback>{errors.assistanceId.message}</FormFeedback>
+              <Label className="form-label" for="assistanceId">
+                انتخاب دوره
+              </Label>
+              <Controller
+                name="assistanceId"
+                control={control}
+                rules={{ required: "لطفاً یک گزینه انتخاب کنید" }}
+                render={({ field }) => (
+                  <Input type="select" id="assistanceId" {...field}>
+                    {data?.map((option) => (
+                      <option key={option.id} value={option.id}>
+                        {option.courseName}
+                      </option>
+                    ))}
+                  </Input>
                 )}
-              </Col>
+              />
+              {errors.assistanceId && (
+                <FormFeedback>{errors.assistanceId.message}</FormFeedback>
+              )}
+            </Col>
 
             <Col xs={12} className="text-center mt-2 pt-50">
               <Button type="submit" className="me-1" color="primary">

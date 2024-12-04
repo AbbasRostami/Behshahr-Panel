@@ -17,18 +17,17 @@ import {
 
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
-import { Link } from "react-router-dom";
 import moment from "moment-jalaali";
 import AssistanceAdd from "./AssistanceAdd";
 import { useGetSth } from "../../../core/apiPost";
+import AssistanceEdit from "./AssistanceEdit";
 const AssisranceWork = () => {
-  
-  const { data, error } = useGetSth('/AssistanceWork', {
+  const { data, error } = useGetSth("/AssistanceWork", {
     staleTime: 5 * 60 * 1000,
-    enabled: true, 
+    enabled: true,
   });
 
-
+  
   const CustomPagination = () => {
     const count = 10;
 
@@ -59,9 +58,8 @@ const AssisranceWork = () => {
       minWidth: "200px",
       sortField: "fullName",
       selector: (row) => row.courseName,
-      cell: (row) => (
-        <div className="d-flex fw-bolder justify-content-left align-items-center">
-          {/* <Avatar className='me-1' img={row.avatar} width='32' height='32' /> */}
+      cell: (row, index) => (
+        <div key={`${row.id}-${index}`} className="d-flex fw-bolder justify-content-left align-items-center">
           {row.courseName}
         </div>
       ),
@@ -74,7 +72,10 @@ const AssisranceWork = () => {
       sortField: "fullName",
       selector: (row) => row.worktitle,
       cell: (row) => (
-        <div className="d-flex fw-bolder justify-content-left align-items-center">
+        <div
+          key={row.id}
+          className="d-flex fw-bolder justify-content-left align-items-center"
+        >
           {row.worktitle}
         </div>
       ),
@@ -87,7 +88,10 @@ const AssisranceWork = () => {
       sortField: "fullName",
       selector: (row) => row.workDescribe,
       cell: (row) => (
-        <div className="d-flex fw-bolder justify-content-left align-items-center">
+        <div
+          key={row.id}
+          className="d-flex fw-bolder justify-content-left align-items-center"
+        >
           {row.workDescribe}
         </div>
       ),
@@ -100,7 +104,10 @@ const AssisranceWork = () => {
       sortField: "inserDate",
       selector: (row) => row.inserDate,
       cell: (row) => (
-        <div className="d-flex fw-bolder justify-content-left align-items-center">
+        <div
+          key={row.id}
+          className="d-flex fw-bolder justify-content-left align-items-center"
+        >
           {row.inserDate
             ? moment(row.inserDate, "YYYY/MM/DD").format("jYYYY/jMM/jDD")
             : "تاریخ نامشخص"}
@@ -114,7 +121,10 @@ const AssisranceWork = () => {
       sortField: "inserDate",
       selector: (row) => row.workDate,
       cell: (row) => (
-        <div className="d-flex fw-bolder justify-content-left align-items-center">
+        <div
+          key={row.id}
+          className="d-flex fw-bolder justify-content-left align-items-center"
+        >
           {row.workDate
             ? moment(row.workDate, "YYYY/MM/DD").format("jYYYY/jMM/jDD")
             : "تاریخ نامشخص"}
@@ -125,18 +135,11 @@ const AssisranceWork = () => {
       name: "اقدام",
       minWidth: "100px",
       cell: (row) => (
-        <div className="column-action">
+        <div key={row.id} className="column-action">
           <UncontrolledDropdown>
             <DropdownToggle tag="div" className="btn btn-sm">
-              <Eye size={14} className="cursor-pointer" />
+              <AssistanceEdit data={row} className="font-medium-2" />
             </DropdownToggle>
-
-            <DropdownMenu>
-              <DropdownItem tag={Link} className="w-100">
-                <FileText size={14} className="me-50" />
-                <span className="align-middle">ویرایش</span>
-              </DropdownItem>
-            </DropdownMenu>
           </UncontrolledDropdown>
         </div>
       ),

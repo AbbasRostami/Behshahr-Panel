@@ -58,6 +58,9 @@ export const useGetRequest = ({ url, key, headers, enabled, staleTime }) => {
   /* END GetRequest */
 }
 
+
+// Post Request
+
 export const postRequest = async (url, data) => {
   try {
     const res = await instance.post(url, data);
@@ -74,6 +77,7 @@ export const usePostSth = (url) => {
 };
 
 
+// Get Reqeuest
 export const getRequest = async (url, params = {}) => {
     try {
       const res = await instance.get(url, { params });
@@ -88,5 +92,24 @@ export const getRequest = async (url, params = {}) => {
       queryKey: [url, options.params],
       queryFn: async () => await getRequest(url, options.params),
       ...options,
+    });
+  };
+
+
+
+  // Put Request
+
+  export const putRequest = async (url, data) => {
+    try {
+      const res = await instance.put(url, data);  
+      return res.data;
+    } catch (error) {
+      throw error; 
+    }
+  };
+
+  export const usePutSth = (url) => {
+    return useMutation({
+      mutationFn: async (data) => await putRequest(url, data),  
     });
   };

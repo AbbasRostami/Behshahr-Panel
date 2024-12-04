@@ -1,4 +1,5 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
+import React from "react";
 import {
   Card,
   Row,
@@ -14,35 +15,86 @@ import {
 
 import { useForm, Controller } from "react-hook-form";
 import "@styles/react/libs/react-select/_react-select.scss";
-import { postApi } from "../../../core/api/api";
+import { Eye } from "react-feather";
+import { useGetSth, usePutSth } from "../../../core/apiPost";
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+import { useQueryClient } from "@tanstack/react-query";
 
-const AssistanceEdit = () => {
+
+const MySwal = withReactContent(Swal);
+
+const AssistanceEdit = React.memo(({ data }) => {
   const [show, setShow] = useState(false);
+  const queryClient = useQueryClient();
+  const { data: assOption } = useGetSth("/AssistanceWork", {
+    enabled: true,
+    staleTime: 5 * 60 * 1000,
+  });
+
 
   const {
     control,
+    reset,
     handleSubmit,
     formState: { errors },
-    register,
-    setValue,
-    watch,
   } = useForm();
+  useEffect(() => {
+    if (data) {
+      reset({
+        worktitle: data.worktitle || "",
+        workDescribe: data.workDescribe || "",
+        workDate: data.workDate?.split("T")[0] || "",
+        id: data.workId || "",
+      });
+    }
+  }, [data,reset]);
+  const { mutate } = usePutSth("/AssistanceWork");
 
-  const onSubmit = async (values) => {
-        
-    // const path = `/User/CreateUser`;
-    // const body = data;
-    // const response = await postApi({ path, body });
-    // console.log("Create User:", response);
+  const editAss = async (values) => {
+    mutate(values, {
+      onSuccess: (data) => {
+        console.log("موفقیت:", data);
+        queryClient.invalidateQueries(["/AssistanceWork"]);
+        setShow(false); // مطمئن شوید که وضعیت فقط یکبار تغییر می‌کند
+        MySwal.fire({
+          title: "عملیات موفقیت‌آمیز بود",
+          text: "اطلاعات جدید با موفقیت اضافه شد",
+          icon: "success",
+          confirmButtonText: "باشه",
+          customClass: {
+            confirmButton: "btn btn-success",
+          },
+          buttonsStyling: false,
+        });
+      },
+      onError: (error) => {
+        console.error("خطا:", error);
+        MySwal.fire({
+          title: "خطا در عملیات",
+          text: "ویرایش اطلاعات جدید با خطا مواجه شد",
+          icon: "error",
+          confirmButtonText: "تلاش مجدد",
+          customClass: {
+            confirmButton: "btn btn-danger",
+          },
+          buttonsStyling: false,
+        });
+      },
+    });
   };
-
 
   return (
     <Fragment>
       <Card className="mb-0 r-2">
-        <Button color="primary" onClick={() => setShow(true)}>
-         ویرایش تسک جدید
-        </Button>
+        {/* <Button hidden color="primary" > */}
+        <Eye
+          size={14}
+          className="cursor-pointer"
+          onClick={() => setShow(true)}
+        />
+
+        {/* </Button> */}
       </Card>
       <Modal
         isOpen={show}
@@ -56,93 +108,87 @@ const AssistanceEdit = () => {
 
         <ModalBody className="px-sm-5 mx-50 pb-5">
           <div className="text-center mb-2">
-            <h1 className="mb-1">اطلاعات جدید تسک را وارد کنید</h1>
+            <h1 className="mb-1">اطلاعات ویرایش تسک را وارد کنید</h1>
           </div>
           <Row
+            onSubmit={handleSubmit(editAss)}
             tag="form"
             className="gy-1 pt-75"
-            onSubmit={handleSubmit(onSubmit)}
           >
             <Col md={6} xs={12}>
               <Label className="form-label" for="firstName">
-                نام
+                عنوان تسک
               </Label>
               <Controller
                 control={control}
-                name="firstName"
+                name="worktitle"
                 render={({ field }) => {
                   return (
                     <Input
                       {...field}
-                      id="firstName"
-                      placeholder="نام..."
+                      id="worktitle"
                       value={field.value}
                       invalid={errors.firstName && true}
                     />
                   );
                 }}
               />
-              {errors.firstName && (
-                <FormFeedback>لطفا نام را وارد کنید</FormFeedback>
-              )}
             </Col>
             <Col md={6} xs={12}>
-              <Label className="form-label" for="lastName">
-                نام خانوادگی
+              <Label className="form-label" for="workDescribe">
+                توضیحات تسک
               </Label>
               <Controller
-                name="lastName"
+                name="workDescribe"
                 control={control}
                 render={({ field }) => (
                   <Input
                     {...field}
-                    id="lastName"
-                    placeholder="نام خانوادگی..."
+                    id="workDescribe"
                     invalid={errors.lastName && true}
                   />
                 )}
               />
-              {errors.lastName && (
-                <FormFeedback>لطفا نام خانوادگی را وارد کنید</FormFeedback>
-              )}
             </Col>
 
             <Col xs={6}>
-              <Label className="form-label" for="username">
-                شماره موبایل
+              <Label className="form-label" for="workDate">
+                ساعت کاری
               </Label>
               <Controller
-                name="gmail"
+                name="workDate"
                 control={control}
                 render={({ field }) => (
-                  <Input {...field} id="gmail" placeholder="Johe@gmail.com" />
+                  <Input type="date" {...field} id="workDate" />
                 )}
               />
               {errors.username && (
                 <FormFeedback>لطفا ایمیل را وارد کنید</FormFeedback>
               )}
             </Col>
-
             <Col xs={6}>
-              <Label className="form-label" for="username">
-                شماره موبایل
+              <Label className="form-label" for="assistanceId">
+                انتخاب دوره
               </Label>
               <Controller
-                name="phoneNumber"
+                name="assistanceId"
                 control={control}
+                rules={{ required: "لطفاً یک گزینه انتخاب کنید" }}
                 render={({ field }) => (
-                  <Input
-                    {...field}
-                    id="phoneNumber"
-                    placeholder="09111111111"
-                    invalid={errors.username && true}
-                  />
+                  <Input type="select" id="assistanceId" {...field}>
+                    {assOption?.map((option) => (
+                      <option key={option.id} value={option.id}>
+                        {option.courseName}
+                      </option>
+                    ))}
+                  </Input>
                 )}
               />
-              {errors.username && (
-                <FormFeedback>شماره موبایل را وارد کنید</FormFeedback>
+              {errors.assistanceId && (
+                <FormFeedback>{errors.assistanceId.message}</FormFeedback>
               )}
             </Col>
+
             <Col xs={12} className="text-center mt-2 pt-50">
               <Button type="submit" className="me-1" color="primary">
                 ثبت
@@ -161,6 +207,6 @@ const AssistanceEdit = () => {
       </Modal>
     </Fragment>
   );
-};
+});
 
 export default AssistanceEdit;
