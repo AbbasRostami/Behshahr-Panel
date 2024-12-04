@@ -21,6 +21,7 @@ import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { Link } from "react-router-dom";
 import { useGetSth } from "../../../core/apiPost";
 import StatusCoursesAdd from "./StatusCoursesAdd";
+import StatusCoursesEdit from "./StatusCoursesEdit";
 
 const StatusCoursesList = () => {
 
@@ -107,18 +108,14 @@ const StatusCoursesList = () => {
               <Eye size={14} className="cursor-pointer" />
             </DropdownToggle>
 
-            <DropdownMenu>
-              <DropdownItem tag={Link} className="w-100">
-                <FileText size={14} className="me-50" />
-                <span className="align-middle">ویرایش</span>
-              </DropdownItem>
-              <DropdownItem
-                className="w-100"
-                onClick={() => handleSuspendedClick(row)}
-              >
-                <Trash2 size={14} className="me-50" />
-                <span className="align-middle">غیرفعال / غیرفعال</span>
-              </DropdownItem>
+            <DropdownMenu persist>
+              <div key={row.id} className="column-action">
+                <UncontrolledDropdown>
+                  <DropdownToggle tag="div" className="btn btn-sm">
+                    <StatusCoursesEdit data={row} className="font-medium-2" />
+                  </DropdownToggle>
+                </UncontrolledDropdown>
+              </div>
             </DropdownMenu>
           </UncontrolledDropdown>
         </div>
