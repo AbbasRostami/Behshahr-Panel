@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
-import { ChevronDown, Eye, FileText } from "react-feather";
+import { ChevronDown } from "react-feather";
 
 import {
   Row,
@@ -11,8 +11,6 @@ import {
   Button,
   UncontrolledDropdown,
   DropdownToggle,
-  DropdownItem,
-  DropdownMenu,
 } from "reactstrap";
 
 import "@styles/react/libs/react-select/_react-select.scss";
@@ -22,7 +20,7 @@ import AssistanceAdd from "./AssistanceAdd";
 import { useGetSth } from "../../../core/apiPost";
 import AssistanceEdit from "./AssistanceEdit";
 const AssisranceWork = () => {
-  const { data, error } = useGetSth("/AssistanceWork", {
+  const { data } = useGetSth("/AssistanceWork", {
     staleTime: 5 * 60 * 1000,
     enabled: true,
   });
