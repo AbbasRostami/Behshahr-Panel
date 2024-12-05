@@ -73,7 +73,7 @@ const CustomHeader = ({
   );
 };
 
-const UsersList = ({ data, setData,searchDataParams, setSearchDataParams }) => {
+const UsersList = ({ data, setData,searchDataParams,GetArticlesList, setSearchDataParams }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -208,6 +208,7 @@ const UsersList = ({ data, setData,searchDataParams, setSearchDataParams }) => {
             className="react-dataTable"
             paginationComponent={CustomPagination}
             data={data}
+            GetArticlesList={GetArticlesList}
             setData={setData}
             subHeaderComponent={
               <CustomHeader

@@ -1,4 +1,4 @@
-import { Mail, Home, Airplay, Circle, User } from "react-feather";
+import { Mail, Home, Airplay, Circle, User, Server, Move, Menu } from "react-feather";
 
 export default [
   {
@@ -36,18 +36,18 @@ export default [
   {
     id: "Articles",
     title: "مدیریت اخبار و مقالات",
-    icon: <User size={20} />,
+    icon: <Server size={20} />,
     children: [
       {
         id: "list",
         title: "لیست اخبار و مقالات",
-        icon: <Circle size={12} />,
+        icon: <Menu size={30} />,
         navLink: "/articles-list",
       },
       {
         id: "add",
         title: "افزدون اخبار و مقاله",
-        icon: <Circle size={12} />,
+        icon: <Move size={30} />,
         navLink: "/articles-add",
       },
     ],

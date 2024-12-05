@@ -1,10 +1,5 @@
 import { Link } from "react-router-dom";
-import {
-  MoreVertical,
-  FileText,
-  Trash2,
-  Archive,
-} from "react-feather";
+import { MoreVertical, FileText, Trash2, Archive } from "react-feather";
 
 import {
   Badge,
@@ -46,7 +41,7 @@ const deleteArticles = async (id) => {
         MySwal.fire({
           icon: "error",
           title: "عدم دسترسی",
-          text: response.data.ErrorMessage[0],  
+          text: response.data.ErrorMessage[0],
           customClass: {
             confirmButton: "btn btn-danger",
           },
@@ -87,38 +82,32 @@ const deleteArticles = async (id) => {
 };
 
 const handleSuspendedClick = async (id) => {
-  console.log("id", id); 
+  console.log("id", id);
 
   const newIsActive = !id.isActive;
 
   const formData = new FormData();
-  formData.append('Active', newIsActive);
-  formData.append('Id', id.id);
+  formData.append("Active", newIsActive);
+  formData.append("Id", id.id);
   formData.forEach((value, key) => {
     console.log(`${key}: ${value}`);
   });
 
   const path = `/News/ActiveDeactiveNews`;
 
- 
+  try {
     const response = await editApi({ path, body: formData });
     if (response.data.success) {
       toast.success(response.data.message);
-  
-      setData((prevData) =>
-        prevData.map((item) =>
-          item.courseId === course.courseId
-            ? { ...item, isActive: !item.isActive } 
-            : item
-        )
-      );
     } else {
       toast.error("عملیات انجام نشد، مشکلی پیش آمد.");
     }
     console.log("Response Put Active/Deactive:", response);
-  
+  } catch (error) {
+    toast.error("خطا در ارتباط با سرور.");
+    console.error("Error in Active/Deactive:", error);
+  }
 };
-
 
 export const columns = [
   {

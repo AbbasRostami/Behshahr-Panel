@@ -15,6 +15,9 @@ import {
   BookOpen,
   Eye,
   Sun,
+  PenTool,
+  RefreshCcw,
+  Tag,
 } from "react-feather";
 import Avatar from "@components/avatar";
 import googleIcon from "./../../../assets/images/icons/social/google.png";
@@ -37,6 +40,7 @@ import {
   Modal,
   ModalHeader,
   ModalBody,
+  CardHeader,
 } from "reactstrap";
 
 import "@styles/base/pages/page-blog.scss";
@@ -48,7 +52,13 @@ import { useParams } from "react-router-dom";
 import { editApi, getApi } from "../../../core/api/api";
 import moment from "moment";
 import toast from "react-hot-toast";
-
+import Swal from "sweetalert2";
+const MySwal = Swal.mixin({
+  customClass: {
+    popup: "colored-toast",
+    title: "text-success",
+  },
+});
 const ArticlesView = () => {
   const [data, setData] = useState([]);
   const params = useParams();
@@ -56,33 +66,34 @@ const ArticlesView = () => {
   const GetArticlesView = async () => {
     const path = `/News/${params.id}`;
     const response = await getApi({ path });
-    console.log("Get Details News:", response.data);
-    setData(response.data.detailsNewsDto);
+    console.log("Get Details News:", response.data.commentDtos);
+    setData(response.data);
   };
 
   useEffect(() => {
     GetArticlesView();
   }, []);
 
+  console.log("dshjds", data.detailsNewsDto  );
+
   const [show, setShow] = useState(false);
 
   const {
     control,
-    setError,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm();
 
   useEffect(() => {
-    if (data) {
+    if (data?.detailsNewsDto) {
       reset({
-        Title: data.title || "",
-        GoogleTitle: data.googleTitle || "",
-        GoogleDescribe: data.googleDescribe || "",
-        MiniDescribe: data.miniDescribe || "",
-        Describe: data.describe || "",
-        Keyword: data.keyword || "",
+        Title: data.detailsNewsDto.title || "",
+        GoogleTitle: data.detailsNewsDto.googleTitle || "",
+        GoogleDescribe: data.detailsNewsDto.googleDescribe || "",
+        MiniDescribe: data.detailsNewsDto.miniDescribe || "",
+        Describe: data.detailsNewsDto.describe || "",
+        Keyword: data.detailsNewsDto.keyword || "",
       });
     }
   }, [data, reset]);
@@ -91,7 +102,7 @@ const ArticlesView = () => {
     const formData = new FormData();
 
     const datas = {
-      id: data.id,
+      id: params.id,
       Title: values.Title,
       GoogleTitle: values.GoogleTitle,
       GoogleDescribe: values.GoogleDescribe,
@@ -113,41 +124,14 @@ const ArticlesView = () => {
     const response = await editApi({ path, body });
     console.log(response);
     if (response.data.success) {
-      toast.success(response.data.message);
+      setShow(false);
+      MySwal.fire({
+        icon: "success",
+        title: "عملیات موفقیت‌آمیز",
+        text: response.data.message,
+        confirmButtonText: "باشه",
+      });
     }
-  };
-
-  const renderComments = () => {
-    return (
-      <Card className="mb-3">
-        <CardBody>
-          <div className="d-flex">
-            <div>
-              <Avatar
-                className="me-75"
-                img={avatar}
-                imgHeight="38"
-                imgWidth="38"
-              />
-            </div>
-            <div>
-              <h6 className="fw-bolder mb-25">Chad Alexander</h6>
-              <CardText>May 24, 2020</CardText>
-              <CardText>
-                A variation on the question technique above, the multiple-choice
-                question great way to engage your reader.
-              </CardText>
-              <a href="/" onClick={(e) => e.preventDefault()}>
-                <div className="d-inline-flex align-items-center">
-                  <CornerUpLeft size={18} className="me-50" />
-                  <span>Reply</span>
-                </div>
-              </a>
-            </div>
-          </div>
-        </CardBody>
-      </Card>
-    );
   };
 
   return (
@@ -163,16 +147,34 @@ const ArticlesView = () => {
                     style={{ width: "100%", maxHeight: "350px" }}
                     // src={data.currentImageAddressTumb}
                     src={
-                      data?.currentImageAddressTumb &&
+                      data?.detailsNewsDto?.currentImageAddressTumb &&
                       /\.(jpg|jpeg|png|gif|webp)$/i.test(
-                        data.currentImageAddressTumb
+                        data?.detailsNewsDto?.currentImageAddressTumb
                       )
-                        ? data.currentImageAddressTumb
+                        ? data?.detailsNewsDto?.currentImageAddressTumb
                         : articlesPic
                     }
                     top
                   />
                   <CardBody>
+                    <Col sm="12" className="text-end">
+                      <Button
+                        color="primary"
+                        className="rounded  shadow-sm custom-hover"
+                        onClick={() => setShow(true)}
+                      >
+                        <span
+                          style={{
+                            color: "#fff",
+                            fontWeight: "300",
+                            fontSize: "1rem",
+                          }}
+                        >
+                          ویرایش مقاله
+                        </span>
+                      </Button>
+                    </Col>
+
                     <CardTitle tag="h4" className=" g-3 ms-2 fw-bolder">
                       <Avatar
                         className=""
@@ -180,8 +182,9 @@ const ArticlesView = () => {
                         imgHeight="45"
                         imgWidth="45"
                       />
-                      نام نویسنده: {data.addUserFullName}
+                      نام نویسنده: {data?.detailsNewsDto?.addUserFullName}
                     </CardTitle>
+
                     <div className="d-flex align-items-center">
                       <Calendar size={28} />
                       <div>
@@ -198,7 +201,7 @@ const ArticlesView = () => {
 
                         <small className=" fw-bold text-black">
                           {" "}
-                          {moment(data?.insertDate)
+                          {moment(data?.detailsNewsDto?.insertDate)
                             .locale("fa")
                             .format("YYYY/MM/DD")}
                         </small>
@@ -216,60 +219,69 @@ const ArticlesView = () => {
 
                         <small className=" fw-bold text-black">
                           {" "}
-                          {moment(data?.updateDate)
+                          {moment(data?.detailsNewsDto?.updateDate)
                             .locale("fa")
                             .format("YYYY/MM/DD")}
                         </small>
                       </div>
                     </div>
-                    <h4 className="d-flex  rtl mt-2">
+                    <h4 className="d-flex  rtl mt-1">
                       <Hash size={25} />
                       <p className="ms-50">
                         {" "}
-                        دسته بندی: {data.newsCatregoryName}{" "}
+                        دسته بندی: {
+                          data?.detailsNewsDto?.newsCatregoryName
+                        }{" "}
+                      </p>
+                      <br />
+                      <br />
+                    </h4>
+                    <h4 className="d-flex  rtl mt-1">
+                      <Tag size={25} />
+                      <p className="ms-50">
+                        {" "}
+                        کلمات کلیدی: {data?.detailsNewsDto?.keyword}{" "}
                       </p>
                       <br />
                       <br />
                     </h4>
 
-                    <h4 className="rtl mt-2 ">
+                    <h4 className="rtl mt-1 ">
                       <div>
                         <Feather size={25} />
-                       <span className="ms-50"> توضیحات کوتاه:</span>
+                        <span className="ms-50"> توضیحات کوتاه:</span>
                       </div>
-                      <p className="m-1">{data.describe}</p>
+                      <p className="m-1">{data?.detailsNewsDto?.describe}</p>
                     </h4>
-
-
 
                     <h4 className="rtl mt-3 ">
                       <img
                         className="me-1 rounded-6 "
                         src={googleIcon}
-                        alt={data.title}
+                        alt={data?.detailsNewsDto?.title}
                         height="20"
                         width="22"
                       />
-                      عنوان گوگل: {data.googleTitle}
+                      عنوان گوگل: {data?.detailsNewsDto?.googleTitle}
                       <br />
                       <br />
                       <img
                         className="me-1 rounded-6"
                         src={googleIcon}
-                        alt={data.title}
+                        alt={data?.title}
                         height="20"
                         width="22"
                       />
-                      توضیحات گوگل: {data.googleDescribe}
+                      توضیحات گوگل: {data?.detailsNewsDto?.googleDescribe}
                       <br />
                     </h4>
 
                     <div className="d-flex mt-5">
-                     <BookOpen size={45}/>
+                      <BookOpen size={45} />
                       <div>
                         <h6 className="fw-bolder mx-2"> توضیحات دوره:</h6>
                         <CardText className="mb-0 fw-bolder mx-2 ">
-                          {data.describe}
+                          {data?.detailsNewsDto?.describe}
                         </CardText>
                       </div>
                     </div>
@@ -282,13 +294,12 @@ const ArticlesView = () => {
                             href="/"
                             onClick={(e) => e.preventDefault()}
                           >
-                            <Sun
-                              size={21}
-                              className="text-body align-middle"
-                            />
+                            <Sun size={21} className="text-body align-middle" />
                           </a>
                           <a href="/" onClick={(e) => e.preventDefault()}>
-                            <div className="text-body align-middle">{data?.currentRate}</div>
+                            <div className="text-body align-middle">
+                              {data?.detailsNewsDto?.currentRate}
+                            </div>
                           </a>
                         </div>
                         <div className="d-flex align-items-cente">
@@ -297,13 +308,12 @@ const ArticlesView = () => {
                             href="/"
                             onClick={(e) => e.preventDefault()}
                           >
-                            <Eye
-                              size={21}
-                              className="text-body align-middle"
-                            />
+                            <Eye size={21} className="text-body align-middle" />
                           </a>
                           <a href="/" onClick={(e) => e.preventDefault()}>
-                            <div className="text-body align-middle">{data?.currentView}</div>
+                            <div className="text-body align-middle">
+                              {data?.detailsNewsDto?.currentView}
+                            </div>
                           </a>
                         </div>
                       </div>
@@ -337,11 +347,46 @@ const ArticlesView = () => {
                 </Card>
               </Col>
               <Col sm="12" id="blogComment">
-                <h6 className="section-label">Comment</h6>
-                {renderComments()}
+                <h6 className="section-label text-black fw-bolder">کامنت ها</h6>
+                <Card className="mb-3">
+                  {data?.commentDtos?.map((comment, index) => (
+                    <CardBody key={comment.id || index} className="mb-2">
+                      <div className="d-flex">
+                        <div>
+                          <Avatar
+                            className="me-75"
+                            img={avatar}
+                            imgHeight="38"
+                            imgWidth="38"
+                          />
+                        </div>
+                        <div>
+                          <h6 className="fw-bolder mb-25">
+                            {comment.autor || "نویسنده‌ای یافت نشد"}
+                          </h6>
+                          <CardText>
+                            تاریخ:{" "}
+                            {new Date(comment.inserDate).toLocaleDateString(
+                              "fa-IR"
+                            )}
+                          </CardText>
+                          <CardText>
+                            {comment.describe || "بدون توضیحات"}
+                          </CardText>
+                          <a href="/" onClick={(e) => e.preventDefault()}>
+                            <div className="d-inline-flex align-items-center">
+                              <CornerUpLeft size={18} className="me-50" />
+                              <span>پاسخ</span>
+                            </div>
+                          </a>
+                        </div>
+                      </div>
+                    </CardBody>
+                  ))}
+                </Card>
               </Col>
               <Col sm="12">
-                <h6 className="section-label">Leave a Comment</h6>
+                <h6 className="section-label text-black fw-bolder">پاسخ به کامنت</h6>
                 <Card>
                   <CardBody>
                     <Form className="form" onSubmit={(e) => e.preventDefault()}>
@@ -371,12 +416,6 @@ const ArticlesView = () => {
                             />
                           </div>
                         </Col>
-
-                        <Col sm="12">
-                          <Button color="primary" onClick={() => setShow(true)}>
-                            ویرایش
-                          </Button>
-                        </Col>
                       </Row>
                     </Form>
                   </CardBody>
@@ -397,82 +436,239 @@ const ArticlesView = () => {
           toggle={() => setShow(!show)}
         ></ModalHeader>
         <ModalBody className="px-sm-5 pt-50 pb-5">
-          <div className="text-center mb-2">
-            <h1 className="mb-1">ویرایش اطلاعات اخبار و مقالات</h1>
-          </div>
+          <CardHeader
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <RefreshCcw size={30} />
+            <h1 className="ms-2">ویرایش اخبار و مقاله</h1>
+          </CardHeader>
           <Form onSubmit={handleSubmit(onSubmit)}>
-            <Row className="gy-1 pt-75">
+            <Row className=" mt-2 gy-1 pt-75">
               <Col md={4} xs={12}>
-                <Label className="form-label" for="Title">
-                  1
+                <Label
+                  className="form-label"
+                  for="Title"
+                  style={{ fontSize: "15px" }}
+                >
+                  عنوان
                 </Label>
                 <Controller
                   control={control}
                   name="Title"
+                  rules={{
+                    required: "عنوان الزامی است",
+                    minLength: {
+                      value: 10,
+                      message: "عنوان باید حداقل 10 کاراکتر باشد",
+                    },
+                    maxLength: {
+                      value: 120,
+                      message: "عنوان نباید بیشتر از 120 کاراکتر باشد",
+                    },
+                  }}
                   render={({ field }) => (
-                    <Input {...field} invalid={errors.firstName && true} />
+                    <Input
+                      {...field}
+                      invalid={errors.Title && true}
+                      maxLength={120}
+                      minLength={10}
+                    />
                   )}
                 />
+                {errors.Title && (
+                  <span className="text-danger">{errors.Title.message}</span>
+                )}
+                <small className="form-text text-muted">
+                  تعداد کاراکترهای عنوان بین 10 الی 120 می‌باشد.
+                </small>
               </Col>
               <Col md={4} xs={12}>
-                <Label className="form-label" for="GoogleTitle">
-                  2
+                <Label
+                  className="form-label"
+                  for="GoogleTitle"
+                  style={{ fontSize: "15px" }}
+                >
+                  عنوان گوگل
                 </Label>
                 <Controller
                   control={control}
                   name="GoogleTitle"
+                  rules={{
+                    required: "عنوان گوگل الزامی است",
+                    minLength: {
+                      value: 40,
+                      message: "عنوان گوگل باید حداقل 40 کاراکتر باشد",
+                    },
+                  }}
                   render={({ field }) => (
-                    <Input {...field} invalid={errors.firstName && true} />
+                    <Input
+                      {...field}
+                      invalid={errors.GoogleTitle && true}
+                      maxLength={200}
+                      minLength={40}
+                    />
                   )}
                 />
+                {errors.GoogleTitle && (
+                  <span className="text-danger">
+                    {errors.GoogleTitle.message}
+                  </span>
+                )}
+                <small className="form-text text-muted">
+                  تعداد کاراکترهای عنوان گوگل بیشتر از 39 می‌باشد.
+                </small>
               </Col>
               <Col md={4} xs={12}>
-                <Label className="form-label" for="GoogleDescribe">
-                  3
+                <Label
+                  className="form-label"
+                  for="GoogleDescribe"
+                  style={{ fontSize: "15px" }}
+                >
+                  توضیحات گوگل
                 </Label>
                 <Controller
                   control={control}
                   name="GoogleDescribe"
+                  rules={{
+                    required: "توضیحات گوگل الزامی است",
+                    minLength: {
+                      value: 75,
+                      message: "توضیحات گوگل باید حداقل 75 کاراکتر باشد",
+                    },
+                  }}
                   render={({ field }) => (
-                    <Input {...field} invalid={errors.firstName && true} />
+                    <Input
+                      {...field}
+                      invalid={errors.GoogleDescribe && true}
+                      maxLength={300}
+                      minLength={75}
+                    />
                   )}
                 />
+                {errors.GoogleDescribe && (
+                  <span className="text-danger">
+                    {errors.GoogleDescribe.message}
+                  </span>
+                )}
+                <small className="form-text text-muted">
+                  تعداد کاراکترهای توضیحات گوگل بیشتر از 74 می‌باشد.
+                </small>
               </Col>
-              <Col md={4} xs={12}>
-                <Label className="form-label" for="MiniDescribe">
-                  4
+              <Col className="mt-3" md={4} xs={12}>
+                <Label
+                  className="form-label"
+                  for="MiniDescribe"
+                  style={{ fontSize: "15px" }}
+                >
+                  توضیحات کوتاه
                 </Label>
                 <Controller
                   control={control}
                   name="MiniDescribe"
+                  rules={{
+                    required: "توضیحات کوتاه الزامی است",
+                    minLength: {
+                      value: 10,
+                      message: "توضیحات کوتاه باید حداقل 10 کاراکتر باشد",
+                    },
+                    maxLength: {
+                      value: 300,
+                      message: "توضیحات کوتاه نباید بیشتر از 300 کاراکتر باشد",
+                    },
+                  }}
                   render={({ field }) => (
-                    <Input {...field} invalid={errors.firstName && true} />
+                    <Input
+                      {...field}
+                      invalid={errors.MiniDescribe && true}
+                      maxLength={300}
+                      minLength={10}
+                    />
                   )}
                 />
+                {errors.MiniDescribe && (
+                  <span className="text-danger">
+                    {errors.MiniDescribe.message}
+                  </span>
+                )}
+                <small className="form-text text-muted">
+                  تعداد کاراکترهای توضیحات کوتاه بین 10 الی 300 می‌باشد.
+                </small>
               </Col>
-              <Col md={4} xs={12}>
-                <Label className="form-label" for="Describe">
-                  5
+              <Col className="mt-3" md={4} xs={12}>
+                <Label
+                  className="form-label"
+                  for="Describe"
+                  style={{ fontSize: "15px" }}
+                >
+                  توضیحات اصلی
                 </Label>
                 <Controller
                   control={control}
                   name="Describe"
+                  rules={{
+                    required: "توضیحات اصلی الزامی است",
+                    minLength: {
+                      value: 55,
+                      message:
+                        "تعداد کاراکترهای توضیحات اصلی باید بیشتر از 55 میباشد",
+                    },
+                  }}
                   render={({ field }) => (
-                    <Input {...field} invalid={errors.firstName && true} />
+                    <Input
+                      {...field}
+                      invalid={errors.Describe && true}
+                      minLength={55}
+                    />
                   )}
                 />
+                {errors.Describe && (
+                  <span className="text-danger">{errors.Describe.message}</span>
+                )}
+                <small className="form-text text-muted">
+                  تعداد کاراکترهای توضیحات اصلی باید بیشتر از 55 میباشد.
+                </small>
               </Col>
-              <Col md={4} xs={12}>
-                <Label className="form-label" for="Keyword">
-                  6
+              <Col className="mt-3" md={4} xs={12}>
+                <Label
+                  className="form-label"
+                  for="Keyword"
+                  style={{ fontSize: "15px" }}
+                >
+                  کلمات کلیدی
                 </Label>
                 <Controller
                   control={control}
                   name="Keyword"
+                  rules={{
+                    required: "کلمات کلیدی الزامی است",
+                    minLength: {
+                      value: 10,
+                      message: "کلمات کلیدی باید حداقل 10 کاراکتر باشد",
+                    },
+                    maxLength: {
+                      value: 300,
+                      message: "کلمات کلیدی نباید بیشتر از 300 کاراکتر باشد",
+                    },
+                  }}
                   render={({ field }) => (
-                    <Input {...field} invalid={errors.firstName && true} />
+                    <Input
+                      {...field}
+                      invalid={errors.Keyword && true}
+                      maxLength={300}
+                      minLength={10}
+                    />
                   )}
                 />
+                {errors.Keyword && (
+                  <span className="text-danger">{errors.Keyword.message}</span>
+                )}
+                <small className="form-text text-muted">
+                  تعداد کاراکترهای کلمات کلیدی بین 10 الی 300 می‌باشد.
+                </small>
               </Col>
               <Col md={8} xs={12} className="mt-2">
                 <Button color="primary">ثبت</Button>
