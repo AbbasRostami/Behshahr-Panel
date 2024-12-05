@@ -36,8 +36,19 @@ const AssisranceWork = () => {
         };
       });
       setDatas(newData);
+      setfilterSearch(newData);
     }
   }, [data]);
+
+  const [fiterSearch, setfilterSearch] = useState([]);
+
+  const handleSearch = (query) => {
+    const searchData = datas.filter((item) => {
+      return item.worktitle.toLowerCase().match(query.toLowerCase());
+    });
+    console.log(searchData);
+    setfilterSearch(searchData);
+  };
 
   const CustomPagination = () => {
     const count = 10;
@@ -190,6 +201,7 @@ const AssisranceWork = () => {
                     className="ms-50 w-100"
                     type="text"
                     placeholder="جستجو..."
+                    onChange={(e) => handleSearch(e.target.value)}
                   />
                 </div>
 
@@ -215,7 +227,7 @@ const AssisranceWork = () => {
             sortIcon={<ChevronDown />}
             className="react-dataTable"
             paginationComponent={CustomPagination}
-            data={datas}
+            data={fiterSearch}
           />
         </div>
       </Card>
