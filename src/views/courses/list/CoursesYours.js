@@ -4,13 +4,7 @@ import Select from "react-select";
 import { selectThemeColors } from "@utils";
 import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
-import {
-  Archive,
-  ChevronDown,
-  FileText,
-  MoreVertical,
-  Trash2,
-} from "react-feather";
+import { ChevronDown, FileText, MoreVertical, Trash2 } from "react-feather";
 
 import {
   Row,
