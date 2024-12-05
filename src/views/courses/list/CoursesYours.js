@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 // import { columns } from "./columns";
-
+import Select from "react-select";
+import { selectThemeColors } from "@utils";
 import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
 import {
@@ -33,24 +34,35 @@ import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import toast from "react-hot-toast";
 const MySwal = withReactContent(Swal);
-const CustomHeader = ({ handlePerPage, rowsPerPage, searchTerm }) => {
+const CustomHeader = ({
+  handlQuery,
+  handlePerPage,
+  rowsPerPage,
+  searchTerm,
+}) => {
+  const statusOptions = [
+    { value: "", label: "انتخاب کنید" },
+    { value: true, label: "فعال" },
+    { value: false, label: "غیرفعال" },
+  ];
+
   return (
     <div className="invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75">
       <Row>
         <Col xl="6" className="d-flex align-items-center p-0">
           <div className="d-flex align-items-center w-100">
             <label htmlFor="rows-per-page">مرتب سازی</label>
-            <Input
-              className="mx-50 w-25"
-              type="select"
-              id="rows-per-page"
-              value={rowsPerPage}
-              onChange={handlePerPage}
-              style={{ width: "5rem" }}
-            >
-              <option value="active">فعال</option>
-              <option value="deactive">غیرفعال</option>
-            </Input>
+            <Select
+              theme={selectThemeColors}
+              isClearable={false}
+              placeholder="انتخاب کنید..."
+              className="react-select"
+              classNamePrefix="select"
+              options={statusOptions}
+              onChange={(data) => {
+                handlStatus(data);
+              }}
+            ></Select>
           </div>
         </Col>
         <Col
@@ -63,7 +75,7 @@ const CustomHeader = ({ handlePerPage, rowsPerPage, searchTerm }) => {
               className="ms-50 w-100"
               type="text"
               value={searchTerm}
-              // onChange={(e) => handleFilter(e.target.value)}
+              onChange={(e) => handlQuery(e.target.value)}
               placeholder="جستجو..."
             />
           </div>
@@ -81,18 +93,22 @@ const CustomHeader = ({ handlePerPage, rowsPerPage, searchTerm }) => {
 
 const CoursesYours = () => {
   const [data, setData] = useState([]); // ذخیره لیست دوره‌ها
+  const [searchDataParams, setSearchDataParams] = useState({
+    PageNumber: 1,
+    RowsOfPage: 10,
+  });
 
   // گرفتن لیست دوره‌ها از API
   const GetCouresesYours = async () => {
-    const path = `/Course/CourseList?PageNumber=1&RowsOfPage=30&SortingCol=DESC&SortType=Expire&Query`;
-    const response = await getApi({ path });
+    const path = `/Course/CourseList`;
+    const response = await getApi({ path, params: searchDataParams });
     console.log("Courses Yours:", response.data.courseDtos);
     setData(response.data.courseDtos);
   };
 
   useEffect(() => {
     GetCouresesYours();
-  }, []);
+  }, [searchDataParams]);
 
   const handleSuspendedClick = async (course) => {
     const path = `/Course/ActiveAndDeactiveCourse`;
@@ -100,24 +116,46 @@ const CoursesYours = () => {
       isActive: !course.isActive,
       id: course.courseId,
     };
-  
+
     const response = await editApi({ path, body });
-  
+
     if (response.data.success) {
       toast.success(response.data.message);
-  
+
       setData((prevData) =>
         prevData.map((item) =>
           item.courseId === course.courseId
-            ? { ...item, isActive: !item.isActive } 
+            ? { ...item, isActive: !item.isActive }
             : item
         )
       );
     } else {
       toast.error("عملیات انجام نشد، مشکلی پیش آمد.");
     }
-  
+
     console.log("Response Put Active/Deactive:", response);
+  };
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlQuery = (e) => {
+    console.log(e);
+    setSearchDataParams((prev) => {
+      return { ...prev, Query: e };
+    });
+  };
+  const handlStatus = (e) => {
+    console.log(e.value);
+    setSearchDataParams((prev) => {
+      return { ...prev, isActive: e.value };
+    });
+  };
+
+  const handlePagination = (page) => {
+    console.log(page);
+    setSearchDataParams((prev) => {
+      return { ...prev, PageNumber: page.selected };
+    });
+    setCurrentPage(page.selected + 1);
   };
 
   const CustomPagination = () => {
@@ -129,6 +167,7 @@ const CoursesYours = () => {
         nextLabel={""}
         pageCount={count || 1}
         activeClassName="active"
+        forcePage={currentPage !== 0 ? currentPage - 1 : 0}
         onPageChange={(page) => handlePagination(page)}
         pageClassName={"page-item"}
         nextLinkClassName={"page-link"}
@@ -142,7 +181,6 @@ const CoursesYours = () => {
       />
     );
   };
-
 
   const columns = [
     {
@@ -198,7 +236,7 @@ const CoursesYours = () => {
               فعال
             </Badge>
           ) : (
-            <Badge className="fw-bolder text-capitalize" color="danger">
+            <Badge className="fw-bolder text-capitalize" color="danger" pill>
               غیرفعال
             </Badge>
           )}
@@ -215,7 +253,7 @@ const CoursesYours = () => {
       cell: (row) => (
         <span>
           {row.isdelete ? (
-            <Badge className="text-capitalize" color="danger">
+            <Badge className="text-capitalize" color="danger" pill>
               حذف شده
             </Badge>
           ) : (
@@ -253,7 +291,7 @@ const CoursesYours = () => {
                 onClick={() => handleSuspendedClick(row)}
               >
                 <Trash2 size={14} className="me-50" />
-                <span className="align-middle">غیرفعال / غیرفعال</span>
+                <span className="align-middle">غیرفعال / فعال</span>
               </DropdownItem>
               <DropdownItem
                 tag={Link}
@@ -287,7 +325,12 @@ const CoursesYours = () => {
             className="react-dataTable"
             paginationComponent={CustomPagination}
             data={data}
-            subHeaderComponent={<CustomHeader />}
+            subHeaderComponent={
+              <CustomHeader
+                handlePagination={handlePagination}
+                handlQuery={handlQuery}
+              />
+            }
           />
         </div>
       </Card>
