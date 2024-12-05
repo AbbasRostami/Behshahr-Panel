@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
 import { ChevronDown } from "react-feather";
@@ -25,7 +25,20 @@ const AssisranceWork = () => {
     enabled: true,
   });
 
-  
+  const [datas, setDatas] = useState([]);
+
+  useEffect(() => {
+    if (data?.length) {
+      let newData = data.map((item, index) => {
+        return {
+          ...item,
+          index,
+        };
+      });
+      setDatas(newData);
+    }
+  }, [data]);
+
   const CustomPagination = () => {
     const count = 10;
 
@@ -57,7 +70,10 @@ const AssisranceWork = () => {
       sortField: "fullName",
       selector: (row) => row.courseName,
       cell: (row, index) => (
-        <div key={`${row.id}-${index}`} className="d-flex fw-bolder justify-content-left align-items-center">
+        <div
+          key={`${row.id}-${index}`}
+          className="d-flex fw-bolder justify-content-left align-items-center"
+        >
           {row.courseName}
         </div>
       ),
@@ -193,12 +209,13 @@ const AssisranceWork = () => {
             sortServer
             pagination
             responsive
+            keyField="index"
             paginationServer
             columns={columns}
             sortIcon={<ChevronDown />}
             className="react-dataTable"
             paginationComponent={CustomPagination}
-            data={data}
+            data={datas}
           />
         </div>
       </Card>
