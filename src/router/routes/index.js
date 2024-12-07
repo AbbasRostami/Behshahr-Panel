@@ -19,7 +19,16 @@ import CoursesView from "../../views/courses/view";
 import ArticlesLists from "../../views/articles/list";
 import UserList from "../../pages/UserList";
 import UsersView from "../../views/users/view";
-import CommentLists from "../../views/comments/list";
+import AssisranceWork from "../../views/Level 3/AssistanceWork/AssistanceWorkList";
+import BuildingList from "../../views/Level 3/Building/BuildingList";
+import ClassRoomList from "../../views/Level 3/ClassRoom/ClassRoomList";
+import CourseAssistanceList from "../../views/Level 3/CourseAssistance/CourseAssistanceList";
+import CourseSocialGroupList from "../../views/Level 3/CourseSocialGroup/CourseSocialGroupList";
+import DepartmentList from "../../views/Level 3/Department/DepartmentList";
+import TermList from "../../views/Level 3/Term/TermList";
+import StatusCoursesList from "../../views/Level 3/CourseStatus/StatusCoursesList";
+import TechnologyList from "../../views/Level 3/Technology/TechnologyList";
+import CalendarComponent from "../../views/calendar";
 
 const getLayout = {
   blank: <BlankLayout />,
@@ -93,6 +102,46 @@ const Routes = [
   {
     path: "/articles-view/:id",
     element: <ArticlesView />,
+  },
+  {
+    path: "/asswork",
+    element: <AssisranceWork />,
+  },
+  {
+    path: "/building",
+    element: <BuildingList />,
+  },
+  {
+    path: "/class-room",
+    element: <ClassRoomList />,
+  },
+  {
+    path: "/course-assistance",
+    element: <CourseAssistanceList />,
+  },
+  {
+    path: "/course-socialgroup",
+    element: <CourseSocialGroupList />,
+  },
+  {
+    path: "/department",
+    element: <DepartmentList />,
+  },
+  {
+    path: "/term",
+    element: <TermList />,
+  },
+  {
+    path: "/status-courses",
+    element: <StatusCoursesList />,
+  },
+  {
+    path: "/technology",
+    element: <TechnologyList />,
+  },
+  {
+    path: "/calendar",
+    element: <CalendarComponent />,
   },
 
   {

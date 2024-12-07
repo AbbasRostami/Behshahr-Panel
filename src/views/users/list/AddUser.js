@@ -119,7 +119,7 @@ const AddUserModal = () => {
             className="gy-1 pt-75"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <Col md={6} xs={12}>
+            <Col md={12} xs={12}>
               <Label className="form-label" for="firstName">
                 نام
               </Label>
