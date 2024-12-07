@@ -250,6 +250,7 @@ export const columns = [
               onClick={(e) => {
                 e.preventDefault();
                 deleteUser(row.id);
+                deleteUser(row.id);
               }}
             >
               <Trash2 size={14} className="me-50" />

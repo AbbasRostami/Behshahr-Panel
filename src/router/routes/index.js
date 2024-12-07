@@ -91,7 +91,7 @@ const Routes = [
     element: <ArticlesAdds />,
   },
   {
-    path: "/articles-view",
+    path: "/articles-view/:id",
     element: <ArticlesView />,
   },
 
