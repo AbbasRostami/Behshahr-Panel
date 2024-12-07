@@ -110,8 +110,8 @@ export const columns = [
     selector: (row) => row.courseName,
     cell: (row) => {
       return (
-        <div className="d-flex justify-content-left align-items-center  text-truncate ">
-          <div className="d-flex flex-column  text-truncate">
+        <div className="d-flex justify-content-left align-items-center ">
+          <div className="d-flex flex-column">
             <span className=" text-truncate text-truncate fw-bolder">{row.courseName}</span>
           </div>
         </div>

@@ -117,7 +117,7 @@ export const columns = [
     sortField: "fullName",
     selector: (row) => row.addUserFullName,
     cell: (row) => (
-      <div className="d-flex fw-bolder justify-content-left align-items-center">
+      <div className="d-flex justify-content-left align-items-center">
         {row.addUserFullName}
       </div>
     ),
@@ -130,7 +130,7 @@ export const columns = [
     sortField: "fullName",
     selector: (row) => row.title,
     cell: (row) => (
-      <div className="d-flex  fw-bolder justify-content-left align-items-center">
+      <div className="d-flex justify-content-left align-items-center">
         {row.title}
       </div>
     ),
