@@ -28,8 +28,11 @@ import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getApi } from "../../../core/api/api";
-
+import { editApi, getApi } from "../../../core/api/api";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import toast from "react-hot-toast";
+const MySwal = withReactContent(Swal);
 const CustomHeader = ({ handlePerPage, rowsPerPage, searchTerm }) => {
   return (
     <div className="invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75">
@@ -77,23 +80,45 @@ const CustomHeader = ({ handlePerPage, rowsPerPage, searchTerm }) => {
 };
 
 const CoursesYours = () => {
-  const [data, setData] = useState([]);
-  const GetCouresesView = async () => {
-    const path = `/Course/CourseList?PageNumber=1&RowsOfPage=10&SortingCol=DESC&SortType=Expire&Query`;
+  const [data, setData] = useState([]); // ذخیره لیست دوره‌ها
+
+  // گرفتن لیست دوره‌ها از API
+  const GetCouresesYours = async () => {
+    const path = `/Course/CourseList?PageNumber=1&RowsOfPage=30&SortingCol=DESC&SortType=Expire&Query`;
     const response = await getApi({ path });
-    console.log(response.data.courseDtos);
+    console.log("Courses Yours:", response.data.courseDtos);
     setData(response.data.courseDtos);
   };
 
   useEffect(() => {
-    GetCouresesView();
+    GetCouresesYours();
   }, []);
 
-  const datas = [
-    { name: "a", lastname: "b" },
-    { name: "a", lastname: "b" },
-    { name: "a", lastname: "b" },
-  ];
+  const handleSuspendedClick = async (course) => {
+    const path = `/Course/ActiveAndDeactiveCourse`;
+    const body = {
+      isActive: !course.isActive,
+      id: course.courseId,
+    };
+  
+    const response = await editApi({ path, body });
+  
+    if (response.data.success) {
+      toast.success(response.data.message);
+  
+      setData((prevData) =>
+        prevData.map((item) =>
+          item.courseId === course.courseId
+            ? { ...item, isActive: !item.isActive } 
+            : item
+        )
+      );
+    } else {
+      toast.error("عملیات انجام نشد، مشکلی پیش آمد.");
+    }
+  
+    console.log("Response Put Active/Deactive:", response);
+  };
 
   const CustomPagination = () => {
     const count = 10;
@@ -118,11 +143,6 @@ const CoursesYours = () => {
     );
   };
 
-  const statusObj = {
-    pending: "light-warning",
-    active: "light-success",
-    inactive: "light-secondary",
-  };
 
   const columns = [
     {
@@ -132,18 +152,9 @@ const CoursesYours = () => {
       sortField: "fullName",
       selector: (row) => row.title,
       cell: (row) => (
-        <div className="d-flex justify-content-left align-items-center">
+        <div className="d-flex fw-bolder justify-content-left align-items-center">
           {/* <Avatar className='me-1' img={row.avatar} width='32' height='32' /> */}
           {row.title}
-
-          <div className="d-flex flex-column">
-            <Link
-              to={`/apps/user/view/${row.id}`}
-              className="user_name text-truncate text-body"
-            ></Link>
-
-            <small className="text-truncate text-muted mb-0">{row.email}</small>
-          </div>
         </div>
       ),
     },
@@ -155,7 +166,7 @@ const CoursesYours = () => {
       sortField: "fullName",
       selector: (row) => row.typeName,
       cell: (row) => (
-        <div className="d-flex justify-content-left align-items-center">
+        <div className="d-flex fw-bolder justify-content-left align-items-center">
           {row.typeName}
         </div>
       ),
@@ -168,17 +179,8 @@ const CoursesYours = () => {
       sortField: "fullName",
       selector: (row) => row.levelName,
       cell: (row) => (
-        <div className="d-flex justify-content-left align-items-center">
+        <div className="d-flex fw-bolder justify-content-left align-items-center">
           {row.levelName}
-          <div className="d-flex flex-column">
-            <Link
-              to={`/apps/user/view/${row.id}`}
-              className="user_name text-truncate text-body"
-            >
-              <span className="fw-bolder">{row.lastnamelastname}</span>
-            </Link>
-            <small className="text-truncate text-muted mb-0">{row.email}</small>
-          </div>
         </div>
       ),
     },
@@ -190,20 +192,17 @@ const CoursesYours = () => {
       sortField: "status",
       selector: (row) => row.isActive,
       cell: (row) => (
-        <Badge className="text-capitalize" color="success" pill>
+        <span>
           {row.isActive ? (
-            <span> فعال</span>
+            <Badge className=" fw-bolder text-capitalize" color="success" pill>
+              فعال
+            </Badge>
           ) : (
-            <span className="text-capitalize" color="danger">
+            <Badge className="fw-bolder text-capitalize" color="danger">
               غیرفعال
-            </span>
+            </Badge>
           )}
-        </Badge>
-
-        // color={statusObj[row.status]} pill
-        // color='success' pill
-        // color='danger' pill
-        // color='secondary' pill
+        </span>
       ),
     },
 
@@ -214,20 +213,17 @@ const CoursesYours = () => {
       sortField: "status",
       selector: (row) => row.status,
       cell: (row) => (
-        <Badge className="text-capitalize" color="danger" pill>
+        <span>
           {row.isdelete ? (
-            <span> خذف شده</span>
+            <Badge className="text-capitalize" color="danger">
+              حذف شده
+            </Badge>
           ) : (
-            <span className="text-capitalize" color="danger">
+            <Badge className="text-capitalize" color="success" pill>
               موجود
-            </span>
+            </Badge>
           )}
-        </Badge>
-
-        // color={statusObj[row.status]} pill
-        // color='success' pill
-        // color='danger' pill
-        // color='secondary' pill
+        </span>
       ),
     },
 
@@ -242,25 +238,6 @@ const CoursesYours = () => {
             </DropdownToggle>
             <DropdownMenu>
               <DropdownItem
-                tag={Link}
-                className="w-100"
-                // to={`/apps/user/view/${row.id}`}
-              >
-                <FileText size={14} className="me-50" />
-                <Link to="/courses-view">
-                  <span className="align-middle">جزئیات</span>
-                </Link>
-              </DropdownItem>
-              <DropdownItem
-                tag="a"
-                href="/"
-                className="w-100"
-                onClick={(e) => e.preventDefault()}
-              >
-                <Archive size={14} className="me-50" />
-                <span className="align-middle">ویرایش</span>
-              </DropdownItem>
-              <DropdownItem
                 tag="a"
                 href="/"
                 className="w-100"
@@ -269,7 +246,23 @@ const CoursesYours = () => {
                 }}
               >
                 <Trash2 size={14} className="me-50" />
-                <span className="align-middle">حذف</span>
+                <span className="align-middle">موجود کردن</span>
+              </DropdownItem>
+              <DropdownItem
+                className="w-100"
+                onClick={() => handleSuspendedClick(row)}
+              >
+                <Trash2 size={14} className="me-50" />
+                <span className="align-middle">غیرفعال / غیرفعال</span>
+              </DropdownItem>
+              <DropdownItem
+                tag={Link}
+                className="w-100"
+                to={`/courses-view/${row.courseId}`}
+              >
+                <FileText size={14} className="me-50" />
+
+                <span className="align-middle">جزئیات</span>
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>

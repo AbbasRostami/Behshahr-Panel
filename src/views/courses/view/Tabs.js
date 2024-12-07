@@ -1,20 +1,12 @@
-// ** React Imports
 import { Fragment } from "react";
-
-// ** Reactstrap Imports
 import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
-
-// ** Icons Imports
-import { User, Lock, Bookmark, Bell, Link } from "react-feather";
-
-// ** User Components
+import { User, Lock, Bookmark} from "react-feather";
 import UserProjectsList from "./UserProjectsList";
+import GroupsList from "./CoursesGroup";
+import Comments from "./CoursesComments";
+import Status from "./CoursesPayment";
 
-import GroupsList from "./groups";
-import Comments from "./comments";
-import Status from "./status";
-
-const UserTabs = ({ active, toggleTab }) => {
+const CoursesTab = ({ active, toggleTab, data }) => {
   return (
     <Fragment>
       <Nav pills className="mb-2">
@@ -47,22 +39,22 @@ const UserTabs = ({ active, toggleTab }) => {
 
       <TabContent activeTab={active}>
         <TabPane tabId="1">
-          <UserProjectsList />
+          <UserProjectsList data={data}/>
         </TabPane>
 
         <TabPane tabId="2">
-          <GroupsList />
+          <GroupsList data={data} />
         </TabPane>
 
         <TabPane tabId="3">
-          <Comments />
+          <Comments  data={data}/>
         </TabPane>
 
         <TabPane tabId="4">
-          <Status />
+          <Status  data={data} />
         </TabPane>
       </TabContent>
     </Fragment>
   );
 };
-export default UserTabs;
+export default CoursesTab;

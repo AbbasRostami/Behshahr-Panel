@@ -1,5 +1,4 @@
 import { Fragment, useEffect, useState } from "react";
-
 import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
 import {
@@ -7,15 +6,9 @@ import {
   ChevronDown,
   FileText,
   MoreVertical,
-  Trash2,
 } from "react-feather";
-
 import {
-  Row,
-  Col,
   Card,
-  Input,
-  Button,
   Badge,
   UncontrolledDropdown,
   DropdownToggle,
@@ -25,16 +18,13 @@ import {
 
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { getApi } from "../../../core/api/api";
 
 const CoursesReserve = () => {
   const [data, setData] = useState([]);
-  const params = useParams();
-  console.log(params);
-
   const GetCouresesReserve = async () => {
-    const path = `/CourseReserve/c2cb3746-2f31-ef11-b6c9-9b4d470c6650`;
+    const path = `/CourseReserve`;
     const response = await getApi({ path });
     console.log(response.data);
     setData(response.data);
@@ -43,11 +33,8 @@ const CoursesReserve = () => {
   useEffect(() => {
     GetCouresesReserve();
   }, []);
-  const datas = [
-    { name: "a", lastname: "b" },
-    { name: "a", lastname: "b" },
-    { name: "a", lastname: "b" },
-  ];
+
+ 
 
   const CustomPagination = () => {
     const count = 10;
@@ -72,11 +59,7 @@ const CoursesReserve = () => {
     );
   };
 
-  const statusObj = {
-    pending: "light-warning",
-    active: "light-success",
-    inactive: "light-secondary",
-  };
+
 
   const columns = [
     {
@@ -86,19 +69,9 @@ const CoursesReserve = () => {
       sortField: "fullName",
       selector: (row) => row.courseName,
       cell: (row) => (
-        <div className="d-flex justify-content-left align-items-center">
+        <div className="d-flex fw-bolder justify-content-left align-items-center">
           {/* <Avatar className='me-1' img={row.avatar} width='32' height='32' /> */}
           {row.courseName}
-
-          <div className="d-flex flex-column">
-            <Link
-              to={`/apps/user/view/${row.id}`}
-              className="user_name text-truncate text-body"
-              onClick={() => store.dispatch(getUser(row.id))}
-            ></Link>
-
-            <small className="text-truncate text-muted mb-0">{row.email}</small>
-          </div>
         </div>
       ),
     },
@@ -110,11 +83,8 @@ const CoursesReserve = () => {
       sortField: "fullName",
       selector: (row) => row.studentName,
       cell: (row) => (
-        <div className="d-flex justify-content-left align-items-center">
+        <div className="d-flex fw-bolder justify-content-left align-items-center">
           {row.studentName}
-          <div className="d-flex flex-column">
-            <span className="fw-bolder">{row.studentName}</span>
-          </div>
         </div>
       ),
     },
@@ -126,18 +96,8 @@ const CoursesReserve = () => {
       sortField: "fullName",
       selector: (row) => row.reserverDate,
       cell: (row) => (
-        <div className="d-flex justify-content-left align-items-center">
+        <div className="d-flex fw-bolder justify-content-left align-items-center">
           {row.reserverDate}
-          <div className="d-flex flex-column">
-            <Link
-              to={`/apps/user/view/${row.id}`}
-              className="user_name text-truncate text-body"
-              onClick={() => store.dispatch(getUser(row.id))}
-            >
-              <span className="fw-bolder">{row.lastnamelastname}</span>
-            </Link>
-            <small className="text-truncate text-muted mb-0">{row.email}</small>
-          </div>
         </div>
       ),
     },
@@ -149,9 +109,17 @@ const CoursesReserve = () => {
       sortField: "status",
       selector: (row) => row.accept,
       cell: (row) => (
-        <Badge className="text-capitalize" color="danger" pill>
-          {row.accept ? <span>تائید شده</span> : <span>تائیدنشده</span>}
-        </Badge>
+        <span>
+          {row.accept ? (
+            <Badge className="text-capitalize" color="success" pill>
+              تایید شده
+            </Badge>
+          ) : (
+            <Badge className="text-capitalize" color="danger">
+              تایید نشده
+            </Badge>
+          )}
+        </span>
 
         // color={statusObj[row.status]} pill
         // color='success' pill
@@ -187,18 +155,6 @@ const CoursesReserve = () => {
               >
                 <Archive size={14} className="me-50" />
                 <span className="align-middle">تائید</span>
-              </DropdownItem>
-              <DropdownItem
-                tag="a"
-                href="/"
-                className="w-100"
-                onClick={(e) => {
-                  e.preventDefault();
-                  store.dispatch(deleteUser(row.id));
-                }}
-              >
-                <Trash2 size={14} className="me-50" />
-                <span className="align-middle">حذف</span>
               </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>

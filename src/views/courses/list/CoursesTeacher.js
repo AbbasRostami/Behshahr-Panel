@@ -1,6 +1,4 @@
-import { Fragment, useState } from "react";
-// import { columns } from "./columns";
-
+import { Fragment, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import DataTable from "react-data-table-component";
 import { Archive, ChevronDown, FileText, MoreVertical, Trash2 } from "react-feather";
@@ -10,6 +8,7 @@ import { Row, Col, Card, Input, Button, Badge, UncontrolledDropdown, DropdownTog
 import "@styles/react/libs/react-select/_react-select.scss";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
 import { Link } from "react-router-dom";
+import { getApi } from "../../../core/api/api";
 
 const CustomHeader = ({
   handlePerPage,
@@ -46,7 +45,6 @@ const CustomHeader = ({
               className="ms-50 w-100"
               type="text"
               value={searchTerm}
-              // onChange={(e) => handleFilter(e.target.value)}
               placeholder="جستجو..."
             />
           </div>
@@ -64,11 +62,17 @@ const CustomHeader = ({
 
 const CoursesTeacher = () => {
 
-  const datas = [
-    { name: "a", lastname: "b" },
-    { name: "a", lastname: "b" },
-    { name: "a", lastname: "b" },
-  ];
+  const [data, setData] = useState([]);
+  const GetCouresesTeacher = async () => {
+    const path = `/Course/TeacherCourseList?PageNumber=1&RowsOfPage=10&SortingCol=DESC&SortType=Expire`;
+    const response = await getApi({ path });
+    console.log(response.data.teacherCourseDtos);
+    setData(response.data.teacherCourseDtos);
+  };
+
+  useEffect(() => {
+    GetCouresesTeacher();
+  }, []);
 
   const CustomPagination = () => {
     const count = 10;
@@ -92,39 +96,18 @@ const CoursesTeacher = () => {
       />
     );
   };
-
-
-  const statusObj = {
-    pending: 'light-warning',
-    active: 'light-success',
-    inactive: 'light-secondary'
-  }
   
    const columns = [
-  
-  
     {
       name: 'نام دوره',
       sortable: true,
       minWidth: '200px',
       sortField: 'fullName',
-      selector: row => row.name,
+      selector: row => row.title,
       cell: row => (
-        <div className='d-flex justify-content-left align-items-center'>
+        <div className='d-flex fw-bolder justify-content-left align-items-center'>
              {/* <Avatar className='me-1' img={row.avatar} width='32' height='32' /> */}
-          {row.name}
-          
-       
-          <div className='d-flex flex-column'>
-            <Link
-              to={`/apps/user/view/${row.id}`}
-              className='user_name text-truncate text-body'
-              onClick={() => store.dispatch(getUser(row.id))}
-            >
-            </Link>
-            
-            <small className='text-truncate text-muted mb-0'>{row.email}</small>
-          </div>
+          {row.title}
         </div>
       )
     },
@@ -134,15 +117,10 @@ const CoursesTeacher = () => {
       sortable: true,
       minWidth: '200px',
       sortField: 'fullName',
-      selector: row => row.lastname,
+      selector: row => row.typeName,
       cell: row => (
-        <div className='d-flex justify-content-left align-items-center'>
-          {row.lastname}
-          <div className='d-flex flex-column'>
-            
-              <span className='fw-bolder'>{row.lastname}</span>
-            
-          </div>
+        <div className='d-flex fw-bolder justify-content-left align-items-center'>
+          {row.typeName}
         </div>
       )
     },
@@ -152,20 +130,10 @@ const CoursesTeacher = () => {
       sortable: true,
       minWidth: '200px',
       sortField: 'fullName',
-      selector: row => row.lastname,
+      selector: row => row.levelName,
       cell: row => (
-        <div className='d-flex justify-content-left align-items-center'>
-          {row.lastname}
-          <div className='d-flex flex-column'>
-            <Link
-              to={`/apps/user/view/${row.id}`}
-              className='user_name text-truncate text-body'
-              onClick={() => store.dispatch(getUser(row.id))}
-            >
-              <span className='fw-bolder'>{row.lastnamelastname}</span>
-            </Link>
-            <small className='text-truncate text-muted mb-0'>{row.email}</small>
-          </div>
+        <div className='d-flex fw-bolder justify-content-left align-items-center'>
+          {row.levelName}
         </div>
       )
     },
@@ -175,20 +143,10 @@ const CoursesTeacher = () => {
       sortable: true,
       minWidth: '200px',
       sortField: 'fullName',
-      selector: row => row.lastname,
+      selector: row => row.statusName,
       cell: row => (
-        <div className='d-flex justify-content-left align-items-center'>
-          {row.lastname}
-          <div className='d-flex flex-column'>
-            <Link
-              to={`/apps/user/view/${row.id}`}
-              className='user_name text-truncate text-body'
-              onClick={() => store.dispatch(getUser(row.id))}
-            >
-              <span className='fw-bolder'>{row.lastnamelastname}</span>
-            </Link>
-            <small className='text-truncate text-muted mb-0'>{row.email}</small>
-          </div>
+        <div className='d-flex fw-bolder justify-content-left align-items-center'>
+          {row.statusName}
         </div>
       )
     },
@@ -200,15 +158,17 @@ const CoursesTeacher = () => {
       sortField: 'status',
       selector: row => row.status,
       cell: row => (
-        <Badge className='text-capitalize' color='success' pill  >
-          {row.status} فعال
-        </Badge>
-  
-        // color={statusObj[row.status]} pill
-        // color='success' pill
-        // color='danger' pill
-        // color='secondary' pill
-  
+        <span>
+        {row.isActive ? (
+          <Badge className=" fw-bolder text-capitalize" color="success" pill>
+            فعال
+          </Badge>
+        ) : (
+          <Badge className="fw-bolder text-capitalize" color="danger">
+            غیرفعال
+          </Badge>
+        )}
+      </span>
       )
     },
 
@@ -236,18 +196,6 @@ const CoursesTeacher = () => {
                 <Archive size={14} className='me-50' />
                 <span className='align-middle'>ویرایش</span>
               </DropdownItem>
-              <DropdownItem
-                tag='a'
-                href='/'
-                className='w-100'
-                onClick={e => {
-                  e.preventDefault()
-                  store.dispatch(deleteUser(row.id))
-                }}
-              >
-                <Trash2 size={14} className='me-50' />
-                <span className='align-middle'>حذف</span>
-              </DropdownItem>
             </DropdownMenu>
           </UncontrolledDropdown>
         </div>
@@ -270,7 +218,7 @@ const CoursesTeacher = () => {
             sortIcon={<ChevronDown />}
             className="react-dataTable"
             paginationComponent={CustomPagination}
-            data={datas}
+            data={data}
             subHeaderComponent={
               <CustomHeader
               />
