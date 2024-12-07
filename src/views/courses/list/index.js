@@ -9,7 +9,6 @@ import CoursesReserve from "./CoursesReserve";
 import CoursesTeacher from "./CoursesTeacher";
 
 const CoursesLists = () => {
-
   const [active, setActive] = useState("1");
 
   const toggleTab = (tab) => {
@@ -20,15 +19,12 @@ const CoursesLists = () => {
 
   return (
     <div className="app-user-list">
-
       <Row>
-      <Col xl="8" lg="7" xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
+        <Col xl="8" lg="7" xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
           <CoursesListTabs active={active} toggleTab={toggleTab} />
         </Col>
       </Row>
       <Row>
-
-       
         <Col lg="3" sm="6">
           <StatsHorizontal
             color="primary"
@@ -61,9 +57,8 @@ const CoursesLists = () => {
             renderStats={<h3 className="fw-bolder mb-75">237</h3>}
           />
         </Col>
-        
       </Row>
-      
+
       <TabContent activeTab={active}>
         <TabPane tabId="1">
           <CoursesYours />

@@ -8,7 +8,7 @@ import { getApi } from "../../../core/api/api";
 export const columns = [
   {
     sortable: true,
-    minWidth: "300px",
+    maxWidth: "300px",
     name: "نام کاربر",
     selector: (row) => row.studentName,
     cell: (row) => {
@@ -45,16 +45,16 @@ export const columns = [
     cell: (row) => {
       return (
         <span>
-        {row.peymentDone ? (
-          <Badge className="text-capitalize" color="success" >
-           تایید شده
-          </Badge>
-        ) : (
-          <Badge className="text-capitalize"color="danger"  pill>
-            تایید نشده
-          </Badge>
-        )}
-      </span>
+          {row.peymentDone ? (
+            <Badge className="text-capitalize" color="success">
+              تایید شده
+            </Badge>
+          ) : (
+            <Badge className="text-capitalize" color="danger" pill>
+              تایید نشده
+            </Badge>
+          )}
+        </span>
       );
     },
   },
