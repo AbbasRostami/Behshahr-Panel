@@ -86,33 +86,37 @@ export const columns = [
     maxWidth: "300px",
     name: "نام دوره",
     selector: (row) => row.title,
-    Cell: (row) => {
-      return (
-        <div className="d-flex justify-content-left align-items-center ">
-          <div className="avatar-wrapper">
-            {/* <Avatar
-              className="me-1"
-              img={row.img}
-              alt={row.title}
-              imgWidth="32"
-            /> */}
-          </div>
-          <div className="d-flex flex-column">
-            <span className="text-truncate fw-bolder">{row.title}</span>
-          </div>
+    cell: (row) => {
+      return(
+        <div>
+          <span className="fw-bolder">{row.title}</span>
         </div>
-      );
-    },
+      )
+    }
   },
   {
     maxWidth: "300px",
     name: "توضیحات دوره",
     selector: (row) => row.describe,
+    cell: (row) => {
+      return(
+        <div className=" text-truncate ...">
+          <span className=" fw-bolder">{row.describe}</span>
+        </div>
+      )
+    } 
   },
   {
     maxWidth: "300px",
     name: "تاریخ آخرین بروزرسانی",
     selector: (row) => row.lastUpdate,
+    cell: (row) => {
+      return(
+        <div>
+          <span className=" fw-bolder">{row.lastUpdate}</span>
+        </div>
+      )
+    } 
   },
 ];
 

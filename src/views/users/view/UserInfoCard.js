@@ -4,7 +4,6 @@ import {
   Row,
   Col,
   Card,
-  Form,
   CardBody,
   Button,
   Badge,
@@ -15,107 +14,79 @@ import {
   ModalHeader,
 } from "reactstrap";
 import Swal from "sweetalert2";
-import Select from "react-select";
 import { Check, Briefcase } from "react-feather";
 import { useForm, Controller } from "react-hook-form";
 import withReactContent from "sweetalert2-react-content";
-import { selectThemeColors } from "@utils";
-import { getApi } from "../../../core/api/api";
 import "@styles/react/libs/react-select/_react-select.scss";
-// import { getApi } from "../../../core/api/api";
 import avatar from "./../../../assets/images/portrait/small/avatar-s-2.jpg";
-import { useParams } from "react-router-dom";
-
-const statusOptions = [
-  { value: "active", label: "Active" },
-  { value: "inactive", label: "Inactive" },
-  { value: "suspended", label: "Suspended" },
-];
-
-const countryOptions = [
-  { value: "uk", label: "UK" },
-  { value: "usa", label: "USA" },
-  { value: "france", label: "France" },
-  { value: "russia", label: "Russia" },
-  { value: "canada", label: "Canada" },
-];
+import toast from "react-hot-toast";
+import { editApi } from "../../../core/api/api";
 
 const MySwal = withReactContent(Swal);
 
 const UserInfoCard = ({ selectedUser, data }) => {
   const [show, setShow] = useState(false);
+  console.log("Data Get: ", data);
 
   const {
-    reset,
     control,
-    setError,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      // username: selectedUser.username,
-      // lastName: selectedUser.fullName.split(' ')[1],
-      // firstName: selectedUser.fullName.split(' ')[0]
-    },
-  });
+    register,
+    reset,
+  } = useForm();
 
-  const onSubmit = (data) => {
-    if (Object.values(data).every((field) => field.length > 0)) {
-      setShow(false);
-    } else {
-      for (const key in data) {
-        if (data[key].length === 0) {
-          setError(key, {
-            type: "manual",
-          });
-        }
-      }
+  useEffect(() => {
+    if (data) {
+      reset({
+        id: data.id,
+        fName: data.fName || "",
+        lName: data.lName || "",
+        userName: data.userName,
+        gmail: data.gmail || "",
+        phoneNumber: data.phoneNumber || "",
+        active: data.active,
+        isTecher: data.isTecher,
+        isStudent: data.isStudent,
+        recoveryEmail: data.recoveryEmail,
+        userAbout: data.userAbout || "",
+        linkdinProfile: data.linkdinProfile || "",
+        telegramLink: data.telegramLink || "",
+        homeAdderess: data.homeAdderess || "",
+        nationalCode: data.nationalCode || "",
+        gender: data.gender,
+        latitude: data.latitude,
+        longitude: data.longitude,
+        insertDate: data.insertDate,
+        currentPictureAddress: data.currentPictureAddress,
+        birthDay: data.birthDay?.slice(0, 10) || "",
+      });
     }
-  };
-
-  const handleReset = () => {
-    reset({
-      username: selectedUser.username,
-      lastName: selectedUser.fullName.split(" ")[1],
-      firstName: selectedUser.fullName.split(" ")[0],
-    });
-  };
-
-  const handleSuspendedClick = () => {
-    const [data, setData] = useState([]);
-
-    return MySwal.fire({
-      title: "آیا مطمئن هستید؟",
-      text: "البته امکان بازگشت نیست وجود دارد",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "بله",
-      customClass: {
-        confirmButton: "btn btn-primary ssss",
-        cancelButton: "btn btn-outline-danger ms-1",
-      },
-      buttonsStyling: false,
-    }).then(function (result) {
-      if (result.value) {
-        MySwal.fire({
-          icon: "success",
-          title: "موفقیت",
-          text: "عملیات با موفقیت انجام گردید",
-          customClass: {
-            confirmButton: "btn btn-success",
-          },
-        });
-      } else if (result.dismiss === MySwal.DismissReason.cancel) {
-        MySwal.fire({
-          title: "لغو",
-          text: "عملیات لغو گردید",
-          icon: "error",
-          customClass: {
-            confirmButton: "btn btn-success",
-          },
-        });
-      }
-    });
+  }, [data, reset]);
+  const onSubmit = async (values) => {
+    console.log("values Put:", values);
+    const path = `/User/UpdateUser`;
+    const body = values;
+    const response = await editApi({ path, body });
+    console.log("Response: ", response);
+    if (response.data.success) {
+      Swal.fire({
+        icon: "success",
+        title: "عملیات با موفقیت انجام شد!",
+        text: response.data.message,
+        confirmButtonText: "باشه",
+        confirmButtonColor: "#4CAF50",
+        background: "white",
+        iconColor: "#388E3C",
+        showConfirmButton: true,
+        timer: 3000,
+        toast: false,
+        position: "center",
+        customClass: {
+          popup: "animated zoomIn",
+        },
+      });
+    }
   };
 
   return (
@@ -129,13 +100,28 @@ const UserInfoCard = ({ selectedUser, data }) => {
                   height="110"
                   width="110"
                   alt="user-avatar"
-                  src={avatar}
+                  src={data?.currentPictureAddress}
                   className="img-fluid rounded mt-3 mb-2"
                 />
-                <div className="user-info">
-                  <Badge className="text-capitalize" color="success" pill>
-                    Adminstrator
-                  </Badge>
+                <div
+                  className="user-info d-flex justify-content-between flex-wrap"
+                  style={{ gap: "7px" }}
+                >
+                  {data?.roles?.map(
+                    (data, index) =>
+                      (data?.roleName === "Student" ||
+                        data?.roleName === "Teacher" ||
+                        data?.roleName === "Administrator") && (
+                        <Badge
+                          key={index}
+                          className="text-capitalize mr-3"
+                          color="success"
+                          pill
+                        >
+                          {data?.roleName}
+                        </Badge>
+                      )
+                  )}
                 </div>
               </div>
             </div>
@@ -146,7 +132,7 @@ const UserInfoCard = ({ selectedUser, data }) => {
                 <Check className="font-medium-2" />
               </Badge>
               <div className="ms-75">
-                <h4 className="mb-0">1.23k</h4>
+                <h4 className="mb-0">{data?.courses?.length}</h4>
                 <small className="fs-4"> دوره ها </small>
               </div>
             </div>
@@ -155,7 +141,7 @@ const UserInfoCard = ({ selectedUser, data }) => {
                 <Briefcase className="font-medium-2" />
               </Badge>
               <div className="ms-75">
-                <h4 className="mb-0">568</h4>
+                <h4 className="mb-0">{data?.coursesReseves?.length}</h4>
                 <small className="fs-4">دوره های رزرو </small>
               </div>
             </div>
@@ -174,7 +160,7 @@ const UserInfoCard = ({ selectedUser, data }) => {
                 </li>
                 <li className="mb-75">
                   <span className="fw-bolder me-25"> ایمیل کاربر:</span>
-                  <span>{data?.recoveryEmail}</span>
+                  <span>{data?.gmail}</span>
                 </li>
                 <li className="mb-75">
                   <span className="fw-bolder me-25">کد ملی:</span>
@@ -183,8 +169,18 @@ const UserInfoCard = ({ selectedUser, data }) => {
                   </Badge>
                 </li>
                 <li className="mb-75">
-                  <span className="fw-bolder me-25">وضعیت دوره:</span>
-                  <span className="text-capitalize ">فعال {data?.active}</span>
+                  <span className="fw-bolder me-25">وضعیت کاربر:</span>
+                  <span className="text-capitalize" color="success">
+                    {data?.active == "True" ? (
+                      <Badge color="danger" pill>
+                        غیر فعال
+                      </Badge>
+                    ) : (
+                      <Badge color="success " pill>
+                        فعال
+                      </Badge>
+                    )}
+                  </span>
                 </li>
                 <li className="mb-75">
                   <span className="fw-bolder me-25">درصد تکمیل پروفایل :</span>
@@ -209,14 +205,6 @@ const UserInfoCard = ({ selectedUser, data }) => {
             <Button color="primary" onClick={() => setShow(true)}>
               ویرایش
             </Button>
-            <Button
-              className="ms-1"
-              color="danger"
-              outline
-              onClick={handleSuspendedClick}
-            >
-              غیرفعال کردن
-            </Button>
           </div>
         </CardBody>
       </Card>
@@ -233,235 +221,148 @@ const UserInfoCard = ({ selectedUser, data }) => {
           <div className="text-center mb-2">
             <h1 className="mb-1">ویرایش اطلاعات کاربر</h1>
           </div>
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            <Row className="gy-1 pt-75">
-              <Col md={4} xs={12}>
-                <Label className="form-label" for="firstName">
-                  موضوع دوره
-                </Label>
-                <Controller
-                  defaultValue=""
-                  control={control}
-                  id="firstName"
-                  name="firstName"
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      id="firstName"
-                      placeholder="John"
-                      invalid={errors.firstName && true}
-                    />
-                  )}
-                />
-              </Col>
-              <Col md={4} xs={12}>
-                <Label className="form-label" for="lastName">
-                  ظرفیت دوره
-                </Label>
-                <Controller
-                  defaultValue=""
-                  control={control}
-                  id="lastName"
-                  name="lastName"
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      id="lastName"
-                      placeholder="Doe"
-                      invalid={errors.lastName && true}
-                    />
-                  )}
-                />
-              </Col>
-              <Col md={4} xs={12}>
-                <Label className="form-label" for="country">
-                  Country
-                </Label>
-                <Select
-                  id="country"
-                  isClearable={false}
-                  className="react-select"
-                  classNamePrefix="select"
-                  options={countryOptions}
-                  theme={selectThemeColors}
-                  defaultValue={countryOptions[0]}
-                />
-              </Col>
-              <Col md={7} xs={12}>
-                <Label className="form-label" for="lastName">
-                  ظرفیت دوره
-                </Label>
-                <Controller
-                  defaultValue=""
-                  control={control}
-                  id="lastName"
-                  name="lastName"
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      id="lastName"
-                      placeholder="Doe"
-                      invalid={errors.lastName && true}
-                    />
-                  )}
-                />
-              </Col>
-              <Col md={5} xs={12}>
-                <Label className="form-label" for="country">
-                  Country
-                </Label>
-                <Select
-                  id="country"
-                  isClearable={false}
-                  className="react-select"
-                  classNamePrefix="select"
-                  options={countryOptions}
-                  theme={selectThemeColors}
-                  defaultValue={countryOptions[0]}
-                />
-              </Col>
-              <Col md={4} xs={12}>
-                <Label className="form-label" for="country">
-                  Country
-                </Label>
-                <Select
-                  id="country"
-                  isClearable={false}
-                  className="react-select"
-                  classNamePrefix="select"
-                  options={countryOptions}
-                  theme={selectThemeColors}
-                  defaultValue={countryOptions[0]}
-                />
-              </Col>
-              <Col md={4} xs={12}>
-                <Label className="form-label" for="country">
-                  Country
-                </Label>
-                <Select
-                  id="country"
-                  isClearable={false}
-                  className="react-select"
-                  classNamePrefix="select"
-                  options={countryOptions}
-                  theme={selectThemeColors}
-                  defaultValue={countryOptions[0]}
-                />
-              </Col>
-              <Col md={4} xs={12}>
-                <Label className="form-label" for="billing-email">
-                  توضیحات دوره
-                </Label>
-                <Input
-                  type="email"
-                  id="billing-email"
-                  placeholder="example@domain.com"
-                />
-              </Col>
 
-              <Col md={5} xs={12}>
-                <Label className="form-label" for="tax-id">
-                  هزینه دوره
-                </Label>
-                <Input
-                  id="tax-id"
-                  placeholder="Tax-1234"
-                  // defaultValue={selectedUser.contact.substr(selectedUser.contact.length - 4)}
-                />
-              </Col>
-              <Col md={7} xs={12}>
-                <Label className="form-label" for="status">
-                  کلاس دوره
-                </Label>
-                <Select
-                  id="status"
-                  isClearable={false}
-                  className="react-select"
-                  classNamePrefix="select"
-                  options={statusOptions}
-                  theme={selectThemeColors}
-                  // defaultValue={statusOptions[statusOptions.findIndex(i => i.value === selectedUser.status)]}
-                />
-              </Col>
-              <Col md={4} xs={12}>
-                <Label className="form-label" for="firstName">
-                  موضوع دوره
-                </Label>
-                <Controller
-                  defaultValue=""
-                  control={control}
-                  id="firstName"
-                  name="firstName"
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      id="firstName"
-                      placeholder="John"
-                      invalid={errors.firstName && true}
-                    />
-                  )}
-                />
-              </Col>
-              <Col md={4} xs={12}>
-                <Label className="form-label" for="firstName">
-                  موضوع دوره
-                </Label>
-                <Controller
-                  defaultValue=""
-                  control={control}
-                  id="firstName"
-                  name="firstName"
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      id="firstName"
-                      placeholder="John"
-                      invalid={errors.firstName && true}
-                    />
-                  )}
-                />
-              </Col>
-              <Col md={4} xs={12}>
-                <Label className="form-label" for="firstName">
-                  موضوع دوره
-                </Label>
-                <Controller
-                  defaultValue=""
-                  control={control}
-                  id="firstName"
-                  name="firstName"
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      id="firstName"
-                      placeholder="John"
-                      invalid={errors.firstName && true}
-                    />
-                  )}
-                />
-              </Col>
-              <Col md={12} xs={12}>
-                <Label className="form-label" for="firstName">
-                  موضوع دوره
-                </Label>
-                <Controller
-                  defaultValue=""
-                  control={control}
-                  id="firstName"
-                  name="firstName"
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      id="firstName"
-                      placeholder="John"
-                      invalid={errors.firstName && true}
-                    />
-                  )}
-                />
-              </Col>
-              <Button color="primary">ثبت</Button>
-            </Row>
-          </Form>
+          <Row
+            tag="form"
+            className="gy-1 pt-75"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <Col md={4} xs={12}>
+              <Label className="form-label" for="fName">
+                نام
+              </Label>
+              <Controller
+                control={control}
+                name="fName"
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    id="name"
+                    invalid={errors.firstName && true}
+                  />
+                )}
+              />
+            </Col>
+            <Col md={4} xs={12}>
+              <Label className="form-label" for="lName">
+                نام خانوادگی
+              </Label>
+              <Controller
+                control={control}
+                name="lName"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
+            </Col>
+
+            <Col md={4} xs={12}>
+              <Label className="form-label" for="phoneNumber">
+                شماره تلفن
+              </Label>
+              <Controller
+                control={control}
+                name="phoneNumber"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
+            </Col>
+
+            <Col md={4} xs={12}>
+              <Label className="form-label" for="gmail">
+                ایمیل
+              </Label>
+              <Controller
+                control={control}
+                name="gmail"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
+            </Col>
+
+            <Col md={4} xs={12}>
+              <Label className="form-label" for="nationalCode">
+                کد ملی
+              </Label>
+              <Controller
+                control={control}
+                name="nationalCode"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
+            </Col>
+            <Col md={4} xs={12}>
+              <Label className="form-label" for="date">
+                تاریخ تولد
+              </Label>
+              <Controller
+                control={control}
+                name="birthDay"
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    type="date"
+                    // {...register("birthDay")}
+                    invalid={errors.firstName && true}
+                  />
+                )}
+              />
+            </Col>
+            <Col md={6} xs={12}>
+              <Label className="form-label" for="telegramLink">
+                لینک تلگرام
+              </Label>
+              <Controller
+                control={control}
+                name="telegramLink"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
+            </Col>
+            <Col md={6} xs={12}>
+              <Label className="form-label" for="linkdinProfile">
+                لینک لینکدین
+              </Label>
+              <Controller
+                control={control}
+                name="linkdinProfile"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
+            </Col>
+            <Col md={6} xs={12}>
+              <Label className="form-label" for="homeAdderess">
+                آدرس کاربر
+              </Label>
+              <Controller
+                control={control}
+                name="homeAdderess"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
+            </Col>
+            <Col md={6} xs={12}>
+              <Label className="form-label" for="userAbout">
+                درباره کاربر
+              </Label>
+              <Controller
+                control={control}
+                name="userAbout"
+                render={({ field }) => (
+                  <Input {...field} invalid={errors.firstName && true} />
+                )}
+              />
+            </Col>
+            <Button type="submit" color="primary">
+              ثبت
+            </Button>
+          </Row>
         </ModalBody>
       </Modal>
     </Fragment>

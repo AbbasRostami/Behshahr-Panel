@@ -26,7 +26,7 @@ export const editApi = async ({ path, body }) => {
 };
 export const deleteApi = async ({ path, body }) => {
   try {
-    const response = await http.delete(`${path}`, body);
+    const response = await http.delete(`${path}`, { data: body });
     return response;
   } catch (error) {
     return error;
