@@ -165,7 +165,7 @@ const AddUserModal = () => {
 
             <Col xs={6}>
               <Label className="form-label" for="username">
-                ایمیل
+                شماره موبایل
               </Label>
               <Controller
                 name="gmail"

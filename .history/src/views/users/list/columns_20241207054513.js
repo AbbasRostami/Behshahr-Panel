@@ -109,7 +109,7 @@ export const columns = [
   {
     name: "نقش",
     sortable: true,
-    minWidth: "180px",
+    minWidth: "1800px",
     sortField: "fullName",
     selector: (row) => row.userRoles,
     cell: (row) => {

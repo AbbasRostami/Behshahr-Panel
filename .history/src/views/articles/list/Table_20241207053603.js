@@ -159,6 +159,23 @@ const UsersList = ({ data, setData,searchDataParams,GetArticlesList, setSearchDa
         <CardBody>
           <Row>
             <Col md="4">
+              <Label for="role-select" tag="h4">
+                نقش
+              </Label>
+              <Select
+                isClearable={false}
+                placeholder="انتخب کنید..."
+                options={roleOptions}
+                className="react-select"
+                classNamePrefix="select"
+                theme={selectThemeColors}
+                onChange={(data) => {
+                  setCurrentRole(data);
+                }}
+              />
+            </Col>
+
+            <Col md="4">
               <Label for="status-select"> وضعیت </Label>
               <Select
                 theme={selectThemeColors}

@@ -165,13 +165,13 @@ const AddUserModal = () => {
 
             <Col xs={6}>
               <Label className="form-label" for="username">
-                ایمیل
+                شماره موبایل
               </Label>
               <Controller
                 name="gmail"
                 control={control}
                 render={({ field }) => (
-                  <Input {...field} id="gmail" placeholder="Johe@gmail.com" />
+                  <Input {...field} id="gmail" placeholder="091111111" />
                 )}
               />
               {errors.username && (

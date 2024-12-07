@@ -46,7 +46,7 @@ const CoursesLists = () => {
             color="success"
             statTitle="اساتید"
             icon={<UserCheck size={20} />}
-            renderStats={<h3 className="fw-bolder mb-75">352</h3>}
+            renderStats={<h3 className="fw-bolder mb-75">19,860</h3>}
           />
         </Col>
         <Col lg="3" sm="6">
