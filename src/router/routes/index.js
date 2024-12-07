@@ -29,6 +29,7 @@ import TermList from "../../views/Level 3/Term/TermList";
 import StatusCoursesList from "../../views/Level 3/CourseStatus/StatusCoursesList";
 import TechnologyList from "../../views/Level 3/Technology/TechnologyList";
 import CalendarComponent from "../../views/calendar";
+import CommentLists from "../../views/comments/list";
 
 const getLayout = {
   blank: <BlankLayout />,

@@ -12,6 +12,9 @@ import {
   BookOpen,
   Slack,
   Watch,
+  Server,
+  Menu,
+  Move,
 } from "react-feather";
 
 export default [
