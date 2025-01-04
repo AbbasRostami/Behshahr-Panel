@@ -171,12 +171,12 @@ export const columns = [
     cell: (row) => (
       <span>
         {row.isActive ? (
-          <Badge color="success" pill>
-            فعال
-          </Badge>
-        ) : (
           <Badge color="danger" pill>
             غیر فعال
+          </Badge>
+        ) : (
+          <Badge color="success" pill>
+            فعال
           </Badge>
         )}
       </span>
