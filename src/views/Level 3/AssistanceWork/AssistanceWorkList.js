@@ -20,6 +20,8 @@ import AssistanceAdd from "./AssistanceAdd";
 import { useGetSth } from "../../../core/apiPost";
 import AssistanceEdit from "./AssistanceEdit";
 const AssisranceWork = () => {
+
+  
   const { data } = useGetSth("/AssistanceWork", {
     staleTime: 5 * 60 * 1000,
     enabled: true,

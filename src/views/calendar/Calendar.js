@@ -10,7 +10,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import { Menu } from 'react-feather'
 import { Card, CardBody } from 'reactstrap'
 import moment from 'moment-jalaali'
-import faLocale from '@fullcalendar/core/locales/fa'; // اضافه کردن فایل زبان فارسی
+import faLocale from '@fullcalendar/core/locales/fa'; 
 import { useNavigate } from 'react-router-dom'
 const convertToJalali = (date) => {
   return moment(date).format('jYYYY/jMM/jDD')
