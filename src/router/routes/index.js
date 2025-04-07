@@ -11,7 +11,6 @@ import PublicRoute from "@components/routes/PublicRoute";
 import { isObjEmpty } from "@utils";
 import Wizard from "../../views/courses/add";
 import UserView from "../../views/courses/view";
-import ArticlesAdds from "../../pages/Articles-adds";
 import ArticlesView from "../../views/articles/view";
 import CoursesList from "../../pages/CoursesList";
 import CoursesAdd from "../../views/courses/add";
@@ -30,6 +29,7 @@ import StatusCoursesList from "../../views/Level 3/CourseStatus/StatusCoursesLis
 import TechnologyList from "../../views/Level 3/Technology/TechnologyList";
 import CalendarComponent from "../../views/calendar";
 import CommentLists from "../../views/comments/list";
+import ArticlesAdds from "../../pages/Articles-Adds";
 
 const getLayout = {
   blank: <BlankLayout />,
