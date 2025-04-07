@@ -1,8 +1,8 @@
 {
-  "build": {
-    "env": {
-      "NPM_CONFIG_legacy_peer_deps": "true"
-    },
-    "routes": [{ "source": "/(.*)", "destination": "/" }]
-  }
+  "env": {
+    "NPM_CONFIG_legacy_peer_deps": "true"
+  },
+  "routes": [
+    { "src": "/(.*)", "dest": "/" }
+  ]
 }
