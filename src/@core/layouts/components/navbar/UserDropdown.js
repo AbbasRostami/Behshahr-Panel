@@ -1,5 +1,5 @@
 // ** React Imports
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 // ** Custom Components
 import Avatar from "@components/avatar";
@@ -14,6 +14,7 @@ import {
   CreditCard,
   HelpCircle,
   Power,
+  LogIn,
 } from "react-feather";
 
 // ** Reactstrap Imports
@@ -36,6 +37,10 @@ const UserDropdown = () => {
         className="nav-link dropdown-user-link"
         onClick={(e) => e.preventDefault()}
       >
+        <NavLink to="/login">
+          <LogIn size={30} className="me-75" />
+
+        </NavLink>
         <div className="user-nav d-sm-flex d-none">
           <span className="user-name fw-bold">Abbas Rostami</span>
           <span className="user-status">Admin</span>
