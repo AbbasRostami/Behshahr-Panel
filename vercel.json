@@ -1,8 +1,8 @@
 {
-    "build": {
-      "env": {
-        "NPM_CONFIG_legacy_peer_deps": "true"
-      }
-    }
+  "build": {
+    "env": {
+      "NPM_CONFIG_legacy_peer_deps": "true"
+    },
+    "rewrites": [{ "source": "/(.*)", "destination": "/" }]
   }
-  
+}
