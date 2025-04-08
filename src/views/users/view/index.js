@@ -9,11 +9,9 @@ import { useParams } from "react-router-dom";
 const UsersView = () => {
   const [data, setData] = useState([]);
   const params = useParams();
-  // console.log(params);
   const GetUsersView = async () => {
     const path = `/User/UserDetails/${params.id}`;
     const response = await getApi({ path });
-    // console.log("Details: ",response.data);
     setData(response.data);
   };
 

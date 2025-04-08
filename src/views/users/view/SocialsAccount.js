@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment } from "react";
 import { Card, CardBody, CardTitle, Button } from "reactstrap";
 import twitterIcon from "@src/assets/images/icons/social/twitter.png";
 import linkedinIcon from "@src/assets/images/icons/social/linkedin.png";
@@ -11,7 +11,6 @@ const SocialsAccount = ({data}) => {
       <Card>
         <CardBody>
           <CardTitle className="mb-75">شبکه های اجتماعی</CardTitle>
-          {/* <p>Display content from social accounts on your site</p> */}
           <div className="d-flex mt-2">
             <div className="flex-shrink-0 ">
               <img
