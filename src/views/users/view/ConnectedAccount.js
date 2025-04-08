@@ -13,7 +13,6 @@ const ConnectedAccount = ({data}) => {
     <Card>
       <CardBody>
         <CardTitle className="mb-75">سایر اطلاعات کاربر</CardTitle>
-        {/* <p>Display content from your connected accounts on your site</p> */}
         <div className="d-flex mt-2">
           <div className="flex-shrink-0">
             <img
