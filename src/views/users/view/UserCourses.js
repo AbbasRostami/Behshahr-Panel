@@ -1,13 +1,7 @@
 import { Card } from "reactstrap";
 import { ChevronDown } from "react-feather";
 import DataTable from "react-data-table-component";
-import Avatar from "@components/avatar";
 import "@styles/react/libs/tables/react-dataTable-component.scss";
-import { useEffect, useState } from "react";
-import { getApi } from "../../../core/api/api";
-import { Cell } from "recharts";
-import { useParams } from "react-router-dom";
-
 
 export const columns = [
   {
@@ -16,41 +10,40 @@ export const columns = [
     name: "نام دوره",
     selector: (row) => row.title,
     cell: (row) => {
-      return(
+      return (
         <div>
           <span className="fw-bolder">{row.title}</span>
         </div>
-      )
-    }
+      );
+    },
   },
   {
     maxWidth: "300px",
     name: "توضیحات دوره",
     selector: (row) => row.describe,
     cell: (row) => {
-      return(
+      return (
         <div className=" text-truncate ...">
           <span className=" fw-bolder">{row.describe}</span>
         </div>
-      )
-    } 
+      );
+    },
   },
   {
     maxWidth: "300px",
     name: "تاریخ آخرین بروزرسانی",
     selector: (row) => row.lastUpdate,
     cell: (row) => {
-      return(
+      return (
         <div>
           <span className=" fw-bolder">{row.lastUpdate}</span>
         </div>
-      )
-    } 
+      );
+    },
   },
 ];
 
-const UserProjectsList = ({data}) => {
-
+const UserProjectsList = ({ data }) => {
   return (
     <Card>
       <div className="text-truncate react-dataTable user-view-account-projects">
