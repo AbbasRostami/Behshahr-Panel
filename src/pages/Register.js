@@ -1,16 +1,11 @@
-// ** React Imports
 import { Link } from "react-router-dom";
 
-// ** Custom Hooks
 import { useSkin } from "@hooks/useSkin";
 
-// ** Icons Imports
 import { Facebook, Twitter, Mail, GitHub } from "react-feather";
 
-// ** Custom Components
 import InputPasswordToggle from "@components/input-password-toggle";
 
-// ** Reactstrap Imports
 import {
   Row,
   Col,
@@ -22,15 +17,12 @@ import {
   Button,
 } from "reactstrap";
 
-// ** Illustrations Imports
 import illustrationsLight from "@src/assets/images/pages/register-v2.svg";
 import illustrationsDark from "@src/assets/images/pages/register-v2-dark.svg";
 
-// ** Styles
 import "@styles/react/pages/page-authentication.scss";
 
 const Register = () => {
-  // ** Hooks
   const { skin } = useSkin();
 
   const source = skin === "dark" ? illustrationsDark : illustrationsLight;
