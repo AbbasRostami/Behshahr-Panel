@@ -1,16 +1,11 @@
-// ** React Imports
 import { Link } from "react-router-dom";
 
-// ** Reactstrap Imports
 import { Button } from "reactstrap";
 
-// ** Custom Hooks
 import { useSkin } from "@hooks/useSkin";
 
-// ** Illustrations Imports
 import illustrationsLight from "@src/assets/images/pages/error.svg";
 import illustrationsDark from "@src/assets/images/pages/error-dark.svg";
-
 // ** Styles
 import "@styles/base/pages/page-misc.scss";
 
